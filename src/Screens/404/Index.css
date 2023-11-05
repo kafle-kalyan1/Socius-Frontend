@@ -1,0 +1,20 @@
+.container{
+   margin-top: 0 !important;
+}
+.imageContainer{
+   margin-top: 0 !important;
+   width: 60%;
+
+}
+img{
+   height: 60vh;
+
+}
+.btn-404{
+   background-color: #2f80ed !important;
+}
+.btn:hover{
+   background-color: #1b539e !important;
+   scale: 1.02;
+   transition-duration: 1000ms;
+}
