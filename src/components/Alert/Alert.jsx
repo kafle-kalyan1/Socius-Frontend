@@ -1,4 +1,19 @@
+/**
+ * Alert component displays a modal dialog with a title, message, and customizable buttons.
+ * @param {Object} props - The props object containing the following properties:
+ *   @param {string} props.title - The title of the alert.
+ *   @param {string} props.message - The message of the alert.
+ *   @param {string} props.type - The type of the alert. Possible values: "success", "error", "warning", "info".
+ *   @param {Array} props.buttons - An array of button objects with the following properties:
+ *     @param {string} props.buttons.title - The title of the button.
+ *     @param {Function} props.buttons.onclick - The click event handler for the button.
+ *   @param {Function} props.outSideAction - The action to be performed when the alert is closed.
+ *   @param {boolean} props.closeButton - Whether to display a close button in the alert.
+ *   @param {boolean} props.hideDisabled - Whether to hide the alert when disabled.
+ * @returns {JSX.Element} The rendered Alert component.
+ */
 /* eslint-disable react/prop-types */
+
 import ReactDOM from "react-dom/client";
 import { SuccessIcon, ErrorIcon, WarningIcon, InfoIcon } from "/src/Library/Icons/ResponseIcons";
 
@@ -11,6 +26,7 @@ const Alert = ({title, message, type, buttons, outSideAction, closeButton, hideD
     };
 
   if (buttons) {
+    debugger
     var butTitle = buttons[0].title;
     var butTitle2 = buttons[1]?.title ? buttons[1].title : "Cancel"; 
     var butOnclick = buttons[0].onclick;
@@ -87,7 +103,7 @@ const Alert = ({title, message, type, buttons, outSideAction, closeButton, hideD
             </button>
 
             <button
-              onClick={()=>butOnclick2}
+              onClick={()=>{butOnclick2; hide();}}
               className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100"
             >
               {butTitle2}

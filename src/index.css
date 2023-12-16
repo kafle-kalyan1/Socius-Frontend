@@ -30,7 +30,32 @@
    width: 20px;
  }
 }
-   
+
+.scroll-bar2::-webkit-scrollbar {
+  width: 0px; 
+  /* margin-left: 10px; */
+}
+/* .scroll-bar::-webkit-scrollbar-track {
+  background: #202a5a;
+  } */
+  /* .scroll-bar::-webkit-scrollbar:hover { */
+   /* background-color: red;
+   width: 10px;
+  } */
+  /* .scroll-bar::-webkit-scrollbar-track:active {
+  background: #55fceb;
+  } */
+
+ .scroll-bar2::-webkit-scrollbar-thumb {
+  background-color: #438e1a; 
+  border-radius: 0px; 
+  transition: width 0.2s;
+}
+ .scroll-bar2::-webkit-scrollbar-thumb:hover {
+  background-color: #939e73; 
+  width: 10px;
+}
+
 
 @keyframes spin-once {
   0% {
@@ -45,5 +70,32 @@
   animation: spin-once 1s forwards;
 }
 
+.post_text::selection{
+  background: #0eb0a1;
+  color: #000000;
+}
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 25%;
+  }
+  25% {
+    background-position: 25% 50%;
+  }
+  50% {
+    background-position: 50% 75%;
+  }
+  75% {
+    background-position: 75% 60%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.bg-sidebar{
+  background: conic-gradient(from 90deg at 50% 125%, #1f005c, #003298, #005ac6, #007fdc, #00a2d3, #00c4ae, #00e474, #00ff00, #1f005c, #003298, #005ac6, #007fdc, #00a2d3, #00c4ae, #00e474, #00ff00);
+  animation: gradientAnimation 1s linear infinite;
+
+}
 
  

@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import LostPage from "./Screens/404/NotFound";
+import ServerError from "./Screens/ServerError/ServerError";
 
 const Home = lazy(() => import("./Screens/Home/Home"));
 const Profile = lazy(() => import("./Screens/Profile/Profile"));
@@ -60,7 +61,7 @@ function AppRoute() {
       />
       <Route
         exact
-        path="/setup"
+        path="/edit-profile"
         element={
           <Suspense fallback={<div>Loading...</div>}>
             <SetUpAccount />
@@ -83,6 +84,15 @@ function AppRoute() {
         element={
           <Suspense fallback={<div>Loading...</div>}>
             <OPT />
+          </Suspense>
+        }
+      />
+      <Route
+        exact
+        path="/servererror"
+        element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <ServerError />
           </Suspense>
         }
       />

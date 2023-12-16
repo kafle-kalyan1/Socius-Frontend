@@ -1,0 +1,15 @@
+{
+   "theme_color": "#ffffff",
+   "short_name": "Socius",
+   "name": "Socius",
+   "start_url": ".",
+   "display": "standalone",
+   "background_color": "#ffffff",
+   "icons": [
+      {
+         "src": "/Favicons/iPhone.png",
+         "sizes": "180x180",
+         "type": "image/png"
+      }
+   ]
+}

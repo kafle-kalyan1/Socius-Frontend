@@ -18,20 +18,27 @@ const ProfileProvider = ({ children }) => {
             Authorization: `Bearer ${access}`,
           },
         });
-        const profileData = response.data;
-        // console.log(profileData);
+        const profileData = response;
         setProfile(profileData);
       }
       else{
+      debugger;
         Cookies.remove("access");
         Cookies.remove("refresh");
         setProfile(null);
         window.location.href = "/login";
       }
     } catch (error) {
-      if (error.response.status === 401) {
+      
+      if(error.request.status==500){
+        window.location.href = "/servererror";
+      }
+      else if (error.response.status == 401) {
         refreshAccessToken();
-      } else {
+      }
+      else {
+        
+        debugger;
         console.error("Error getting access token");
         Cookies.remove("access");
         Cookies.remove("refresh");

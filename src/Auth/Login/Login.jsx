@@ -19,6 +19,7 @@ const secret_key = import.meta.env.VITE_SECRET_KEY
 import { showLoading } from '/src/components/Loading/Loading';
 import Cookies from "js-cookie";
 import { ProfileContext } from "/src/context/ProfileContext/ProfileContext";
+import { EncryptString } from './../../Library/Others/Others';
 
 
 const Login = () => {
@@ -46,6 +47,8 @@ const Login = () => {
 
     }),
     onSubmit: (values) => {
+      showLoading(true)
+      // var enc_password = EncryptString(values.password)
       axios.post("api/auth/login/", {
         username: values.username,
         password: values.password,
@@ -112,6 +115,8 @@ console.log(email)
         });
       }
        
+    }).finally(() => {
+      showLoading(false)
     });
     },
   });

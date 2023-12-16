@@ -1,128 +1,87 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
-import Sidebar from "../../components/Sidebar/Sidebar";
-import "./Styles.css"; // Import the CSS file for styling
-import { Link } from "react-router-dom";
-// import { IoAddCircleSharp } from "react-icons/io5";
-import Modal from "../../components/Modal/Index";
+import OurProfile from "./OurProfile";
+import ValidateUser from "/src/Library/Others/Others";
+import Sidebar from "/src/components/Sidebar/Sidebar";
+import { Skeleton } from "antd";
+import Post from "/src/components/Post/Post";
+import FriendRecommendation from "../../components/FriendRecommendation/FriendRecommendation";
+import Button from "../../components/Button/Button";
+import { MenuContext } from "/src/context/MenuContext/MenuContext";
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import OurProfileSkeleton from "./OurProfileSkeleton";
+import PostSkeleton from "../../components/Post/PostSkeleton";
+
 
 const Profile = () => {
-  const [followerModal, setFollowerModal] = useState(false);
-  const { profile } = useContext(ProfileContext);
+  const {open, setOpen} = useContext(MenuContext);  
+  const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
+  ValidateUser();
 
-  const modalRef = useRef(null);
 
+  // useEffect to get user data from backend
   useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        setFollowerModal(false);
+    let accessToken = Cookies.get("access");
+    console.log(accessToken)
+    axios.get("api/auth/user/",{
+      headers: {
+        Authorization: `Bearer ${accessToken}`
       }
-    };
+    }).then((res) => 
+    {
+      console.log(res.data)
+      setUserData(res.data.data);
+      setLoading(false);
+        }
+    ).catch((err) => {
+      setLoading(false);
+    })
+  
+  }, [])
 
-    document.addEventListener("mousedown", handleOutsideClick);
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, []);
-
-  let data = [
-    { name: "ram", followers: 100 },
-    { name: "shayam", followers: 500 },
-    { name: "hari", followers: 1000 },
-  ];
+  const post = {
+    profileImage: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1',
+    username: 'John_doe',
+    timestamp: '22h ago',
+    fullname: 'John Doe',
+    postText: 'Hypnosis at the parallel universe was the advice of alarm, commanded to a conscious ship.Processors experiment with paralysis!  Hypnosis at the parallel universe was the advice of alarm, commanded to a conscious ship. Processors experiment with paralysis! Hypnosis at the parallel universe was the advice of alarm, commanded to a conscious ship. Processors experiment with paralysis! Hypnosis at the parallel universe was the advice of alarm, commanded to a conscious ship. Processors experiment with paralysis!',
+    images: ['https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1', 'https://media.istockphoto.com/id/1181218567/photo/close-up-top-view-of-young-people-putting-their-hands-together-indian-friends-with-stack-of.jpg?s=2048x2048&w=is&k=20&c=p_rtPy46oLQZRKvYfRpS2cwgMZhFIex0MGwq4ihWizQ='],
+    likes: 12,
+    comments: 8,
+    is_verified: true,
+    is_suspicious: false,
+    shares: 4,
+  };
+  
   return (
-    <div className="profile-page">
-      <div className="sidebar">
-        <Sidebar />
-      </div>
-      <div className="profile-container">
-        <div className="profile-header">
-          <div className="profilepic">
-            {profile && profile.data2.profile_picture ? (
-              <img
-                src={`https://res.cloudinary.com/dfvekucsr/${profile.data2.profile_picture}`}
-                alt="Profile Picture"
-                className="profile-picture"
-              />
-            ) : (
-              <div className="profile-picture-placeholder"></div>
-            )}
-          </div>
-          <div className="username">
-            {profile && profile.data1.username ? (
-              <h1 className="username">{profile.data1.username}</h1>
-            ) : (
-              <Link to={"/profile/edit"} className="username">
-                Add New User Name
-              </Link>
-            )}
+    <div className="flex h-screen">
+    <div className={` block duration-300 ${open ? "w-1/5":" w-1/12"}`}>
+        <Sidebar className=""/>
+    </div>
+        <div className={`block duration-300 ${open ? "w-4/5":" w-10/12"} ml-10 mt-5`}>
+        {loading ? (
+          <OurProfileSkeleton />
+        ) : (
+          <>
+        <OurProfile data={userData}/>
+        </>
+        )}
 
-            {followerModal ? (
-              <Modal
-                title="Followers"
-                data={data}
-                setShowModal={setFollowerModal}
-                ref={modalRef}
-              />
-            ) : null}
+        <div className="flex">
+        <div className="block w-4/6 ml-10 mt-2">
+        <h1 className=" text-3xl ml-10">Posts</h1>
+        <Post {...post} />
+        <Post {...post} />
+        </div>
+        <div className="block w-2/6 mr-5">
+        <h1>Friends </h1>
+          <FriendRecommendation />
+        </div>
+        </div>
+        </div>
 
-            <div className="stats">
-              <div style={{ cursor: "auto" }} className="stats-item">
-                <span className="quantity">{0}</span>
-                <span className="label">Posts</span>
-              </div>
-              <div
-                onClick={() => setFollowerModal(!followerModal)}
-                className="stats-item"
-              >
-                <span className="quantity">146M</span>
-                <span className="label">Followers</span>
-              </div>
-              <div className="stats-item">
-                <span className="quantity">{10}</span>
-                <span className="label">Following</span>
-              </div>
-            </div>
-          </div>
 
-          <div className="right">
-            <Link className="btn btn-primary m-1" to="/profile/edit">
-              {/* <AiOutlineEdit /> Edit Profile */}
-            </Link>
-            <Link className="btn btn-success m-1" to="/profile/edit">
-              {/* <IoAddCircleSharp /> New Post */}
-            </Link>
-          </div>
-        </div>
-        <div className="bio">
-          {profile && profile.data2.bio ? (
-            <h1 className="bio">{profile.data2.bio}</h1>
-          ) : (
-            <Link to={"/profile/edit"} className="bio">
-              Add Bio
-            </Link>
-          )}
-        </div>
-      </div>
-      <div className="section">
-        <div className="posts">
-          <div className="section-title">POST</div>
-          <div className="section-item">
-            <h1>HELLO</h1>
-            <h1>HELLO</h1>
-          </div>
-        </div>
-        <div className="posts">
-          <div className="section-title">POST</div>
-          <div className="section-item">
-            <h1>HELLO</h1>
-            <h1>HELLO</h1>
-          </div>
-        </div>
-        {/* <div className="likes">Likes</div>
-        <div className="collection">Collection</div> */}
-      </div>
     </div>
   );
 };

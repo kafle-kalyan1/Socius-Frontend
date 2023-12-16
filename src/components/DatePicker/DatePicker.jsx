@@ -5,6 +5,7 @@ const DatePickers = (props) => {
   const { formik, title, name, Icon, minDate, maxDate } = props;
 
   const onChange = (value) => {
+    console.log(value)
     formik.values[name] = value?.format('YYYY-MM-DD');
   }
   return (

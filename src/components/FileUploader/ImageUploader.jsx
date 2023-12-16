@@ -7,9 +7,9 @@ const ImageUploader = ({ formik, name,title,max, Icon }) => {
     // Your initial file list
   ]);
 
-  const onChange = ({ fileList: newFileList }) => {
+  const onChange = async ({ fileList: newFileList }) => {
     setFileList(newFileList);
-    formik.setFieldValue(name, newFileList);
+    formik.values[name] = newFileList[0];
   };
 
   const onPreview = async (file) => {

@@ -8,10 +8,9 @@ const manifestForPlugin =     {
     theme_color: "#171717",
 		background_color: "#e8ebf2",
 		display: "standalone",
-		scope: "/",
+		scope: ".",
 		start_url: "/",
-		orientation: "portrait",
-    short_name: "React App",
+    short_name: "Socius",
   icons: [
       {
           src: "Favicons/iPhone.png",

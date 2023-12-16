@@ -2,12 +2,13 @@ import { BrowserRouter } from "react-router-dom";
 import AppRoute from "./Routes";
 import { ConfigProvider } from "antd";
 import { ProfileProvider  } from "./context/ProfileContext/ProfileContext";
-
+import { MenuContextProvider } from "./context/MenuContext/MenuContext";
 
 
 function App() {
   return (
     <BrowserRouter>
+    <MenuContextProvider>
     <ProfileProvider >
 
       <ConfigProvider
@@ -45,6 +46,7 @@ function App() {
 
     </ConfigProvider>
     </ProfileProvider>
+</MenuContextProvider>
     </BrowserRouter>
   );
 }

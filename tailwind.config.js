@@ -29,7 +29,7 @@ export default {
         textSecondary: "#0f0f0f", // Secondary text color dark black
 
         
-        cardBg: "#F3F4F6", // Card background color
+        cardBg: "#e6f2eb", // Card background color
 
         cardBorder: "#D1D5DB", // Card border color
 
@@ -44,8 +44,8 @@ export default {
         blue_: "#dfe7f1", // Accent color: blue
         blue_hover: "#b8c0cb", // Accent color: blue
 
-        red_: "#e9e0e0", // Accent color: red
-        red_hover: "#d5c8c8", // Accent color: red
+        danger: "#eb4034", 
+        danger_hover: "#eb4134", // Accent color: red
 
 
         error_red: "#EE3E54", // Accent color: red
