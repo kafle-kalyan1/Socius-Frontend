@@ -30,11 +30,21 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://127.0.0.1:8000/",
+        target: "https://socius.onrender.com",
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace("/api", ""),
       },
     },
   },
+  build: {
+    proxy: {
+      "/api": {
+        target: "https://socius.onrender.com/", 
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace("/api", ""),
+      }
+    }
+  }
 });
