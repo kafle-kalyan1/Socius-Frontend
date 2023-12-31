@@ -6,10 +6,20 @@ import ValidateUser, {
 } from "/src/Library/Others/Others";
 import Post from "/src/components/Post/Post";
 import { MenuContext } from '/src/context/MenuContext/MenuContext';
+import  Button  from '/src/components/Button/Button.jsx';
+import { showBigPopup } from './../../components/BigPopup/BigPopup';
+import CreatePost from "/src/components/CreatePost/CreatePost";
 
 const Home = () => {
   const {open, setOpen} = useContext(MenuContext);
   ValidateUser();
+  function createPost2(){
+    showBigPopup({
+      children:(
+        <CreatePost/>
+      )
+    })
+  }
   const post = {
     profileImage: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1',
     username: 'John_doe',
@@ -25,15 +35,13 @@ const Home = () => {
   };
   return (
     <div className="flex h-screen">
-<div className={` block duration-300 ${open ? "w-1/5":" w-1/12"}`}>
+<div className={` block duration-300 z-20 ${open ? "w-1/5":" w-1/12"}`}>
         <Sidebar className=""/>
     </div>
           <div className={`block duration-300 ${open ? "w-4/5":" w-10/12"} ml-10 mt-5`}>
           <div className="w-3/4">
           <span className="text-3xl">Home</span>
-        <Post {...post} />
-        <Post {...post} />
-        <Post {...post} />
+          <Button  type="primary" text="Create Post"  onClick={createPost2} width={"4px"}/>
           </div>
       </div>
     </div>

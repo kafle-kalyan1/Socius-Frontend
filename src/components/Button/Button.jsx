@@ -1,101 +1,60 @@
-/**
- * Button component.
- *
- * @component
- * @param {Object} props - The component props.
- * @param {number|string} props.width - The width of the button. Can be a number or a string representing a CSS value.
- * @param {string} props.text - The text content of the button.
- * @param {string} props.type - The type of the button. Can be "primary", "secondary", or "danger".
- * @param {function} props.onClick - The click event handler for the button.
- * @returns {JSX.Element} The rendered button component.
- */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
+import { sanitizeHtml } from '../../Library/Others/Others';
 
+const Button = ({ width, text, type, onClick }) => {
+  const [isAltPressed, setIsAltPressed] = useState(false);
 
-const Button = ({width, text, type, onClick}) => {
-   const getWidthClass = () => {
-      if (typeof width === 'number') {
-        return `w-${width}`;
-      } else if (typeof width === 'string') {
-        return `w-[${width}]`;
-      } else {
-        return 'w-full';
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Alt') {
+        event.preventDefault();
+        setIsAltPressed(true);
       }
     };
-  
-    const widthClass = getWidthClass();
-  
- if(type === "primary"){
-   return (
-         <button
-         onClick={onClick}
-            type="submit"
-             className={`${widthClass}  px-4 py-2 tracking-wide text-dark_textPrimary dark:text-dark_textPrimary transition-colors  cursor-pointer duration-200 transform bg-primary rounded-md hover:bg-primary_hover focus:outline-black focus:bg-primary_hover`}>
-              {text}
-            </button>
-   )
- }
-   if(type === "secondary"){
-     
-      return (
-            <button
-            onClick={onClick}
-               type="submit"
-               className={`${widthClass} cursor-pointer  px-4 py-2 tracking-wide text-dark_textPrimary dark:text-dark_textPrimary transition-colors duration-200 transform bg-secondary rounded-md hover:bg-secondary_hover focus:outline-black focus:bg-secondary_hover`}>
-               {text}
-               </button>
-      )
-   }
-   //now case for danger 
-   if(type === "danger"){
 
-      return (
-            <button
-            onClick={onClick}
-               type="submit"
-               className={`${widthClass} cursor-pointer  px-4 py-2 tracking-wide text-dark_textPrimary dark:text-dark_textPrimary transition-colors duration-200 transform bg-danger rounded-md hover:bg-danger_hover focus:outline-black focus:bg-danger_hover`}>
-               {text}
-               </button>
-      )
-   }
-   //if type == txtPrimary then use white bg and primary as text color
-   if(type === "txtPrimary"){
+    const handleKeyUp = (event) => {
+      event.preventDefault();
+      if (event.key === 'Alt') {
+        setIsAltPressed(false);
+      }
+    };
 
-      return (
-            <button
-            onClick={onClick}
-               type="submit"
-               className={`${widthClass} cursor-pointer  px-4 py-2 tracking-wide text-primary dark:text-primary transition-colors duration-200 transform bg-white rounded-md hover:bg-primary_hover hover:text-white focus:outline-black focus:bg-primary_hover`}>
-               {text}
-               </button>
-      )
-   }
-   //if type == txtSecondary then use white bg and secondary as text color
-   if(type === "txtSecondary"){
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
 
-      return (
-            <button
-            onClick={onClick}
-               type="submit"
-               className={`${widthClass} cursor-pointer  px-1 py-1 tracking-wide text-secondary dark:text-secondary transition-colors duration-200 transform bg-white rounded-md hover:bg-secondary_hover hover:text-white focus:outline-black focus:bg-secondary_hover`}>
-               {text}
-               </button>
-      )
-   }
-   //if type == txtDanger then use white bg and danger as text color
-   if(type === "txtDanger"){
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
 
-      return (
-            <button
-            onClick={onClick}
-               type="submit"
-               className={`${widthClass}  cursor-pointer  px-1 py-2 tracking-wide text-danger dark:text-danger transition-colors duration-200 transform bg-white rounded-md hover:bg-danger_hover hover:text-white focus:outline-black focus:bg-danger_hover`}>
-               {text}
-               </button>
-      )
-   }
-}
+  const getWidthClass = () => {
+    if (typeof width === 'number' || (typeof width === 'string' && /^\d+(\.\d+)?(px|%)?$/.test(width))) {
+      return `w-${width}`;
+    }
+    return 'w-full';
+  };
 
-export default Button
+  const widthClass = getWidthClass();
 
-//      <Button type={"danger"} text={"click me"} width={"4px"}/>
+  const buttonClasses = `cursor-pointer px-4 py-2 tracking-wide text-textPrimary dark:text-textPrimary transition-colors duration-200 transform ${widthClass} rounded-md`;
+
+  const typeClasses = {
+    primary: 'bg-primary_btn_dark hover:bg-primary_btn_dark_hover text-white focus:outline-none focus:bg-primary_btn_dark_hover',
+    secondary: 'bg-secondary_btn hover:bg-secondary_btn_hover text-white focus:outline-none focus:bg-secondary_btn_hover',
+    danger: 'bg-red-500 hover:bg-red-600 text-white focus:outline-none focus:bg-red-600',
+    txtPrimary: 'bg-indigo_bg hover:bg-primary_btn_dark text-indigo_text hover:text-white  focus:outline-none focus:bg-primary_btn_dark focus:text-white',
+    txtSecondary: 'bg-green_bg hover:bg-secondary_btn_hover text-secondary_text hover:text-white focus:outline-none focus:bg-secondary_btn_hover focus:text-white',
+    txtDanger: 'bg-red_bg hover:bg-red_text hover:text-white focus:outline-none text-red-600 focus:bg-red_text focus:text-white',
+  };
+
+  const typeClass = typeClasses[type] || typeClasses.primary;
+
+  return (
+    <button onClick={onClick} type="submit" className={`transition ease-linear  duration-100 shadow-md  ${buttonClasses} ${typeClass} hover:shadow-lg `}>
+      {isAltPressed ? <span dangerouslySetInnerHTML={{ __html: text }} /> : sanitizeHtml(text)}
+    </button>
+  );
+};
+
+export default Button;

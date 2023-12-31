@@ -61,7 +61,7 @@ const SetupAccount = () => {
       dob: "",
       bio: "",
       gender: null,
-      email: "",
+      secondary_email: "",
       phone_number: "", 
       fullname: "",
       first_name: "",
@@ -85,8 +85,8 @@ const SetupAccount = () => {
       },).then((res) => {
         toast.success('Profile Updated successfully')
       hideBigPopup()
-        console.log(res);
-      }
+      window.location.reload();
+    }
       ).catch((err) => {
         toast.error(err)
         console.log(err);

@@ -56,7 +56,7 @@ const Profile = () => {
   
   return (
     <div className="flex h-screen">
-    <div className={` block duration-300 ${open ? "w-1/5":" w-1/12"}`}>
+    <div className={` block duration-300 z-20 ${open ? "w-1/5":" w-1/12"}`}>
         <Sidebar className=""/>
     </div>
         <div className={`block duration-300 ${open ? "w-4/5":" w-10/12"} ml-10 mt-5`}>

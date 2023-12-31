@@ -20,6 +20,7 @@ import { showLoading } from '/src/components/Loading/Loading';
 import Cookies from "js-cookie";
 import { ProfileContext } from "/src/context/ProfileContext/ProfileContext";
 import { EncryptString } from './../../Library/Others/Others';
+import Button from "../../components/Button/Button";
 
 
 const Login = () => {
@@ -61,6 +62,7 @@ const Login = () => {
           const { access, refresh } = res.data;
           Cookies.set("access", access);
           Cookies.set("refresh", refresh);
+          Cookies.set("username", values.username);
           fetchProfileData(access);
           navigate("/");
 
@@ -129,7 +131,7 @@ console.log(email)
         <h1 className="w-full m-auto -ml-1 flex -my-14 justify-center">
       <DynamicLogo/> 
         </h1>
-        <h2 className="text-xl mt-1 font-semibold text-center text-textSecondary dark:text-dark_textSecondary">
+        <h2 className="text-xl mt-1 font-semibold text-center text-text_ dark:text-dark_textSecondary">
           Sign in
         </h2>
         <form className="mt-6" onSubmit={formik.handleSubmit}>
@@ -149,59 +151,53 @@ console.log(email)
           Icon={<LockOutlined/>}
           name="password"
           title="Password"
-          type={showPassword ? "password" : "text"}
-          otherState={{'state':showPassword, 'setState':setShowPassword}}
-          btn1={{'icon1':<EyeOutlined/>, 'text1':"Hide Password", 'action1':() => setShowPassword(!showPassword)}}
-          btn2={{'icon2':<EyeInvisibleOutlined/>, 'text2':"Show Password", 'action2':() => setShowPassword(!showPassword)}}
+          type={"text"}
+          haveHideView={true}
+
        
 
           />
           <Link
             to="#"
             title="Reset Password here!"
-            className="text-xs text-[#646262] dark:text-[#d7d6d6] focus:text-error_red hover:text-error_red hover:underline"
+            className="text-xs text-text_ focus:text-red_text hover:text-red_text duration-100 hover:underline"
           >
             Forget Password?
           </Link>
           <div className="mt-6 w-full justify-center flex">
-            <button
-            type="submit"
-             className="w-full  px-4 py-2 tracking-wide text-dark_textPrimary dark:text-dark_textPrimary transition-colors duration-200 transform bg-primary rounded-md hover:bg-primary_hover focus:outline-black focus:bg-primary_hover">
-              Login
-            </button>
+            <Button type="primary" text="Login" width="full" />
           </div>
         </form>
         <div className="relative flex items-center justify-center w-full mt-6 border border-t">
-          <div className="absolute px-2 bg-cardBg dark:bg-dark_cardBg dark:text-dark_textPrimary text-textPrimary">Or Login With</div>
+          <div className="absolute px-2 bg-cardBg text-text_">Or Login With</div>
         </div>
         <span></span>
         <div className="flex mt-4 gap-x-2 max-sm:flex-col max-sm:gap-y-2">
           <button
             type="button"
             title="Login with Google"
-            className="flex items-center justify-center w-full p-2 border border-gray-600 rounded-md
-              bg-[#deeddd] hover:bg-[#cadcc8] duration-500"
-            //  focus:ring-2 focus:ring-offset-1 focus:ring-secondary
+            className="flex items-center justify-center w-full p-2 border border-border rounded-md
+              bg-green_bg hover:bg-green_bg_hover duration-500 text-green_text "
           >
-            <span className="">Google</span>
+            <span className="text-xl">Google</span>
             <GoogleIcon />
           </button>
           <button
             title="Login with Facebook"
-            className="flex items-center justify-center w-full p-2 border border-gray-600 rounded-md 
-             bg-[#dfe7f1] hover:bg-[#b8c0cb] duration-500"
+            className="flex items-center justify-center w-full p-2 border border-border rounded-md 
+             bg-blue_bg hover:bg-blue_bg_hover text-blue_text duration-500"
             // focus:ring-2 focus:ring-offset-1 focus:ring-secondary
           >
-            <span>Facebook</span>
+            <span className="text-xl">Facebook</span>
             <FacebookIcon/>
           </button>
           <button 
           title="Login with Github"
-          className="flex items-center justify-center w-full p-2 border border-gray-600 rounded-md 
-           bg-[#e9e0e0] hover:bg-[#d5c8c8]  duration-500"
+          className="flex items-center justify-center w-full p-2 border border-border rounded-md 
+           bg-red_bg hover:bg-red_bg_hover text-red_text  duration-500"
           // focus:ring-2 focus:ring-offset-1 focus:purple-secondary
            >
-            <span>Github</span>
+            <span className="text-xl">Github</span>
             <GithubIcon />
           </button>
         </div>
@@ -209,7 +205,7 @@ console.log(email)
         <p className="mt-8 text-2xs font-light text-center text-textPrimary dark:text-dark_textPrimary">
           {" "}
           Don&apos;t have an account?{" "}
-          <Link to="/register" className="font-medium text-secondary hover:underline">
+          <Link to="/register" className="font-medium text-link_text hover:underline">
             Register Now?
           </Link>
         </p>

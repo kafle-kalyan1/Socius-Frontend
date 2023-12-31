@@ -28,6 +28,7 @@ const ChangeProfilePic = (profile_picture) => {
         if (res.data.status_code == 200) {
           toast.success("Profile picture changed successfully");
           hideBigPopup();
+          window.location.reload();
         }
       }).catch((err) => {
          toast.error("Something went wrong");

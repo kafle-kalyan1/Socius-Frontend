@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import Button from '../../components/Button/Button'
-import { dateFormat, firstLetterCapital } from '../../Library/Others/Others'
+import Button from '/src/components/Button/Button'
+import { dateFormat, firstLetterCapital } from '/src/Library/Others/Others'
 import { useNavigate } from 'react-router-dom'
-import BigPopup, { showBigPopup } from '../../components/BigPopup/BigPopup'
-import SetupAccount from '../../Auth/Others/SetupAccount'
+import BigPopup, { showBigPopup } from '/src/components/BigPopup/BigPopup'
+import SetupAccount from '/src/Auth/Others/SetupAccount'
 import ChangeProfilePic from './ChangeProfilePic'
 import { blobToDataURL } from '/src/Library/Others/Others';
 import { hideBigPopup } from '/src/components/BigPopup/BigPopup';
-import ChangePassword from '../../Auth/Others/ChangePassword'
+import ChangePassword from '/src/Auth/Others/ChangePassword'
 
 const OurProfile = (props) => {
     const navigate = useNavigate()

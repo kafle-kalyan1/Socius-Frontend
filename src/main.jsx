@@ -4,8 +4,11 @@ import App from "./App.jsx";
 import "./index.css";
 import { ProfileProvider } from "./context/ProfileContext/ProfileContext.jsx";
 import { Toaster } from "react-hot-toast";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
   <React.StrictMode>
   <Toaster
   position="top-right"
@@ -15,4 +18,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <App />
     </ProfileProvider>
   </React.StrictMode>
+  </GoogleOAuthProvider>
 );

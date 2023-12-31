@@ -30,7 +30,7 @@ const Alert = ({title, message, type, buttons, outSideAction, closeButton, hideD
     var butTitle = buttons[0].title;
     var butTitle2 = buttons[1]?.title ? buttons[1].title : "Cancel"; 
     var butOnclick = buttons[0].onclick;
-    var butOnclick2 = buttons[1]?.onclick ? buttons[1].onclick : hide;
+    var butOnclick2 = buttons[1].onclick ? buttons[1].onclick : hide;
   }
   var hidden = "block";
   if (hideDisabled) {
@@ -56,7 +56,7 @@ const Alert = ({title, message, type, buttons, outSideAction, closeButton, hideD
       );
       break;
     case "warning":
-      color = "orange";
+      color = "red";
        icon = (
         <WarningIcon/>
       );
@@ -131,5 +131,8 @@ export function showModal({title, message, type, buttons, outSideAction, closeBu
   document.getElementById('modal').style.display = 'block';
 }
 
+export function hideAlertModal() {
+  document.getElementById('modal').style.display = 'none';
+}
 
 export default Alert;

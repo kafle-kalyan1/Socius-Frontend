@@ -6,50 +6,75 @@ export default {
     extend: {
       darkMode: 'data-theme',
       colors: {
-        dark_primary: "#3D5FD6", // Primary color (e.g., for buttons)
-        dark_secondary: "#68D2CD", // Secondary color (e.g., for links)
-        dark_background: "#1F2937", // Main background color
-        dark_textPrimary: "#F9FAFB", // Primary text color
-        dark_textSecondary: "#A7B6C2", // Secondary text color
-        dark_cardBg: "#374151", // Card background color
-        dark_cardBorder: "#4B5563", // Card border color
-        dark_buttonHover: "#C4B5FD", // Button hover color (light theme)
-
-        primary: "#0eb0a1", // Primary color (e.g., for buttons)
-        primary_hover: "#009688", // Primary color (e.g., for buttons)
-
-        secondary: "#9342f5", // Secondary color (e.g., for links)
-        secondary_hover: "#721adb", // Secondary color (e.g., for links)
 
 
-        background: "#faf5f5", // Main background color white
+        text_: "#131414", 
+        main_text:"#102f94",
+        deep_primary_text:"#002ead",
 
-        textPrimary: "#131313", // Primary text color main black
+        secondary_text:"#0eb0a1",
+        link_text:"#aa10b5",
 
-        textSecondary: "#0f0f0f", // Secondary text color dark black
+        secondary_btn: "#14ccbb",
+        secondary_btn_hover : "#0eb0a1",
+
+        secondary: "#5C6BC0",
+        secondary_hover: "#5C6BD0", 
+
+
+        background: "#f7f8fa", 
+
+        textPrimary: "#131313", 
+
+        textSecondary: "#0f0f0f", 
 
         
-        cardBg: "#e6f2eb", // Card background color
+        cardBg: "#f2f4f5", 
+        card_bg_hover: "#d6f0ff",
 
-        cardBorder: "#D1D5DB", // Card border color
-
-
-
-        yellow_: "#edd993", // Accent color: yellow
-        yellow_hover: "#d4bf79", // Accent color: yellow
-
-        green_: "#deeddd", // Accent color: green
-        green_hover: "#cadcc8", // Accent color: green
-
-        blue_: "#dfe7f1", // Accent color: blue
-        blue_hover: "#b8c0cb", // Accent color: blue
-
-        danger: "#eb4034", 
-        danger_hover: "#eb4134", // Accent color: red
+        cardBorder: "#D1D5DB",
 
 
-        error_red: "#EE3E54", // Accent color: red
 
+
+
+
+
+        red_text: "#f44336",
+        red_bg: 'rgba(244, 67, 54, 0.15)',
+        red_bg_hover: 'rgba(244, 67, 54, 0.25)',
+
+        green_text: "#4caf50",
+        green_bg: 'rgba(10,210,110,.1)',
+        green_bg_hover: 'rgba(10,210,110,.2)',
+
+        yellow_text: "#ffeb3b",
+        yellow_bg: 'rgba(255,235,59,.1)',
+        yellow_bg_hover: 'rgba(255,235,59,.2)',
+
+        cyan_text: "#00bcd4",
+        cyan_bg: 'rgba(0,188,212,.1)',
+        cyan_bg_hover: 'rgba(0,188,212,.2)',
+
+        purple_text: "#9c27b0",
+        purple_bg: 'rgba(156,39,176,.1)',
+        purple_bg_hover: 'rgba(156,39,176,.2)',
+
+        orange_text: "#ff9800",
+        orange_bg: 'rgba(255,152,0,.1)',
+        orange_bg_hover: 'rgba(255,152,0,.2)',
+
+        pink_text: "#e91e63",
+        pink_bg: 'rgba(233,30,99,.1)',
+        pink_bg_hover: 'rgba(233,30,99,.2)',
+
+        indigo_text: "#3f51b5",
+        indigo_bg: 'rgba(63,81,181,.1)',
+        indigo_bg_hover: 'rgba(63,81,181,.2)',
+
+        blue_text: "#2196f3",
+        blue_bg: 'rgba(33,150,243,.1)',
+        blue_bg_hover: 'rgba(33,150,243,.2)',
 
         error_color: "#EF4444",
         info_clor: "#3B82F6",
@@ -137,7 +162,16 @@ export default {
           '50%': { transform: 'translateY(0)', animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)' },
         },
       },
-      
+      backgroundImage: {
+        'primary_btn_dark': 'linear-gradient(to top right, #6573f0, #5c6af7)',
+        'primary_btn_light': 'linear-gradient(to top right, #8d97f0, #8690f7)',
+
+        'primary_btn_dark_hover': 'linear-gradient(to top right, #7a87fa, #5f6ce8)',
+        'primary_btn_light_hover': 'linear-gradient(to top right, #818be6, #7a84eb)',
+
+        'primary_btn_bg_very_light': 'linear-gradient(to top right, #cacded, #a0a7f2)',
+
+      },
 
 
     },

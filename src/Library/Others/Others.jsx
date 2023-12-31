@@ -1,10 +1,11 @@
 import CryptoAES from 'crypto-js/aes';
 import CryptoENC from 'crypto-js/enc-utf8';
 import Cookies from 'js-cookie';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useLayoutEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ProfileContext } from '/src/context/ProfileContext/ProfileContext';
 import { SHA256 } from 'crypto-js';
+import toast from 'react-hot-toast';
 
 
 
@@ -28,7 +29,7 @@ export function EncryptString(data){
   const { fetchProfileData } = useContext(ProfileContext);
   const navigate = useNavigate();
 
-  useEffect(()=>{
+  useLayoutEffect(()=>{
     const access = Cookies.get("access");
     if (!access) {
       navigate('/login');
@@ -39,7 +40,10 @@ export function EncryptString(data){
  export default ValidateUser
 
  export const firstLetterCapital = (string) => {
+  if (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  return string;
   };
 
 
@@ -53,6 +57,7 @@ export function EncryptString(data){
  * // returns 'Mon Aug 30, 2021'
   */
   export const dateFormat = (date, includeDay = false) => {
+    if (!date) return null;
     const d = new Date(date);
     const month = d.toLocaleString('default', { month: 'short' });
     const day = d.getDate();
@@ -88,3 +93,14 @@ export function EncryptString(data){
     });
   }
   
+  export  const sanitizeHtml = (html) => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+  };
+
+  export const copy = (text) => {
+    navigator.clipboard.writeText(text);
+    toast.success("Copied to clipboard");
+  };
+
+  export const defaultProfilePic = "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";

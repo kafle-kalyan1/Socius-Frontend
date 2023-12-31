@@ -35,14 +35,14 @@ formik.values[name] = value;
     filterOption={filterOption}
     options={options}
     rootClassName='outline-0 border ring-0 bg-background border-cardBorder dark:border-dark_cardBorder '
-    className={`block w-full mt-2 h-[42px] text-textPrimary dark:text-dark_textPrimary font-mono dark:bg-dark_background border-0 ring-0 outline-0 rounded-md border-cardBorder dark:border-dark_cardBorder`}
+    className={`block w-full mt-2 h-[42px] text-textPrimary dark:text-dark_textPrimary font-mono dark:bg-dark_background border-0 ring-0 outline-0 rounded-md border-cardBorder dark:border-dark_cardBorder bg-background`}
   />
           </span>
 
           {formik.touched[name] &&
       formik.errors[name] &&
       formik.values[name] != "" ? (
-        <h3 className="text-xs text-error_red">{formik.errors[name]}</h3>
+        <h3 className="text-xs text-red_text">{formik.errors[name]}</h3>
       ) : null}
 
    </div>

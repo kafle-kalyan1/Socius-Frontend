@@ -19,7 +19,7 @@ const ProfileProvider = ({ children }) => {
           },
         });
         const profileData = response;
-        setProfile(profileData);
+        setProfile(profileData.data.data);
       }
       else{
       debugger;

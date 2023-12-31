@@ -33,14 +33,14 @@ const DatePickers = (props) => {
           className={`block w-full px-4 py-2 mt-2 text-textPrimary placeholder-bold dark:text-dark_textPrimary bg-background dark:bg-dark_background border-2 rounded-md focus:ring-0 ring-0 font-mono border-cardBorder dark:border-dark_cardBorder
             ${
             formik.touched[name] && formik.errors[name]
-              ? "border-error_red placeholder-error_red"
+              ? "border-red_text placeholder-red_text"
               : "outline-cardBorder dark:outline-dark_cardBorder "
               }
         `}
         />
       </span>
       {formik.touched[name] && formik.errors[name] && (
-        <h3 className="text-xs text-error_red">{formik.errors[name]}</h3>
+        <h3 className="text-xs text-red_text">{formik.errors[name]}</h3>
       )}
     </div>
   );
