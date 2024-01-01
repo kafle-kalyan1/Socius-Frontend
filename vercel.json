@@ -2,7 +2,7 @@
    "rewrites": [
      {
        "source": "*",
-       "destination": "https://socius.onrender.com"
+       "destination": "https://socius.onrender.com/"
      }
    ]
  }
