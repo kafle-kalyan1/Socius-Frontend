@@ -15,7 +15,7 @@ import otpicon from "/src/assets/Icons/OTP.svg";
 
 import error_icon from "/src/assets/ResponseIcons/Simple/error.svg";
 import success_icon from "/src/assets/ResponseIcons/Simple/success.svg";
-import info_icon from "/src/assets/ResponseIcons/Simple/info.svg";
+import info_icon from "/src/assets/ResponseIcons/Simple/Info.svg";
 import warning_icon from "/src/assets/ResponseIcons/Simple/warning.svg";
 
 
