@@ -1,0 +1,7 @@
+[build]
+ publish="dist"
+
+[[redirect]] 
+   from = "*"
+   to = "https://socius.onrender.com/"
+   status = 200
