@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import LostPage from "./Screens/404/NotFound";
 import ServerError from "./Screens/ServerError/ServerError";
@@ -19,12 +19,21 @@ const SetUpAccount = lazy(() => import("./Auth/Others/SetupAccount"));
 const OPT = lazy(() => import("./Auth/Others/OTP"));
 const UserProfile= lazy(()=>import('./Screens/UserProfile/UserProfile'));
 
+import { ProfileContext } from '/src/context/ProfileContext/ProfileContext';
+import Sidebar  from '/src/components/Sidebar/Sidebar';
+import MobileNavbar from './components/Sidebar/MobileNavbar';
+import { MenuContext } from '/src/context/MenuContext/MenuContext';
+
 function AppRoute() {
   const { notifications, addNotification, removeNotification } = useNotification();
+  const {user} = useContext(ProfileContext);
+  const {isMobile, setIsMobile} = useContext(MenuContext);
+
 
   useEffect(() => {
+   if(user?.username){
     const username = Cookies.get("username");
-    const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${username}/`);
+    const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${user.username}/`);
 
     newSocket.onopen = () => {
       console.log("WebSocket connected");
@@ -53,12 +62,36 @@ function AppRoute() {
 
       }
     };
+   }
 
   });
 
+
   return (
     <>
+    {
+      window.location.pathname=='/login' || window.location.pathname=='/register' ? null : isMobile ? <MobileNavbar /> : <Sidebar />
+    }
     <Routes>
+    <Route
+        exact
+        path="/login"
+        element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <Login />
+          </Suspense>
+        }
+      />
+      <Route
+        exact
+        path="/register"
+        element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <Register />
+          </Suspense>
+        }
+      />
+
       <Route
         exact
         path=""
@@ -95,15 +128,7 @@ function AppRoute() {
           </Suspense>
         }
       />
-      <Route
-        exact
-        path="/register"
-        element={
-          <Suspense fallback={<div>Loading...</div>}>
-            <Register />
-          </Suspense>
-        }
-      />
+      
       <Route
         exact
         path="/edit-profile"
@@ -114,15 +139,7 @@ function AppRoute() {
         }
       />
       
-      <Route
-        exact
-        path="/login"
-        element={
-          <Suspense fallback={<div>Loading...</div>}>
-            <Login />
-          </Suspense>
-        }
-      />
+      
       <Route
         exact
         path="/verify-otp"

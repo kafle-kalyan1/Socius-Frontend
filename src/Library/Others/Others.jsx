@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 
 
 const VITE_PASSWORD_KEY = import.meta.env.VITE_PASSWORD_KEY;
+const cloudinary_cloud = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
 
 export function EncryptString(data){
    var enc_string= CryptoAES.encrypt(data,VITE_PASSWORD_KEY ).toString();
@@ -24,20 +25,6 @@ export function EncryptString(data){
    var originalText = bytes.toString(CryptoENC);
    return originalText;
  }    
-
- const ValidateUser = () => {
-  const { fetchProfileData } = useContext(ProfileContext);
-  const navigate = useNavigate();
-
-  useLayoutEffect(()=>{
-    const access = Cookies.get("access");
-    if (!access) {
-      navigate('/login');
-    }
-    fetchProfileData(access);
-    },[])
- }
- export default ValidateUser
 
  export const firstLetterCapital = (string) => {
   if (string) {
@@ -104,3 +91,34 @@ export function EncryptString(data){
   };
 
   export const defaultProfilePic = "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";
+
+  export function ShortcutKey(key,callback){
+    key=key.toUpperCase().charCodeAt(0);
+    var fun=function(e) {
+      if (e.altKey == true && e.keyCode == key){
+        e.preventDefault();
+        callback();
+      }
+    }
+    window.addEventListener('keydown', fun);
+    return ()=>{window.removeEventListener('keydown',fun)};
+  }
+
+
+  export function uploadCloudinary(file, preset="yaofb5a3"
+    , folder="socius") {
+    const url = `https://api.cloudinary.com/v1_1/dfvekucsr/upload`;
+    const formData = new FormData();
+    formData.append('file', file.originFileObj);
+    formData.append('upload_preset', preset);
+    formData.append('folder', folder);
+    return fetch(url, {
+      method: 'POST',
+      body: formData,
+    }).then((response) => {
+      response.json()
+    }).catch((error) => {
+      toast.error("Error uploading image");
+    }
+      );
+  } 

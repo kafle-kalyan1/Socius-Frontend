@@ -19,12 +19,11 @@ const secret_key = import.meta.env.VITE_SECRET_KEY
 import { showLoading } from '/src/components/Loading/Loading';
 import Cookies from "js-cookie";
 import { ProfileContext } from "/src/context/ProfileContext/ProfileContext";
-import { EncryptString } from './../../Library/Others/Others';
-import Button from "../../components/Button/Button";
+import { EncryptString } from '/src/Library/Others/Others';
+import Button from "/src/components/Button/Button";
 
 
 const Login = () => {
-  
   const [showPassword, setShowPassword] = useState(true);
   const usernames = useRef();
   const navigate = useNavigate();

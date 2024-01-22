@@ -7,8 +7,8 @@ const TextEditor = ({ setContent }) => {
 
   const config = useMemo(
     () => ({
-      height: 500,
-      minHeight: 500,
+      height: 400,
+      minHeight: 300,
       readonly: false,
       buttons: [
         "italic",
@@ -29,7 +29,7 @@ const TextEditor = ({ setContent }) => {
 
   return (
     <>
-      <div className="w-full overflow-x-auto">
+      <div className="w-full overflow-x-auto  overflow-scroll">
         <div className="w-[320px] md:w-full">
           <JoditEditor
             ref={editor}

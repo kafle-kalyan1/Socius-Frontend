@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import CustomPopover from "../PopOver/PopOver";
 import '/src/index.css'
 
-const Post = ({
+const PreviewPost = ({
   profileImage,
   username,
   timestamp,
@@ -35,7 +35,6 @@ const Post = ({
   );
 
   
-  const navigate = useNavigate();
 
   useEffect(() => {
     setCount({likes: likes, comments: comments})
@@ -59,9 +58,6 @@ const Post = ({
     );
   }
 
-  function viewProfile(username) {
-    navigate(`u/${username}`);
-  }
 
   const truncatedText = showFullText ? postText : postText.slice(0, 200);
 
@@ -72,22 +68,19 @@ const Post = ({
 
   
   const buttons = [
-    { label: 'Report', onClick: ()=> console.log("Button 1 Clicked") },
-    { label: 'Print', onClick: ()=> console.log("Button 2 Clicked") },
-  ];
+  ]
 
   return (
     <div
-      className="bg-slate-800 text-white rounded-lg flex flex-col min-h-[300px] h-fit min-w-[400px] max-w-[600px] 3xl:max-w-[800px] 3xl:w-[800px] space-y-6 p-10 mb-4"
+      className="bg-slate-800 text-white rounded-lg flex flex-col w-4/6 min-h-[300px] h-fit max-w-[900px] space-y-6 p-10 mb-4"
       onMouseEnter={() => setIsMouseOver(true)}
       onMouseLeave={() => setIsMouseOver(false)}
     >
       <div className="flex space-x-4 items-center w-full ">
         <div className="w-12 h-12">
           <img
-            onClick={() => viewProfile(username)}
             alt="avatar"
-            src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
+            src={profileImage}
             className="rounded-full w-full h-full object-cover cursor-pointer"
           />
           <div></div>
@@ -95,11 +88,10 @@ const Post = ({
         <div className="space-y-2">
           <div className="flex space-x-2 items-center w-full">
             <h2
-              onClick={() => viewProfile(username)}
               className="text-base cursor-pointer"
             >
               {" "}
-              {fullname}{" "}
+              {fullname ? fullname : "John Doe"}{" "}
             </h2>
             <CheckCircleOutlined className=" text-primary" title="This Profile is verified" />
             {/* <WarningOutlined  className=" text-red_" title="This Profile may be fake!"/> */}
@@ -111,7 +103,7 @@ const Post = ({
       </div>
       <div>
         <p className="post_text text-sm leading-6 text-slate-300">
-          {truncatedText}
+        <span dangerouslySetInnerHTML={{ __html: truncatedText }} />
           {postText.length > 3 && (
             <span
               className="text-blue-500 cursor-pointer"
@@ -145,7 +137,7 @@ const Post = ({
             <RightCircleOutlined style={{ fontSize: "40px" }} />
           </div>
         ) : null}
-
+        {images?.length > 1 ?
         <img
           onClick={(e) => openImageinNewTab(e)}
           src={images[currentImageIndex]}
@@ -154,6 +146,7 @@ const Post = ({
           title="Click to open in new tab"
           className="h-[300px] w-[800px] cursor-alias object-cover rounded-lg"
         />
+        :null}
       </div>
       <div className="flex justify-between pt-1">
   <div className="flex gap-2">
@@ -176,5 +169,5 @@ const Post = ({
   );
 };
 
-export default Post;
+export default PreviewPost;
 

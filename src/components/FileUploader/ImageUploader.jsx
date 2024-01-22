@@ -3,16 +3,24 @@ import React, { useState } from 'react';
 import { Upload } from 'antd';
 
 const ImageUploader = ({ formik, name,title,max, Icon }) => {
-  const [fileList, setFileList] = useState([
-    // Your initial file list
-  ]);
+
+  const [fileList, setFileList] = useState(
+    formik.values[name] ? [...formik.values[name]] : []
+  );
 
   const onChange = async ({ fileList: newFileList }) => {
+    debugger;
     setFileList(newFileList);
-    formik.values[name] = newFileList[0];
+    if(max) {
+      formik.values[name] = newFileList;
+    }
+    else{
+      formik.values[name] = newFileList[0];
+    }
   };
 
   const onPreview = async (file) => {
+    debugger;
     let src = file.url;
     if (!src) {
       src = await new Promise((resolve) => {

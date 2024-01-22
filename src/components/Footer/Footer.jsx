@@ -4,7 +4,7 @@ import DynamicLogo from "/src/DynamicLogo";
 
 const Footer = () => {
   return (
-    <div className="w-full relative bottom-0 left-0 m-0 p-0 bg-background overflow-x-hidden dark:bg-dark_background border-t-2 border-cardBorder h-fit z-50 body-font">
+    <div className="w-full relative bottom-0 left-0 m-0 p-0 bg-background overflow-x-hidden dark:bg-dark_background border-t-2 border-cardBorder h-fit z-20 body-font">
   <div className="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
     <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
       <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">

@@ -1,5 +1,4 @@
 import OurProfile from "./OurProfile";
-import ValidateUser from "/src/Library/Others/Others";
 import Sidebar from "/src/components/Sidebar/Sidebar";
 import { Skeleton } from "antd";
 import Post from "/src/components/Post/Post";
@@ -14,10 +13,9 @@ import PostSkeleton from "../../components/Post/PostSkeleton";
 
 
 const Profile = () => {
-  const {open, setOpen} = useContext(MenuContext);  
+  const {isMobile, setOpen} = useContext(MenuContext);  
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
-  ValidateUser();
 
 
   // useEffect to get user data from backend
@@ -55,11 +53,8 @@ const Profile = () => {
   };
   
   return (
-    <div className="flex h-screen">
-    <div className={` block duration-300 z-20 ${open ? "w-1/5":" w-1/12"}`}>
-        <Sidebar className=""/>
-    </div>
-        <div className={`block duration-300 ${open ? "w-4/5":" w-10/12"} ml-10 mt-5`}>
+    <div className={`flex ${!isMobile ? " ml-72" : "ml-0"} `}>
+    <div className={` block w-3/5 font-primary_font justify-center max-lg:w-full max-lg:m-2 m-auto bg-red-300 max-sm:w-full`}>
         {loading ? (
           <OurProfileSkeleton />
         ) : (

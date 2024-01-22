@@ -1,87 +1,139 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
+import { showModal } from '/src/components/Alert/Alert';
+import Cookies from 'js-cookie';
+import { hideAlertModal } from '/src/components/Alert/Alert';
 
-/**
- * @param {Object} props
- * @param {Function} props.onClose - Function to be called when the popup is closed
- * @param {React.ReactNode} props.children - Content of the popup
- * @returns {React.ReactNode}
- * @example 
- * <BigPopup onClose={handleClose}>
- *   <div>Content</div>
- * </BigPopup>
- */
-const BigPopup = ({ onClose, children }) => {
-   const [isOpen, setIsOpen] = useState(true);
+const BigPopup = ({ id, onClose, children, ask = false }) => {
+  const [isOpen, setIsOpen] = useState(true);
 
-   //shortcut key esc to close popup in useEffect
-   useEffect(() => {
-      const handleEsc = (event) => {
-         if (event.keyCode === 27) {
-            handleClose();
-         }
-      };
-      window.addEventListener('keydown', handleEsc);
-      return () => {
-         window.removeEventListener('keydown', handleEsc);
-      };
-   });
-   
-
-   const handleClose = () => {
-      setIsOpen(false); // Set isOpen to false to hide the popup
-      if (onClose) {
-         onClose(); // Call the onClose function if provided
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if(open){
+      if (event.keyCode === 27) {
+        if (ask) {
+          showModal({
+            type: "info",
+            title: "Close Without Saving",
+            message: "Are you sure you want to close without saving",
+            buttons: [
+              {
+                title: "Yes",
+                onclick: () => {
+                  document.getElementById(id).style.display = 'none';
+                },
+              },
+              {
+                title: "No",
+                onclick: () => {
+                  hideAlertModal();
+                },
+              },
+            ],
+            outSideAction: true,
+          });
+        } else {
+          handleClose();
+        }
+        window.addEventListener('keydown', handleEsc); 
       }
-   };
+      }
+   }
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+    };
+  });
 
+  const handleClose = () => {
+    setIsOpen(false);
+    if (onClose) {
+      onClose();
+    }
+  };
 
-   return (
-      <>
-         {isOpen && (
-            <div
-            className='fixed scroll-smooth overflow-y-scroll scroll-bar  inset-0 bg-cardBorder   backdrop-filter backdrop-blur-md flex justify-center items-center z-40  mx-auto bg-opacity-5'
-            >
-               <button className='fixed block top-2 right-2 w-8 h-8 rounded-md text-white hover:bg-error_red hover:opacity-100  duration-200  bg-black opacity-50 cursor-pointer'
-                  onClick={handleClose}
-               >
-                  X
-               </button>
-               <div className='mt-32 p-1 w-full '>
-               <div className=' '>
-
-               {children}
-               </div>
-               </div>
-            </div>
-         )}
-      </>
-   );
+  return (
+    <>
+      {isOpen && (
+        <div className='fixed inset-0 flex justify-center items-center z-40 mx-auto bg-opacity-50 bg-gray-800' id={id}>
+          <button
+            className='fixed block top-2 right-2 w-8 h-8 rounded-md text-white hover:bg-red-500 duration-200 bg-black opacity-50 cursor-pointer'
+            onClick={handleClose}
+          >
+            X
+          </button>
+          <div className='mt-6 p-4 w-11/12 min-w-md bg-cardBg rounded-md shadow-md overflow-scroll'>
+            {children}
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
-// write jsdox comments for the functions
-/**
- * @param {Object} props
- * @param {Function} props.onClose - Function to be called when the popup is closed
- * @param {React.ReactNode} props.children - Content of the popup
- * @returns {React.ReactNode}
- * @example 
- * <BigPopup onClose={handleClose}>
- *   <div>Content</div>
- * </BigPopup>
- */
-export function showBigPopup({ onClose, children }) {
-   const modalContainer = document.getElementById('modal');
-console.log(onClose)
-   ReactDOM.createRoot(modalContainer).render(
-      <BigPopup onClose={onClose}>{children}</BigPopup>
-   );
-   document.getElementById('modal').style.display = 'block';
+let modals = [];
+
+export function showBigPopup({ id, onClose, children, ask = false }) {
+  const modalContainer = document.getElementById(id);
+
+  if (!modalContainer) {
+    const newModalContainer = document.createElement('div');
+    newModalContainer.id = id;
+    document.body.appendChild(newModalContainer);
+  }
+
+  modals.push({ id, onClose, children, ask });
+
+  updateModalsState();
 }
 
-export function hideBigPopup() {
-   document.getElementById('modal').style.display = 'none';
+export function hideBigPopup(id, ask = false) {
+  if (ask) {
+    showModal({
+      type: "info",
+      title: "Close Without Saving",
+      message: "Are you sure you want to close without saving",
+      buttons: [
+        {
+          title: "Yes",
+          onclick: () => {
+            modals = modals.filter((modal) => modal.id !== id);
+            updateModalsState();
+          },
+        },
+        {
+          title: "No",
+          onclick: () => {
+            hideAlertModal();
+          },
+        },
+      ],
+      outSideAction: true,
+    });
+  } else {
+    // Remove the modal from the modals array
+    modals = modals.filter((modal) => modal.id !== id);
+
+    // Update the state to trigger a re-render
+    updateModalsState();
+  }
 }
+
+// Function to update the state and trigger a re-render
+const updateModalsState = () => {
+  ReactDOM.createRoot(document.getElementById('modals-container')).render(
+    <div id="modals-container">
+      {modals.map((modal) => (
+        <BigPopup
+          key={modal.id}
+          id={modal.id}
+          onClose={modal.onClose}
+          ask={modal.ask}
+        >
+          {modal.children}
+        </BigPopup>
+      ))}
+    </div>
+  );
+};
 
 export default BigPopup;
-

@@ -28,12 +28,13 @@ export const SidebarContext = createContext();
 
 export function Sidebarr({ children }) {
   const { open, setOpen } = useContext(MenuContext);
-  const { profile } = useContext(ProfileContext);
+  const { profile,fetchProfileData } = useContext(ProfileContext);
   const [search, setSearch] = useState(null);
   const navigate = useNavigate();
   const searchRef = useRef(null);
 
   useEffect(() => {
+    fetchProfileData();
     searchRef.current?.focus();
   }, []);
 
@@ -70,8 +71,8 @@ export function Sidebarr({ children }) {
   ];
 
   return (
-    <aside className={`h-screen scroll-bar2 z-auto ${open ? "w-66" : "w-16"}`}>
-      <nav className="h-full scroll-bar2 flex flex-col fixed bg-cardBg border-r border-cardBorder shadow-sm transition-width duration-300 ease-in-out">
+    <aside className={`h-screen fixed scroll-bar2 z-30`}>
+      <nav className="h-full scroll-bar2 flex flex-col bg-cardBg border-r border-cardBorder shadow-sm transition-width duration-300 ease-in-out">
         <div className="p-4 pb-2 flex justify-between items-center">
           {open && (
             <span className="flex gap-2">
@@ -79,12 +80,12 @@ export function Sidebarr({ children }) {
               <h2 className="text-2xl text-main_text">Socius</h2>
             </span>
           )}
-          <button
+          {/* <button
             onClick={() => setOpen((curr) => !curr)}
             className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
           >
             {open ? <ChevronFirst /> : <ChevronLast />}
-          </button>
+          </button> */}
         </div>
 
         {open && (
@@ -229,8 +230,7 @@ export function SidebarItem({ icon, text, onClick, path, alert }) {
 
 export default function SIdebar() {
   const { open, setOpen } = useContext(MenuContext);
-
-  return (
+  return   (
     <main className="App">
       <Sidebarr>
         {!open && (

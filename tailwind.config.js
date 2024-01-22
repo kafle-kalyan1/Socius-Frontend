@@ -104,6 +104,7 @@ export default {
         'lg': '1024px',
         'xl': '1280px',
         '2xl': '1536px',
+        '3xl': '1920px',
 
       },
       spacing: {
@@ -117,8 +118,7 @@ export default {
         mono: ['ui-monospace', 'SFMono-Regular'],
         display: ['Oswald'],
         body: ['Open Sans'],
-        //lato font as primary_font
-        primary_font: ['Lato'],
+        primary_font: ["Poppins", "sans-serif"],
       },
       boxShadow: {
         '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',

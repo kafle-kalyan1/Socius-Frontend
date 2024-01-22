@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { sanitizeHtml } from '../../Library/Others/Others';
+import { ShortcutKey, sanitizeHtml } from '../../Library/Others/Others';
 
-const Button = ({ width, text, type, onClick }) => {
+const Button = ({ width, text, type, onClick, shortCutKey }) => {
   const [isAltPressed, setIsAltPressed] = useState(false);
 
   useEffect(() => {
+    
     const handleKeyDown = (event) => {
       if (event.key === 'Alt') {
         event.preventDefault();
@@ -18,6 +19,10 @@ const Button = ({ width, text, type, onClick }) => {
         setIsAltPressed(false);
       }
     };
+    let shortCutKeyPressed;
+    if(shortCutKey){
+       shortCutKeyPressed = ShortcutKey(shortCutKey,onClick);
+    }
 
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
@@ -25,8 +30,12 @@ const Button = ({ width, text, type, onClick }) => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
+      if(ShortcutKey) {
+        shortCutKeyPressed;
+      }
+        
     };
-  }, []);
+  });
 
   const getWidthClass = () => {
     if (typeof width === 'number' || (typeof width === 'string' && /^\d+(\.\d+)?(px|%)?$/.test(width))) {

@@ -49,7 +49,7 @@ function App() {
       }
        }}
       >
-    <div className="w-screen h-screen dark:bg-dark_background bg-background m-0 p-0 overflow-y-auto max-h-[100vh] scroll-smooth  scroll-bar">
+    <div className="w-screen h-screen font-primary_font dark:bg-dark_background bg-background m-0 p-0 overflow-y-auto max-h-[100vh] scroll-smooth  scroll-bar">
      <AppRoute />
 
     </div>
