@@ -9,7 +9,7 @@ const ImageUploader = ({ formik, name,title,max, Icon }) => {
   );
 
   const onChange = async ({ fileList: newFileList }) => {
-    debugger;
+    
     setFileList(newFileList);
     if(max) {
       formik.values[name] = newFileList;
@@ -20,7 +20,7 @@ const ImageUploader = ({ formik, name,title,max, Icon }) => {
   };
 
   const onPreview = async (file) => {
-    debugger;
+  
     let src = file.url;
     if (!src) {
       src = await new Promise((resolve) => {

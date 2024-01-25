@@ -6,7 +6,7 @@ import { ProfileProvider } from "./context/ProfileContext/ProfileContext.jsx";
 import { Toaster } from "react-hot-toast";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
-
+console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID)
 ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
   <React.StrictMode>

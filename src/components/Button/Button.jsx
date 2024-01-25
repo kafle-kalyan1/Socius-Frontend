@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { ShortcutKey, sanitizeHtml } from '../../Library/Others/Others';
+import { FaSpinner } from 'react-icons/fa'; // Assuming you're using react-icons for icons
 
-const Button = ({ width, text, type, onClick, shortCutKey }) => {
+const Button = ({ width, text, type, onClick, shortCutKey, icon, disabled=false }) => {
   const [isAltPressed, setIsAltPressed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    
     const handleKeyDown = (event) => {
       if (event.key === 'Alt') {
         event.preventDefault();
@@ -19,9 +20,10 @@ const Button = ({ width, text, type, onClick, shortCutKey }) => {
         setIsAltPressed(false);
       }
     };
+
     let shortCutKeyPressed;
-    if(shortCutKey){
-       shortCutKeyPressed = ShortcutKey(shortCutKey,onClick);
+    if (shortCutKey) {
+      shortCutKeyPressed = ShortcutKey(shortCutKey, handleClick);
     }
 
     document.addEventListener('keydown', handleKeyDown);
@@ -30,12 +32,26 @@ const Button = ({ width, text, type, onClick, shortCutKey }) => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
-      if(ShortcutKey) {
-        shortCutKeyPressed;
+      if (shortCutKeyPressed) {
+        shortCutKeyPressed();
       }
-        
     };
-  });
+  }, [shortCutKey]);
+
+  const handleClick = async () => {
+    setIsLoading(true);
+
+    try {
+      // Call the provided onClick callback
+      await onClick();
+    } catch (error) {
+      // Handle any errors if needed
+      console.error('Error during button click:', error);
+    } finally {
+      // Reset loading state after the onClick callback completes
+      setIsLoading(false);
+    }
+  };
 
   const getWidthClass = () => {
     if (typeof width === 'number' || (typeof width === 'string' && /^\d+(\.\d+)?(px|%)?$/.test(width))) {
@@ -46,7 +62,7 @@ const Button = ({ width, text, type, onClick, shortCutKey }) => {
 
   const widthClass = getWidthClass();
 
-  const buttonClasses = `cursor-pointer px-4 py-2 tracking-wide text-textPrimary dark:text-textPrimary transition-colors duration-200 transform ${widthClass} rounded-md`;
+  const buttonClasses = `flex cursor-pointer text-center px-4 py-2 tracking-wide text-textPrimary dark:text-textPrimary transition-colors duration-200 transform ${widthClass} rounded-md`;
 
   const typeClasses = {
     primary: 'bg-primary_btn_dark hover:bg-primary_btn_dark_hover text-white focus:outline-none focus:bg-primary_btn_dark_hover',
@@ -60,8 +76,21 @@ const Button = ({ width, text, type, onClick, shortCutKey }) => {
   const typeClass = typeClasses[type] || typeClasses.primary;
 
   return (
-    <button onClick={onClick} type="submit" className={`transition ease-linear  duration-100 shadow-md  ${buttonClasses} ${typeClass} hover:shadow-lg `}>
-      {isAltPressed ? <span dangerouslySetInnerHTML={{ __html: text }} /> : sanitizeHtml(text)}
+    <button
+      onClick={handleClick}
+      type="submit"
+      className={`transition disabled:cursor-not-allowed ease-linear duration-100 shadow-md ${buttonClasses} ${typeClass} hover:shadow-lg justify-center`}
+      disabled={disabled}
+    >
+          {icon && <span className="mt-1 mr-3">{icon}</span>}
+      {isLoading ? (
+        <FaSpinner className="animate-spin mr-2" />
+      ) : (
+        <>
+          {isAltPressed ? <span dangerouslySetInnerHTML={{ __html: text }} /> : sanitizeHtml(text)}
+
+        </>
+      )}
     </button>
   );
 };

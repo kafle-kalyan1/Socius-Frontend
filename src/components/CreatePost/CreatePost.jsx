@@ -6,23 +6,44 @@ import ImageUploader from "../FileUploader/ImageUploader";
 import { useFormik } from "formik";
 import Post from '/src/components/Post/Post';
 import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
-import  { defaultProfilePic } from "../../Library/Others/Others";
+import  { defaultProfilePic, uploadCloudinary } from "../../Library/Others/Others";
 import PreviewPost from "../Post/PreviewPost";
+import toast from "react-hot-toast";
+import { showLoading } from '/src/components/Loading/Loading';
+import APICall from "../../Library/API/APICall";
 
 const CreatePost = ({profile}) => {
   const [content, setContent] = useState("");
   const [isAddImageModalVisible, setAddImageModalVisible] = useState(false);
-  console.log(profile);
 
   const formik = useFormik({
     initialValues: {
       images: null,
       content: "",
     },
-    onSubmit: (values) => {
-      debugger;
-      console.log(values);
+    onSubmit: async (values) => {
+      showLoading(true)
+      var urls = [];
+      if(values.images?.length > 0){
+        for (const element of values.images) {
+          const imgLinks = await uploadCloudinary(element);
+           console.log(imgLinks)
+           urls = [...urls, imgLinks.url];
+      }
+      }
+      const final_data = {
+        images: urls,
+        text_content:content
+      }
+       let response = await APICall('/api/posts/createPost/','POST',final_data).then((res)=>{
+toast.success(res.message)
+hideBigPopup('createPost')
+       }).catch((err)=>toast.error("Something went wrong!")).finally(()=>{
+        showLoading(false)
+       })
+
     },
+
   });
 
   const handleAddImageClick = () => {
@@ -34,8 +55,6 @@ const CreatePost = ({profile}) => {
   };
 
   const handlePreviewClick = () => {
-    console.log(profile)
-    debugger
     showBigPopup({
       id: "preview-post",
       children: (
@@ -89,6 +108,7 @@ const CreatePost = ({profile}) => {
           onClick={handlePreviewClick}
           text={`P<u>r</u>eview`}
           type="txtPrimary"
+          disabled={true}
         />
         <Button
           onClick={handleAddImageClick}

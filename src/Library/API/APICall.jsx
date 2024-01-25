@@ -4,16 +4,16 @@ import { useNavigation } from "react-router-dom";
 
 
 export default async function APICall(url, method='post', data={}) {
-   const navigate = useNavigation()
+   // const navigate = useNavigation()
    if (url == null || url == undefined) {
       return;
    }
-   const access_token = Cookies.get("access_token");
+   const access_token = Cookies.get("access");
    if(access_token == null || access_token == undefined){
-      navigate('/unauthorized')
+      window.location.href('/login')
       return;
    }
-   axios({
+   var response = await axios({
     method: method,
     url: url,
     data: data,
@@ -23,10 +23,19 @@ export default async function APICall(url, method='post', data={}) {
       'Authorization': `Bearer ${access_token}`,
     },
    })
-      .then((response) => {
-         return response;
-      })
-      .catch((error) => {
-         return error;
-      });
+
+   try {
+      if (response.status != 200 && response.status != 201) {
+         console.log(response.status)
+         throw new Error(`Upload failed with status ${response.status}`);
+       }
+   
+       return response.data;
+
+
+   } catch (error) {
+      console.error(error);
+      throw error; 
+    }
+      
 }

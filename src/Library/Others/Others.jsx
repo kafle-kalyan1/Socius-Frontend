@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ProfileContext } from '/src/context/ProfileContext/ProfileContext';
 import { SHA256 } from 'crypto-js';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 
 
@@ -105,20 +106,33 @@ export function EncryptString(data){
   }
 
 
-  export function uploadCloudinary(file, preset="yaofb5a3"
-    , folder="socius") {
+  export async function uploadCloudinary(file, preset = "yaofb5a3", folder = "socius") {
     const url = `https://api.cloudinary.com/v1_1/dfvekucsr/upload`;
     const formData = new FormData();
     formData.append('file', file.originFileObj);
     formData.append('upload_preset', preset);
     formData.append('folder', folder);
-    return fetch(url, {
-      method: 'POST',
-      body: formData,
-    }).then((response) => {
-      response.json()
-    }).catch((error) => {
-      toast.error("Error uploading image");
+  
+    try {
+      const response = await axios.post(url, formData);
+  
+      if (response.status !== 200) {
+        throw new Error(`Upload failed with status ${response.status}`);
+      }
+  
+      const responseData = response.data;
+  
+      // Check if the response contains the expected 'url' property
+      if (responseData.url) {
+        console.log(responseData); // Log the result here
+        return responseData;
+      } else {
+        throw new Error(`Invalid response format: 'url' property not found`);
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      throw error; // rethrow the error for further handling in the onSubmit function
     }
-      );
-  } 
+  }
+  
+  // export async function axios_auth()

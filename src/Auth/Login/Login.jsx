@@ -21,6 +21,7 @@ import Cookies from "js-cookie";
 import { ProfileContext } from "/src/context/ProfileContext/ProfileContext";
 import { EncryptString } from '/src/Library/Others/Others';
 import Button from "/src/components/Button/Button";
+import { FaLockOpen } from "react-icons/fa";
 
 
 const Login = () => {
@@ -164,7 +165,7 @@ console.log(email)
             Forget Password?
           </Link>
           <div className="mt-6 w-full justify-center flex">
-            <Button type="primary" text="Login" width="full" />
+            <Button type="primary" text="Login" width="full" icon={<FaLockOpen/>} />
           </div>
         </form>
         <div className="relative flex items-center justify-center w-full mt-6 border border-t">

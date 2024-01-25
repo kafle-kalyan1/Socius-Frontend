@@ -7,13 +7,11 @@ import { blobToDataURL } from "/src/Library/Others/Others";
 import { hideBigPopup } from "/src/components/BigPopup/BigPopup";
 import axios from "axios";
 import OurProfileSkeleton from "./../Profile/OurProfileSkeleton";
-import ValidateUser from "../../Library/Others/Others";
 
 const OtherUserProfile = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  ValidateUser();
   //get username from url
   const username = window.location.pathname.split("/")[2];
 
