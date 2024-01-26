@@ -7,12 +7,13 @@ import { hideBigPopup } from "/src/components/BigPopup/BigPopup";
 import toast from "react-hot-toast";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { defaultProfilePic, uploadCloudinary } from "../../Library/Others/Others";
+import { showLoading } from '../../components/Loading/Loading';
 
-const ChangeProfilePic = (profile_picture) => {
-   profile_picture = profile_picture.profile_picture;
+const ChangeProfilePic = ({profile_picture}) => {
   const formik = useFormik({
     initialValues: {
-      profile_picture: null,
+      profile_picture: profile_picture ? profile_picture : defaultProfilePic,
     },
     onSubmit: (values) => {
       let accessToken = Cookies.get("access");
@@ -37,18 +38,6 @@ const ChangeProfilePic = (profile_picture) => {
     },
   });
 
-  const [isDefault, setIsDefault] = useState(true);
-
-  useEffect(() => {
-   debugger;
-    if (profile_picture) {
-      setIsDefault(false);
-      formik.setValues({ ...formik.values, profile_picture: profile_picture });
-    } else {
-      setIsDefault(true);
-    }
-  }, []);
-
   const handleCancel = () => {
     hideBigPopup();
   };
@@ -59,42 +48,31 @@ const ChangeProfilePic = (profile_picture) => {
       input.accept = 'image/*';
       input.click();
       input.onchange = async () => {
+        showLoading(true)
          let file = input.files[0];
          let reader = new FileReader();
          reader.readAsDataURL(file);
-         reader.onload = () => {
-            formik.setValues({ ...formik.values, profile_picture: reader.result });
-            console.log(reader.result);
-            setIsDefault(false);
+         reader.onload = async() => {
+           var url = await uploadCloudinary(reader.result)
+           formik.setValues({ ...formik.values, "profile_picture": url.url });
+           showLoading(false)
          };
          reader.onerror = (error) => {
             toast.error('Error: ', error);
             console.log('Error: ', error);
          };
-      };
+        }
+
    }
 
   return (
     <div className="flex flex-col mx-auto bg-background rounded-md w-1/3 h-screen my-0">
-      {isDefault ? (
-        <img
-          className="h-96 w-auto mx-auto rounded-full"
-          src={ "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
-          }
-          alt=""
-        />
-      ) : (<>
 
-         {
-         console.log(formik.values.profile_picture)
-      }
          <img
             className="h-96 w-auto mx-auto rounded-full"
             src={formik.values.profile_picture}
             alt="Profile Pic"
          />         
-      </>
-      )}
 
       <div className="flex justify-center align-middle gap-4 ">
         <Button

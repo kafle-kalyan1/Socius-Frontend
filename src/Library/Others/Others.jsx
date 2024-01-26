@@ -109,7 +109,7 @@ export function EncryptString(data){
   export async function uploadCloudinary(file, preset = "yaofb5a3", folder = "socius") {
     const url = `https://api.cloudinary.com/v1_1/dfvekucsr/upload`;
     const formData = new FormData();
-    formData.append('file', file.originFileObj);
+    formData.append('file', file);
     formData.append('upload_preset', preset);
     formData.append('folder', folder);
   
@@ -136,3 +136,38 @@ export function EncryptString(data){
   }
   
   // export async function axios_auth()
+
+  export async function urlToAntdFile(url, filename = 'file') {
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const response = await fetch(proxyUrl + url);
+    const data = await response.blob();
+    return new File([data], filename, { type: 'image/jpeg' });
+  }
+
+  export async function DefaultAntdProfile(url=defaultProfilePic, filename = 'file') {
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    const response = await fetch(proxyUrl + url);
+    const data = await response.blob();
+    return new File([data], filename, { type: 'image/jpeg' });
+  }
+
+
+  export function timeAgo(dateTime){
+    const currentTimestamp = new Date().getTime();
+  const pastTimestamp = new Date(dateTime).getTime();
+
+  const seconds = Math.floor((currentTimestamp - pastTimestamp) / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (seconds < 60) {
+    return seconds + ' seconds ago';
+  } else if (minutes < 60) {
+    return minutes + ' minutes ago';
+  } else if (hours < 24) {
+    return hours + ' hours ago';
+  } else {
+    return days + ' days ago';
+  }
+  }

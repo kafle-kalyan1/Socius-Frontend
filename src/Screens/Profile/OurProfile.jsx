@@ -8,23 +8,18 @@ import ChangeProfilePic from './ChangeProfilePic'
 import { blobToDataURL } from '/src/Library/Others/Others';
 import { hideBigPopup } from '/src/components/BigPopup/BigPopup';
 import ChangePassword from '/src/Auth/Others/ChangePassword'
+import { defaultProfilePic } from '../../Library/Others/Others'
 
 const OurProfile = (props) => {
     const navigate = useNavigate()
-    const [profile, setProfile] = useState(null)
-    useEffect(() => {
-        debugger
-        if (props.data?.profile_picture) {
-            setProfile("data:image/png;base64,"+(props.data.profile_picture))
-        }
-    }, [props.data.profile_picture])
+    console.log(props.data)
     const handleEditProfile = () => {
         showBigPopup({
             onClose: () => {
                 console.log('Closed')
             },
             children:(
-                <ChangeProfilePic profile_picture={profile}/>
+                <ChangeProfilePic profile_picture={props.data.profile_picture}/>
                 )
             })
     }
@@ -69,9 +64,9 @@ const OurProfile = (props) => {
                         <div className="bg-white p-3 border-t-4 border-green-400">
                             <div className=" overflow-hidden relative group">
                             {
-                                props.data?.profile_picture ? <img id='profile-img' className='h-40 w-40 mx-auto rounded-full' src={profile}  />
+                                props.data?.profile_picture ? <img id='profile-img' className='h-40 w-40 mx-auto rounded-full' src={props.data.profile_picture}  />
                                  : <img className="h-40 w-40 mx-auto rounded-full"
-                                    src={"https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"}
+                                    src={defaultProfilePic}
                                     alt="" />
                             }
                                 
@@ -86,7 +81,7 @@ const OurProfile = (props) => {
                                         </button>
                                         <button
                                             className="px-4 py-2 bg-green-500 rounded-full mx-2"
-                                            onClick={(e) => handleViewProfile(profile)}
+                                            onClick={(e) => handleViewProfile(props.data.profile_picture)}
                                         >
                                             View Profile
                                         </button>

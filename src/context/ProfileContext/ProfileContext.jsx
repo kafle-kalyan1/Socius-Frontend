@@ -12,7 +12,6 @@ const ProfileProvider = ({ children }) => {
   useEffect(() => {
     const access = Cookies.get("access");
   
-    // if pages are login, register, setupaccount, otp, 404, servererror, then don't fetch profile data
     const path = window.location.pathname;
     if (
       path === "/login" ||

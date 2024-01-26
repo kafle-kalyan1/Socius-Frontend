@@ -26,7 +26,7 @@ const CreatePost = ({profile}) => {
       var urls = [];
       if(values.images?.length > 0){
         for (const element of values.images) {
-          const imgLinks = await uploadCloudinary(element);
+          const imgLinks = await uploadCloudinary(element.originFileObj);
            console.log(imgLinks)
            urls = [...urls, imgLinks.url];
       }
@@ -43,7 +43,7 @@ hideBigPopup('createPost')
        })
 
     },
-
+    
   });
 
   const handleAddImageClick = () => {

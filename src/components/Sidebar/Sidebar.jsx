@@ -125,7 +125,7 @@ export function Sidebarr({ children }) {
           <img
             src={
               profile?.profile_picture
-                ? "data:image/png;base64," + profile.profile_picture
+                ? profile.profile_picture
                 : defaultProfilePic
             }
             alt=""

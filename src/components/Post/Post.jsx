@@ -12,8 +12,10 @@ import {
 import { useNavigate } from "react-router-dom";
 import CustomPopover from "../PopOver/PopOver";
 import '/src/index.css'
+import { defaultProfilePic, timeAgo } from "../../Library/Others/Others";
 
 const Post = ({
+  id,
   profileImage,
   username,
   timestamp,
@@ -24,6 +26,7 @@ const Post = ({
   shares,
   fullname,
 }) => {
+  
   const [showFullText, setShowFullText] = useState(false);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -33,6 +36,7 @@ const Post = ({
   const [count, setCount] = useState(
     {likes: 0, comments: 0}
   );
+  console.log(images?.length)
 
   
   const navigate = useNavigate();
@@ -78,7 +82,7 @@ const Post = ({
 
   return (
     <div
-      className="bg-slate-800 text-white rounded-lg flex flex-col min-h-[300px] h-fit min-w-[400px] max-w-[600px] 3xl:max-w-[800px] 3xl:w-[800px] space-y-6 p-10 mb-4"
+      className=" bg-cardBg text-black rounded-lg flex flex-col min-h-[300px] h-auto min-w-[350px] max-w-[600px] 3xl:max-w-[800px] 3xl:w-[800px] space-y-6 p-5 mb-4"
       onMouseEnter={() => setIsMouseOver(true)}
       onMouseLeave={() => setIsMouseOver(false)}
     >
@@ -87,10 +91,9 @@ const Post = ({
           <img
             onClick={() => viewProfile(username)}
             alt="avatar"
-            src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
+            src={profileImage ? profileImage : defaultProfilePic}
             className="rounded-full w-full h-full object-cover cursor-pointer"
           />
-          <div></div>
         </div>
         <div className="space-y-2">
           <div className="flex space-x-2 items-center w-full">
@@ -98,31 +101,29 @@ const Post = ({
               onClick={() => viewProfile(username)}
               className="text-base cursor-pointer"
             >
-              {" "}
-              {fullname}{" "}
+              {fullname}
             </h2>
-            <CheckCircleOutlined className=" text-primary" title="This Profile is verified" />
-            {/* <WarningOutlined  className=" text-red_" title="This Profile may be fake!"/> */}
-            <div className="  text-xs text-slate-400">posted an update</div>
+            <CheckCircleOutlined className=" text-secondary_text" title="This Profile is verified" />
+            <div className="text-xs text-black">posted an update</div>
             <CustomPopover content={"Options"} buttons={buttons} mainButton={<EllipsisOutlined />} />
           </div>
-          <p className=" text-xs text-slate-400">{timestamp}</p>
+          <p className="text-xs text-black">{timeAgo(timestamp)}</p>
         </div>
       </div>
       <div>
-        <p className="post_text text-sm leading-6 text-slate-300">
-          {truncatedText}
-          {postText.length > 3 && (
-            <span
-              className="text-blue-500 cursor-pointer"
-              onClick={toggleShowFullText}
-            >
-              {showFullText ? " Show less" : " Show more"}
-            </span>
-          )}
-        </p>
+        <p
+          className="post_text text-sm leading-6 text-black"
+          dangerouslySetInnerHTML={{ __html: truncatedText }}
+        ></p>
+        {postText.length > 3 && (
+          <span
+            className="text-blue-500 cursor-pointer"
+            onClick={toggleShowFullText}
+          >
+            {showFullText ? " Show less" : " Show more"}
+          </span>
+        )}
       </div>
-
       <div className="relative">
         {images?.length > 1 ? (
           <div
@@ -134,7 +135,6 @@ const Post = ({
             <LeftCircleOutlined style={{ fontSize: "40px" }} />
           </div>
         ) : null}
-
         {images?.length > 1 ? (
           <div
             onClick={showNextImage}
@@ -145,34 +145,35 @@ const Post = ({
             <RightCircleOutlined style={{ fontSize: "40px" }} />
           </div>
         ) : null}
-
-        <img
-          onClick={(e) => openImageinNewTab(e)}
-          src={images[currentImageIndex]}
-          alt="post"
-          style={{ pointerEvents: "none" }}
-          title="Click to open in new tab"
-          className="h-[300px] w-[800px] cursor-alias object-cover rounded-lg"
-        />
+        {images?.length > 0 ? (
+          <img
+            onClick={(e) => openImageinNewTab(e)}
+            src={images[currentImageIndex]}
+            alt="post"
+            style={{ pointerEvents: "none" }}
+            title="Click to open in new tab"
+            className="h-auto w-full cursor-alias object-cover rounded-lg"
+          />
+        ) : (
+          <></>
+        )}
       </div>
       <div className="flex justify-between pt-1">
-  <div className="flex gap-2">
-  <button onClick={handleLike} className="flex gap-1 items-center">
-      <HeartOutlined/>
-      <p>{count.likes} Likes</p>
-    </button>
-  </div>
-
-    <button onClick={()=> console.log("comment")} className="flex gap-1 items-center">
-      <CommentOutlined style={{ fontSize: "20px" }} />
-      <p>{count.comments} Comments</p>
-    </button>
-
-    <button onClick={()=> console.log("share")} className="flex gap-1 items-center ">
-      <SendOutlined style={{ fontSize: "20px" }} />
-    </button>
-  </div>
+        <div className="flex gap-2">
+          <button onClick={handleLike} className="flex gap-1 items-center">
+            <HeartOutlined/>
+            <p>{count.likes} Likes</p>
+          </button>
+        </div>
+        <button onClick={()=> console.log("comment")} className="flex gap-1 items-center">
+          <CommentOutlined style={{ fontSize: "20px" }} />
+          <p>{count.comments} Comments</p>
+        </button>
+        <button onClick={()=> console.log("share")} className="flex gap-1 items-center ">
+          <SendOutlined style={{ fontSize: "20px" }} />
+        </button>
       </div>
+    </div>
   );
 };
 

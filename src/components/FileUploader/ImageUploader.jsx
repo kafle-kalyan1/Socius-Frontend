@@ -3,19 +3,18 @@ import React, { useState } from 'react';
 import { Upload } from 'antd';
 
 const ImageUploader = ({ formik, name,title,max, Icon }) => {
-
+  console.log(formik.values)
   const [fileList, setFileList] = useState(
     formik.values[name] ? [...formik.values[name]] : []
   );
 
   const onChange = async ({ fileList: newFileList }) => {
-    
     setFileList(newFileList);
-    if(max) {
-      formik.values[name] = newFileList;
-    }
-    else{
-      formik.values[name] = newFileList[0];
+  
+    if (max) {
+      formik.setFieldValue(name, newFileList);
+    } else {
+      formik.setFieldValue(name, newFileList[0]);
     }
   };
 
