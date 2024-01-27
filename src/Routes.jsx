@@ -18,6 +18,7 @@ const Login = lazy(() => import("./Auth/Login/Login"));
 const SetUpAccount = lazy(() => import("./Auth/Others/SetupAccount"));
 const OPT = lazy(() => import("./Auth/Others/OTP"));
 const UserProfile= lazy(()=>import('./Screens/UserProfile/UserProfile'));
+const SinglePost = lazy(()=>import('./components/Post/SinglePost'))
 
 import { ProfileContext } from '/src/context/ProfileContext/ProfileContext';
 import Sidebar  from '/src/components/Sidebar/Sidebar';
@@ -185,6 +186,17 @@ function AppRoute() {
           </Suspense>
         }
       />
+
+<Route
+        exact
+        path="/post/:id"
+        element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <SinglePost />
+          </Suspense>
+        }
+      />
+    
 
       <Route
         exact

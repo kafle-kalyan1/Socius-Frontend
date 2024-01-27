@@ -10,12 +10,16 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import OurProfileSkeleton from "./OurProfileSkeleton";
 import PostSkeleton from "../../components/Post/PostSkeleton";
+import APICall from "../../Library/API/APICall";
+import toast from "react-hot-toast";
 
 
 const Profile = () => {
   const {isMobile, setOpen} = useContext(MenuContext);  
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const [posts, setPosts] = useState([]);
+
 
 
   // useEffect to get user data from backend
@@ -35,48 +39,58 @@ const Profile = () => {
     ).catch((err) => {
       setLoading(false);
     })
+
+  
+    getOwnPosts()
   
   }, [])
-
-  const post = {
-    profileImage: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1',
-    username: 'John_doe',
-    timestamp: '22h ago',
-    fullname: 'John Doe',
-    postText: 'Hypnosis at the parallel universe was the advice of alarm, commanded to a conscious ship.Processors experiment with paralysis!  Hypnosis at the parallel universe was the advice of alarm, commanded to a conscious ship. Processors experiment with paralysis! Hypnosis at the parallel universe was the advice of alarm, commanded to a conscious ship. Processors experiment with paralysis! Hypnosis at the parallel universe was the advice of alarm, commanded to a conscious ship. Processors experiment with paralysis!',
-    images: ['https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1', 'https://media.istockphoto.com/id/1181218567/photo/close-up-top-view-of-young-people-putting-their-hands-together-indian-friends-with-stack-of.jpg?s=2048x2048&w=is&k=20&c=p_rtPy46oLQZRKvYfRpS2cwgMZhFIex0MGwq4ihWizQ='],
-    likes: 12,
-    comments: 8,
-    is_verified: true,
-    is_suspicious: false,
-    shares: 4,
-  };
+  
+  async function getOwnPosts (){
+    try {
+      const response = await APICall("/api/posts/getOwnPost/", "GET", {});
+      console.log(response);
+      setPosts(response); 
+    } catch (error) {
+      toast.error("Something went wrong!");
+    }
+  }
   
   return (
     <div className={`flex ${!isMobile ? " ml-72" : "ml-0"} `}>
-    <div className={` block w-3/5 font-primary_font justify-center max-lg:w-full max-lg:m-2 m-auto bg-red-300 max-sm:w-full`}>
+      <div className={` fixed lg:ml-[14%] overflow-x-scroll w-4/6 h-screen font-primary_font justify-center items-center max-lg:w-full max-lg:m-0 m-auto max-sm:w-full`}>
+        <div className=" max-md:w-full  max-sm:w-full">
         {loading ? (
           <OurProfileSkeleton />
         ) : (
           <>
         <OurProfile data={userData}/>
-        </>
+      
+        {posts && posts.map((post) => (
+            <Post
+              key={post.id}
+              id={post.id}
+              profileImage={post.user_profile.profile_picture}
+              username={post.user.username}
+              timestamp={post.timestamp}
+              fullname={post.user_profile.fullname}
+              postText={post.text_content}
+              images={post.images}
+              likes={post.likes_count}
+              user_has_liked={post.user_has_liked}
+              comments={post.comments_count}
+              is_verified={false} // You may need to fetch this information separately
+              is_suspicious={false} // You may need to fetch this information separately
+              shares={0} 
+              afterDelete={getOwnPosts}
+            />
+          ))}
+          </>
         )}
+        
+        </div>
+      </div>
 
-        <div className="flex">
-        <div className="block w-4/6 ml-10 mt-2">
-        <h1 className=" text-3xl ml-10">Posts</h1>
-        <Post {...post} />
-        <Post {...post} />
-        </div>
-        <div className="block w-2/6 mr-5">
-        <h1>Friends </h1>
-          <FriendRecommendation />
-        </div>
-        </div>
-        </div>
-
-
+      <div className={`fixed right-0 w-1/5 max-lg:hidden h-screen bg-slate-400 `}></div>
     </div>
   );
 };

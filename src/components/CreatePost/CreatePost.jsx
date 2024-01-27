@@ -11,6 +11,8 @@ import PreviewPost from "../Post/PreviewPost";
 import toast from "react-hot-toast";
 import { showLoading } from '/src/components/Loading/Loading';
 import APICall from "../../Library/API/APICall";
+import TextArea from '/src/components/Input/TextArea';
+import { FaTextHeight } from "react-icons/fa";
 
 const CreatePost = ({profile}) => {
   const [content, setContent] = useState("");
@@ -33,7 +35,7 @@ const CreatePost = ({profile}) => {
       }
       const final_data = {
         images: urls,
-        text_content:content
+        text_content:formik.values.content
       }
        let response = await APICall('/api/posts/createPost/','POST',final_data).then((res)=>{
 toast.success(res.message)
@@ -89,13 +91,21 @@ hideBigPopup('createPost')
   return (
     <div className="flex flex-col mt-0 bg-cardBg mx-auto w-full h-4/5  p-4 rounded-md  overflow-scroll">
       <h1 className="text-2xl mb-2 text-center">Create Post</h1>
-      <TextEditor
+      <TextArea 
+        formik={formik}
+        name="content"
+        Icon={FaTextHeight}
+        rows="4"
+        col="60"
+        title="Post Text"
+        />
+      {/* <TextEditor
         content={content}
         setContent={(value) => {
           setContent(value);
           formik.handleChange("content")(value);
         }}
-      />
+      /> */}
       <div className="flex gap-3 justify-evenly">
         <Button
           onClick={() => {

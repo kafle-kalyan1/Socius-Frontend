@@ -7,6 +7,7 @@ import { blobToDataURL } from "/src/Library/Others/Others";
 import { hideBigPopup } from "/src/components/BigPopup/BigPopup";
 import axios from "axios";
 import OurProfileSkeleton from "./../Profile/OurProfileSkeleton";
+import { defaultProfilePic } from "../../Library/Others/Others";
 
 const OtherUserProfile = () => {
   const navigate = useNavigate();
@@ -46,20 +47,12 @@ const OtherUserProfile = () => {
             <div className="w-full md:w-3/12 md:mx-2">
               <div className="bg-white p-3 border-t-4 border-green-400">
                 <div className=" overflow-hidden relative group">
-                  {profile.profile_picture ? (
                     <img
                       id="profile-img"
                       className="h-40 w-40 mx-auto rounded-full"
-                      src={"data:image/png;base64," + profile.profile_picture}
+                      src={profile.profile_picture || defaultProfilePic}
                       alt=""
                     />
-                  ) : (
-                    <img
-                      className="h-40 w-40 mx-auto rounded-full"
-                      src="https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png"
-                      alt=""
-                    />
-                  )}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black bg-opacity-50 transition-opacity">
                     <div className="text-white text-center">
                       <button

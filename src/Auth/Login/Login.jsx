@@ -64,8 +64,7 @@ const Login = () => {
           Cookies.set("refresh", refresh);
           Cookies.set("username", values.username);
           fetchProfileData(access);
-          navigate("/");
-
+          window.location.href= '/'
         }
       else{
         toast.error(res.data.message, {

@@ -27,7 +27,7 @@ const Home = () => {
       try {
         const response = await APICall("/api/posts/getPosts/", "GET", {});
         console.log(response);
-        setPosts(response); // Assuming the API response is an array of posts
+        setPosts(response); 
       } catch (error) {
         toast.error("Something went wrong!");
       }
@@ -52,7 +52,8 @@ const Home = () => {
               postText={post.text_content}
               images={post.images}
               likes={post.likes_count}
-              comments={0} // You may need to fetch comments separately
+              user_has_liked={post.user_has_liked}
+              comments={post.comments_count}
               is_verified={false} // You may need to fetch this information separately
               is_suspicious={false} // You may need to fetch this information separately
               shares={0} // You may need to fetch shares separately
