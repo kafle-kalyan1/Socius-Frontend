@@ -40,15 +40,11 @@ const Button = ({ width, text, type, onClick, shortCutKey, icon, disabled=false 
 
   const handleClick = async () => {
     setIsLoading(true);
-
     try {
-      // Call the provided onClick callback
       await onClick();
     } catch (error) {
-      // Handle any errors if needed
       console.error('Error during button click:', error);
     } finally {
-      // Reset loading state after the onClick callback completes
       setIsLoading(false);
     }
   };

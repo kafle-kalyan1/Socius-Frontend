@@ -6,7 +6,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import { MenuContext } from '/src/context/MenuContext/MenuContext';
 import axios from "axios";
 import Cookies from "js-cookie";
-import { dateFormat } from "../../Library/Others/Others";
+import { dateFormat, defaultProfilePic } from "../../Library/Others/Others";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
@@ -87,7 +87,9 @@ const Message = () => {
   }, [currentChatUser, user, socket, state, username]);
 
   useEffect(() => {
-    fetchMessages();
+    if(currentChatUser){
+      fetchMessages();
+    }
   }, [currentChatUser, page]);
 
   useEffect(() => {
@@ -116,6 +118,9 @@ const Message = () => {
       message: "",
     },
     onSubmit: (values) => {
+      alert(socket)
+      alert(currentChatUser)
+
       if (socket && socket.readyState === WebSocket.OPEN) {
         socket.send(
           JSON.stringify({
@@ -189,8 +194,8 @@ const Message = () => {
                         className="h-12 w-12 rounded-full"
                         src={
                           user.profile_picture
-                            ? "data:image/png;base64," + user.profile_picture
-                            : "https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png"
+                            ?  user.profile_picture
+                            : defaultProfilePic
                         }
                         alt={`Profile of ${user.username}`}
                       />

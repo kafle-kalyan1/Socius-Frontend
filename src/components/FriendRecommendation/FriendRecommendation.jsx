@@ -6,78 +6,52 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import APICall from '../../Library/API/APICall';
 
 const UNFRIEND_MESSAGE = "Are you sure you want to unfriend";
 const CANCEL_REQUEST_MESSAGE = "Are you sure you want to cancel the request to";
 
-const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = false, isrequested = false, isrequestedByMe = false }) => {
+const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = false, isrequested = false, isrequestedByMe = false,load_data }) => {
   const [isRequested, setIsRequested] = useState(isrequested);
   const [isFriend, setIsFriend] = useState(isfriend);
   const [isRequestedByMe, setIsRequestedByMe] = useState(isrequestedByMe);
   const navigate = useNavigate();
-  let access = Cookies.get("access");
-  console.log(username, isfriend , isrequested , isrequestedByMe )
 
-  const sendRequestTo = (e, username) => {
-    e.stopPropagation();
-    axios.post(`/api/user/sendFriendRequest/`, {
-      friend: username
-    }, {
-      headers: {
-        Authorization: `Bearer ${access}`
-      }
-    }).then((res) => {
-      console.log(res.data);
-      setIsRequested(true);
-      setIsRequestedByMe(true);
+  const sendRequestTo = async (username) => {
+
+      let response = await APICall("/api/user/sendFriendRequest/","POST",{"friend": username})
+      
+      if(response.status == 200){
       toast.success(`Request sent to ${username}`);
-    }).catch((err) => {
-      console.log(err);
-    });
+      load_data()
+      }
+
   };
 
-  const cancelRequest = (e, username) => {
-    e.stopPropagation();
-    axios.post(`/api/user/cancelFriendRequest/`, {
-      friend: username
-    }, {
-      headers: { Authorization: `Bearer ${access}` }
-    }).then((res) => {
-      setIsRequested(false);
-      setIsRequestedByMe(false);
+  const cancelRequest = async (username) => {
+      let response = await APICall("/api/user/cancelFriendRequest/","POST",{"friend": username})
+      if(response.status == 200){
       toast.success(`Cancelled request to ${username}`);
-    }).catch((err) => {
-      console.log(err);
-    });
+      load_data()
+      }
   };
 
-  const unfriend = (e, username) => {
-    e.stopPropagation();
-    axios.post(`/api/user/unfriend/`, {
-      friend: username
-    }, {
-      headers: { Authorization: `Bearer ${access}` }
-    }).then((res) => {
-      setIsFriend(false);
+  const unfriend = async (username) => {
+
+      let response = await APICall("/api/user/removeFriend/","POST",{"friend": username})
+      if(response.status == 200){
       toast.success(`Unfriended ${username}`);
-    }).catch((err) => {
-      console.log(err);
-    });
+      load_data()
+      }
   };
 
-  const acceptRequest = (e, username) => {
-    e.stopPropagation();
-    axios.post(`/api/user/acceptFriendRequest/`, {
-      friend: username
-    }, {
-      headers: { Authorization: `Bearer ${access}` }
-    }).then((res) => {
-      setIsFriend(true);
-      setIsRequested(false);
+  const acceptRequest = async (username) => {
+
+      let response = await APICall("/api/user/acceptFriendRequest/","POST",{"friend": username})
+      if(response.status == 200){
       toast.success(`Accepted request from ${username}`);
-    }).catch((err) => {
-      console.log(err);
-    });
+      load_data()
+      }
   };
 
   const actionButton = isFriend ? (
@@ -85,8 +59,8 @@ const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = fals
       text="Unfriend"
       type="danger"
       width={1 / 2}
-      onClick={(e) => {
-        unfriend(e, username);
+      onClick={() => {   
+        unfriend(username);
       }}
     />
   ) : isRequested ? isRequestedByMe ? (
@@ -94,8 +68,8 @@ const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = fals
       text="Cancel Request"
       type="txtDanger"
       width={1 / 2}
-      onClick={(e) => {
-        cancelRequest(e, username);
+      onClick={() => {
+        cancelRequest(username);
       }}
     />
   ) : (
@@ -103,8 +77,8 @@ const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = fals
       text="Accept Request"
       type="primary"
       width={1 / 2}
-      onClick={(e) => {
-        acceptRequest(e, username);
+      onClick={() => {
+        acceptRequest(username);
       }}
     />
   ) : (
@@ -112,14 +86,14 @@ const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = fals
       text="Add Friend"
       type="primary"
       width={1 / 2}
-      onClick={(e) => {
-        sendRequestTo(e, username);
+      onClick={() => {
+        sendRequestTo(username);
       }}
     />
   );
 
   return (
-    <div className="bg-white dark:bg-cardBg rounded-lg shadow-md p-4 transition-colors duration-200 cursor-pointer" key={username} onClick={()=> navigate(`/u/${username}`)}>
+    <div className="bg-white dark:bg-cardBg rounded-lg shadow-md p-4 transition-colors duration-200 cursor-pointer" key={username}>
       <img className="w-24 h-24 rounded-full mx-auto mb-4" src={profile_pic} alt={fullname} />
       <div className="text-center">
         <h4 className="text-xl font-semibold">{firstLetterCapital(fullname)}</h4>
