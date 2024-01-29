@@ -1,5 +1,5 @@
 import { lazy, Suspense, useContext, useEffect, useLayoutEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import LostPage from "./Screens/404/NotFound";
 import ServerError from "./Screens/ServerError/ServerError";
 import Logout from "./Auth/LogOut/LogOut";
@@ -27,23 +27,67 @@ import { MenuContext } from '/src/context/MenuContext/MenuContext';
 
 function AppRoute() {
   const { notifications, addNotification, removeNotification } = useNotification();
-  const {user} = useContext(ProfileContext);
+  const {profile} = useContext(ProfileContext);
   const {isMobile, setIsMobile} = useContext(MenuContext);
+  const navigate = useNavigate()
 
 
   useEffect(() => {
-   if(user?.username){
+   if(profile?.username){
     const username = Cookies.get("username");
-    const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${user.username}/`);
+    const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
 
     newSocket.onopen = () => {
       console.log("WebSocket connected");
     };
 
     newSocket.onmessage = (event) => {
-      console.log(event);
-      toast.success(JSON.parse(event.data).message);
-      // const newNotification = JSON.parse(event.data).message;
+      let res_data =  JSON.parse(event.data)
+      console.log(res_data)
+      if(res_data.type == "message"){
+        const message = res_data.message;
+      const shortenedMessage = message.split(' ').slice(0, 100).join(' ');
+
+      toast((t) => (
+        <div className="flex items-center space-x-4">
+        <img className="w-8 h-8 rounded-full" src={res_data.profile_picture} alt={res_data.sender} />
+        <span>{res_data.fullname}</span>
+        <div>
+          <p>{shortenedMessage}</p>
+          <button
+            className="bg-blue-500 text-white rounded px-2 py-1"
+            onClick={() => {
+              toast.dismiss(t.id);
+              navigate(`/message/${res_data.sender}`)
+            }}
+          >
+            Check
+          </button>
+        </div>
+      </div>
+      ));
+      }
+      else if(res_data.type == "friend_request"){
+        //create a toast for friend request
+        toast((t) => (
+          <div className="flex items-center space-x-4">
+            <img className="w-8 h-8 rounded-full" src={res_data.profile_picture} alt={res_data.sender} />
+            <span>{res_data.fullname}</span>
+            <div>
+              <p>Friend request</p>
+              <button
+                className="bg-blue-500 text-white rounded px-2 py-1"
+                onClick={() => {
+                  toast.dismiss(t.id);
+                  navigate(`/u/${res_data.sender}`)
+                }}
+              >
+                Check
+              </button>
+            </div>
+          </div>
+        ));
+      }
     };
 
     newSocket.onclose = () => {

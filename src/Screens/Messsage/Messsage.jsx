@@ -118,9 +118,6 @@ const Message = () => {
       message: "",
     },
     onSubmit: (values) => {
-      alert(socket)
-      alert(currentChatUser)
-
       if (socket && socket.readyState === WebSocket.OPEN) {
         socket.send(
           JSON.stringify({

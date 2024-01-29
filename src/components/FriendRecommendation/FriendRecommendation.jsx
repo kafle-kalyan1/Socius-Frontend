@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '../Button/Button';
 import { showModal } from '../Alert/Alert';
 import { firstLetterCapital } from '../../Library/Others/Others';
@@ -7,6 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import APICall from '../../Library/API/APICall';
+import { WebSocketContext } from '../../Socket/SocketContext';
+import { w3cwebsocket } from 'websocket';
+import { ProfileContext } from '../../context/ProfileContext/ProfileContext';
 
 const UNFRIEND_MESSAGE = "Are you sure you want to unfriend";
 const CANCEL_REQUEST_MESSAGE = "Are you sure you want to cancel the request to";
@@ -16,13 +19,29 @@ const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = fals
   const [isFriend, setIsFriend] = useState(isfriend);
   const [isRequestedByMe, setIsRequestedByMe] = useState(isrequestedByMe);
   const navigate = useNavigate();
+  const {profile} = useContext(ProfileContext);
+
+
 
   const sendRequestTo = async (username) => {
 
       let response = await APICall("/api/user/sendFriendRequest/","POST",{"friend": username})
-      
       if(response.status == 200){
+
       toast.success(`Request sent to ${username}`);
+
+      const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
+    newSocket.onopen = () => {
+      console.log("WebSocket connected");
+      newSocket.send(
+        JSON.stringify({
+          "type":"friend_request",
+          "data":{
+            "sender_username":username,
+          },
+        })
+      );
+    };
       load_data()
       }
 

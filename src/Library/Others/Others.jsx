@@ -7,6 +7,7 @@ import { ProfileContext } from '/src/context/ProfileContext/ProfileContext';
 import { SHA256 } from 'crypto-js';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { w3cwebsocket } from 'websocket';
 
 
 
@@ -14,6 +15,17 @@ import axios from 'axios';
 
 const VITE_PASSWORD_KEY = import.meta.env.VITE_PASSWORD_KEY;
 const cloudinary_cloud = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+
+
+export function Notification_socket(){
+  const {profile} = useContext(ProfileContext);
+  return(
+    profile?.username ?
+    new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`)
+    : null
+    )
+}
+
 
 export function EncryptString(data){
    var enc_string= CryptoAES.encrypt(data,VITE_PASSWORD_KEY ).toString();
