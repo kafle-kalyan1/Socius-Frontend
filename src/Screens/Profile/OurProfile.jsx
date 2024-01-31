@@ -16,12 +16,14 @@ const OurProfile = (props) => {
     const handleEditProfile = () => {
         showBigPopup({
             onClose: () => {
-                console.log('Closed')
+                hideBigPopup('profile-pic')
             },
             children:(
                 <ChangeProfilePic profile_picture={props.data.profile_picture}/>
-                )
-            })
+                ),
+            id: 'profile-pic'
+            },
+        )
     }
     const handleViewProfile = (img) => {
         let a = document.getElementById('profile-img')
@@ -33,12 +35,13 @@ const OurProfile = (props) => {
     const editProfile = () => {
        showBigPopup({
             onClose: () => {
-            hideBigPopup()
+            hideBigPopup('profile-setup')
             },
             children:
             (
                 <SetupAccount />
-            )
+            ),
+            id:"profile-setup"
     })
 
     }
@@ -47,12 +50,14 @@ const OurProfile = (props) => {
         console.log("sdad")
         showBigPopup({
             onClose: () => {
-                console.log('Closed')
+                hideBigPopup('change-password')
             },
             children:
             (
                 <ChangePassword/>
-            )
+            ),
+            id:"change-password"
+    
     })
     }
 

@@ -70,11 +70,6 @@ const SetupAccount = () => {
     validationSchema: Yup.object({
       dob: Yup.date("Please enter valid date").required("Date of Birth is required").max(new Date(), "Date of Birth cannot be in future"),
       gender: Yup.string().required("Gender is required"),
-      secondary_email: Yup.string().email("Invalid email address"),
-      phone_number: Yup.string().matches(
-        /^(\+\d+[\-\s]?)?[0]?\d{10,}$/,
-        "Invalid phone number"
-      ),
     }),
     onSubmit: (values) => {
       const acess = Cookies.get("access");
@@ -84,7 +79,6 @@ const SetupAccount = () => {
         },
       },).then((res) => {
         toast.success('Profile Updated successfully')
-      hideBigPopup()
       window.location.reload();
     }
       ).catch((err) => {

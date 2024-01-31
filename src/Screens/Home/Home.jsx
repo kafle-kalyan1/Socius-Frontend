@@ -8,11 +8,13 @@ import CreatePost from "/src/components/CreatePost/CreatePost";
 import { ProfileContext } from "/src/context/ProfileContext/ProfileContext";
 import APICall from "../../Library/API/APICall";
 import toast from "react-hot-toast";
+import { Select } from "antd";
 
 const Home = () => {
   const { isMobile } = useContext(MenuContext);
   const { profile } = useContext(ProfileContext);
   const [posts, setPosts] = useState([]);
+  const [sort, setSort] = useState("default");
 
   function createPost2() {
     showBigPopup({
@@ -25,7 +27,7 @@ const Home = () => {
   useEffect(() => {
     const getPosts = async () => {
       try {
-        const response = await APICall("/api/posts/getPosts/", "GET", {});
+        const response = await APICall("/api/posts/getPosts/?sort="+sort, "GET", {});
         console.log(response);
         setPosts(response); 
       } catch (error) {
@@ -34,13 +36,29 @@ const Home = () => {
     };
 
     getPosts();
-  }, []);
+  }, [sort]);
+
+  const filters = [
+    { value: "default", label: "Default" },
+    { value: "new", label: "New" },
+    { value: "friend", label: "Friend's Post" },
+  ]
 
   return (
     <div className={`flex ${!isMobile ? " ml-72" : "ml-0"} `}>
-      <div className={` fixed lg:ml-[14%] overflow-x-scroll w-4/6 h-screen font-primary_font justify-center items-center max-lg:w-full max-lg:m-0 m-auto max-sm:w-full`}>
+      <div className={` fixed lg:ml-[14%] overflow-x-scroll scroll-bar w-4/6 h-screen font-primary_font justify-center items-center max-lg:w-full max-lg:m-0 m-auto max-sm:w-full`}>
         <div className=" max-md:w-full  max-sm:w-full">
           <Button type="primary" text="Create Post" onClick={createPost2} width={"4px"} />
+          <Select
+          showSearch
+          style={{ width: 200 }}
+          placeholder="Search"
+          defaultValue={sort}
+          optionFilterProp="children"
+          options={filters}
+          onChange={(value) => setSort(value)}
+          onBlur={(value) => setSort(value)}
+          />
           {posts && posts.map((post) => (
             <Post
               key={post.id}
@@ -54,9 +72,9 @@ const Home = () => {
               likes={post.likes_count}
               user_has_liked={post.user_has_liked}
               comments={post.comments_count}
-              is_verified={false} // You may need to fetch this information separately
-              is_suspicious={false} // You may need to fetch this information separately
-              shares={0} // You may need to fetch shares separately
+              is_verified={false} 
+              is_suspicious={false} 
+              shares={0}
             />
           ))}
           
