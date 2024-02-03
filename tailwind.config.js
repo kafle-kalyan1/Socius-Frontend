@@ -48,7 +48,7 @@ export default {
         green_bg: 'rgba(10,210,110,.1)',
         green_bg_hover: 'rgba(10,210,110,.2)',
 
-        yellow_text: "#ffeb3b",
+        yellow_text: "#c9b406",
         yellow_bg: 'rgba(255,235,59,.1)',
         yellow_bg_hover: 'rgba(255,235,59,.2)',
 

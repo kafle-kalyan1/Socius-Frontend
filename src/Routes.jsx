@@ -1,4 +1,4 @@
-import { lazy, Suspense, useContext, useEffect, useLayoutEffect, useState } from "react";
+import { Fragment, lazy, Suspense, useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import LostPage from "./Screens/404/NotFound";
 import ServerError from "./Screens/ServerError/ServerError";
@@ -19,6 +19,12 @@ const SetUpAccount = lazy(() => import("./Auth/Others/SetupAccount"));
 const OPT = lazy(() => import("./Auth/Others/OTP"));
 const UserProfile= lazy(()=>import('./Screens/UserProfile/UserProfile'));
 const SinglePost = lazy(()=>import('./components/Post/SinglePost'))
+const Search = lazy(()=>import('./Screens/Search/Search'))
+const Settings = lazy(()=>import('./Screens/Settings/MainSettings'))
+const GeneralSettings = lazy(()=>import('./Screens/Settings/GeneralSettings'))
+const NotificationSettings = lazy(()=>import('./Screens/Settings/NotificationSettings'))
+const AccountSettings = lazy(()=>import('./Screens/Settings/AccountSettings'))
+const AdvanceSettings = lazy(()=>import('./Screens/Settings/AdvanceSettings'))
 
 import { ProfileContext } from '/src/context/ProfileContext/ProfileContext';
 import Sidebar  from '/src/components/Sidebar/Sidebar';
@@ -114,9 +120,7 @@ function AppRoute() {
 
   return (
     <>
-    {
-      window.location.pathname=='/login' || window.location.pathname=='/register' ? null : isMobile ? <MobileNavbar /> : <Sidebar />
-    }
+
     <Routes>
     <Route
         exact
@@ -251,6 +255,67 @@ function AppRoute() {
           </Suspense>
         }
       />
+
+<Route
+        exact
+        path="/search"
+        element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <Search />
+          </Suspense>
+        }
+      />
+
+       <Route
+        exact
+        path="/settings"
+        element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <Settings />
+          </Suspense>
+        }
+      />
+
+       <Route
+        exact
+        path="/settings/general"
+        element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <GeneralSettings />
+          </Suspense>
+        }
+      />
+      
+       <Route
+        exact
+        path="/settings/account"
+        element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <AccountSettings />
+          </Suspense>
+        }
+      />
+      
+       <Route
+        exact
+        path="/settings/notifications"
+        element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <NotificationSettings />
+          </Suspense>
+        }
+      />
+
+       <Route
+        exact
+        path="/settings/advance"
+        element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <AdvanceSettings />
+          </Suspense>
+        }
+      />
+
 
 <Route
         exact

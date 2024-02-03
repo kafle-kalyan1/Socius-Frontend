@@ -2,15 +2,18 @@ import { BrowserRouter } from "react-router-dom";
 import AppRoute from "./Routes";
 import { ConfigProvider } from "antd";
 import { ProfileProvider  } from "./context/ProfileContext/ProfileContext";
-import { MenuContextProvider } from "./context/MenuContext/MenuContext";
+import { MenuContext, MenuContextProvider } from "./context/MenuContext/MenuContext";
 import { NotificationProvider, useNotification  } from './context/NotificationContext/NotificationContext';
+import  Sidebar  from '/src/components/Sidebar/Sidebar';
+import { useContext } from "react";
+import MobileNavbar from "./components/Sidebar/MobileNavbar";
 
 
 function App() {
+  const { isMobile } = useContext(MenuContext);
   return (
     <BrowserRouter>
     <NotificationProvider>
-    <MenuContextProvider>
     <ProfileProvider >
       <ConfigProvider
        theme={{
@@ -50,13 +53,15 @@ function App() {
        }}
       >
     <div className="w-screen h-screen font-primary_font dark:bg-dark_background bg-background m-0 p-0 overflow-y-auto max-h-[100vh] scroll-smooth  scroll-bar">
+   { window.location.pathname=='/login' || window.location.pathname=='/register' ? null : isMobile ? <MobileNavbar /> : 
+       <Sidebar />
+   }
      <AppRoute />
 
     </div>
 
     </ConfigProvider>
     </ProfileProvider>
-</MenuContextProvider>
     </NotificationProvider>
     </BrowserRouter>
   );

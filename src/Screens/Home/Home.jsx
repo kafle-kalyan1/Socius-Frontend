@@ -57,7 +57,6 @@ const Home = () => {
           optionFilterProp="children"
           options={filters}
           onChange={(value) => setSort(value)}
-          onBlur={(value) => setSort(value)}
           />
           {posts && posts.map((post) => (
             <Post

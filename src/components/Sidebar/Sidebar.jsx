@@ -248,7 +248,7 @@ export default function SIdebar() {
         <SidebarItem
           icon={<Compass size={20} />}
           text="Explore"
-          path="/profile-explore"
+          path="/search"
         />
         <SidebarItem
           icon={<MessageCircle size={20} />}
@@ -271,7 +271,7 @@ export default function SIdebar() {
         <SidebarItem
           icon={<Settings size={20} />}
           text="Settings"
-          onClick={() => console.log("Settings Clicked")}
+          path="/settings"
         />
         <SidebarItem
           icon={<HelpCircle size={20} />}
