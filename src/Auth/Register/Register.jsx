@@ -190,8 +190,8 @@ const Register = () => {
         />
       ) : null}
 
-      <div className="relative flex flex-col justify-center min-h-screen overflow-x-hidden  max-sm:block mb-8 ">
-        <div className="w-full p-10 m-auto bg-cardBg rounded-md shadow-xl sm:max-w-xl dark:bg-dark_cardBg border">
+      <div className="relative flex flex-col justify-center min-h-screen max-sm:block mb-8 ">
+        <div className="w-full p-10 m-auto ml-[15%] max-md:ml-0 bg-cardBg rounded-md shadow-xl sm:max-w-xl dark:bg-dark_cardBg border">
           <h1 className="w-full m-auto -ml-1 flex -my-14 justify-center">
             <DynamicLogo />
           </h1>

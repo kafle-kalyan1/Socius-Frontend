@@ -45,8 +45,8 @@ const Search = () => {
 
 
    return (
-      <div className={`flex ${!isMobile ? " ml-80" : "ml-0"} mt-8 scroll-bar`}>
-      <div className={`block lg:ml-[14%] w-4/6 h-screen font-primary_font justify-center items-center max-lg:w-full max-lg:m-0 m-auto max-sm:w-full`}>
+      <div className={`flex mt-8`}>
+      <div className={` block overflow-auto scroll-bar w-5/6 h-screen font-primary_font justify-center items-center max-lg:w-full m-auto ml-[5%] max-sm:ml-5 max-sm:w-full`}>
       
       <div className="max-md:w-full max-sm:w-full mb-5">
          {/* Search  */}

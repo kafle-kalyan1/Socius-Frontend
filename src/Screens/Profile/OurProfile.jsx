@@ -62,12 +62,12 @@ const OurProfile = (props) => {
     }
 
     return (
-        <div className="bg-gray-100">
+        <div className="block bg-cardBg">
             <div className="container mx-auto my-5 p-5">
-                <div className="md:flex no-wrap md:-mx-2 ">
-                    <div className="w-full md:w-3/12 md:mx-2">
+                <div className="flex flex-col lg:flex-row md:-mx-2 ">
+                    <div className="w-full lg:w-3/12 md:mx-2">
                         <div className="bg-white p-3 border-t-4 border-green-400">
-                            <div className=" overflow-hidden relative group">
+                            <div className=" overflow-auto relative group">
                             {
                                 props.data?.profile_picture ? <img id='profile-img' className='h-40 w-40 mx-auto rounded-full' src={props.data.profile_picture}  />
                                  : <img className="h-40 w-40 mx-auto rounded-full"
@@ -166,7 +166,7 @@ const OurProfile = (props) => {
                             </div>
                         </div> */}
                     </div>
-                    <div className="w-full md:w-9/12 mx-2 h-64">
+                    <div className="w-full lg:w-9/12 mx-2 h-64">
                         <div className="bg-white p-3 shadow-sm rounded-sm">
                             <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
                                 <span className="text-green-500">
@@ -179,14 +179,14 @@ const OurProfile = (props) => {
                                 <span className="tracking-wide">About</span>
                             </div>
                             <div className="text-gray-700">
-                                <div className="grid md:grid-cols-2 text-sm">
+                                <div className="grid grid-cols-1 text-sm">
                                     <div className="grid grid-cols-2">
                                         <div className="px-4 py-2 font-semibold">First Name</div>
-                                        <div className="px-4 py-2">{props?.data?.first_name ? firstLetterCapital(props?.data?.first_name) : (props?.data?.fullname) ? firstLetterCapital(props?.data?.fullname?.split(" ")[0]) : ''}</div>
+                                        <div className="px-4 py-2">{props?.data?.first_name ? firstLetterCapital(props?.data?.first_name) : (props?.data?.fullname) ? firstLetterCapital(props?.data?.fullname?.split(" ")[0]) : '-'}</div>
                                     </div>
                                     <div className="grid grid-cols-2">
                                         <div className="px-4 py-2 font-semibold">Last Name</div>
-                                        <div className="px-4 py-2">{props?.data?.last_name ? firstLetterCapital(props?.data?.last_name) : props?.data?.fullname ? firstLetterCapital(props?.data?.fullname?.split(" ").pop()) :''}</div>
+                                        <div className="px-4 py-2">{props?.data?.last_name ? firstLetterCapital(props?.data?.last_name) : props?.data?.fullname ? firstLetterCapital(props?.data?.fullname?.split(" ").pop()) :'-'}</div>
                                     </div>
                                     <div className="grid grid-cols-2">
                                         <div className="px-4 py-2 font-semibold">Gender</div>

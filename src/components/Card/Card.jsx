@@ -14,8 +14,8 @@ const Card = ({ bgColor = '#e0f9ed', title, description, textColor = '#39c983', 
 
   return (
     <div
-      className={`w-[${width}] bg-[${bgColor}] border-[1px] border-[${bgColor} p-6 rounded-md flex flex-col gap-y-4 shadow-lg cursor-pointer h-max`}
-      style={{width: width, backgroundColor: bgColor, borderColor: bgColor}}
+      className={`w-1/3 bg-[${bgColor}] border-[1px] border-[${bgColor} p-6 rounded-md flex flex-col gap-y-4 shadow-lg cursor-pointer h-max max-sm:w-5/6`}
+      style={{ backgroundColor: bgColor, borderColor: bgColor}}
       onClick={handleClick}
     >
       <div className="flex items-center text-center justify-start gap-x-4">

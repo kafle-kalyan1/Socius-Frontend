@@ -3,20 +3,20 @@ import { MenuContext } from '/src/context/MenuContext/MenuContext';
 import Sidebar from './Sidebar';
 import { MdNotifications, MdOfflineBolt, MdPermContactCalendar, MdResetTv } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { FaCog } from 'react-icons/fa';
+import { FaBell, FaCog } from 'react-icons/fa';
 import Card from '../../components/Card/Card';
-import { AlignEndVerticalIcon } from 'lucide-react';
+import { AlignEndVerticalIcon, BellRing } from 'lucide-react';
 
 const MainSettings = () => {
    const { isMobile } = useContext(MenuContext);
    const navigate  = useNavigate();
 
   return (
-
-    <div className={`flex ${!isMobile ? " ml-32" : "ml-0"} mt-8 scroll-bar`}>
-    <div className={`block lg:ml-[14%] w-4/6 h-screen font-primary_font gap-5  max-lg:w-full max-lg:m-0 m-auto max-sm:w-full mt-40`}>
+    <div className={`flex w-full font-primary_font justify-center items-center  m-auto overflow-auto max-sm:w-full mt-10`}>
     {/* <Sidebar /> */}
-    <div className='flex justify-evenly w-full m-12'>
+    <div className='flex justify-evenly w-full m-auto flex-wrap gap-10  mb-20'>
+    <span className="w-full flex justify-center text-3xl text-center">Settings</span>
+
     <Card 
       title="General"
       description="General settings like theme, language, etc."
@@ -33,15 +33,11 @@ const MainSettings = () => {
       bgColor='#F6F1DD'
 
       />
-    </div>
-
-    <div className='flex justify-evenly w-full m-12'>
     <Card 
       title="Notification"
       description="Notification settings for posts, messages, etc."
-      Icon={MdNotifications}
+      Icon={FaBell}
       onClick={() => navigate("/settings/general")}
-      width='32%'
       textColor='#ab89e3'
       bgColor='#f0e9f7'
       />
@@ -69,7 +65,6 @@ const MainSettings = () => {
       
     
     
-   </div>
    </div>
    
     )

@@ -45,8 +45,8 @@ const Home = () => {
   ]
 
   return (
-    <div className={`flex ${!isMobile ? " ml-72" : "ml-0"} `}>
-      <div className={` fixed lg:ml-[14%] overflow-x-scroll scroll-bar w-4/6 h-screen font-primary_font justify-center items-center max-lg:w-full max-lg:m-0 m-auto max-sm:w-full`}>
+    <div className={`flex ml-0 `}>
+      <div className={` block w-3/4 h-screen font-primary_font overflow-auto scroll-bar justify-center items-center max-lg:w-full m-auto ml-[5%] max-sm:ml-0 max-sm:w-full `}>
         <div className=" max-md:w-full  max-sm:w-full">
           <Button type="primary" text="Create Post" onClick={createPost2} width={"4px"} />
           <Select
@@ -82,7 +82,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className={`fixed right-0 w-1/5 max-lg:hidden h-screen bg-slate-400 `}></div>
+      <div className={`block right-0 w-1/4 max-lg:hidden h-screen bg-slate-400 `}></div>
     </div>
   );
 };

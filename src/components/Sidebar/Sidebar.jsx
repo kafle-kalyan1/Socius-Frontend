@@ -71,7 +71,7 @@ export function Sidebarr({ children }) {
   ];
 
   return (
-    <aside className={`h-screen fixed scroll-bar2 z-30`}>
+    <aside className={`h-screen w-full block scroll-bar2 z-30`}>
       <nav className="h-full scroll-bar2 flex flex-col bg-cardBg border-r border-cardBorder shadow-sm transition-width duration-300 ease-in-out">
         <div className="p-4 pb-2 flex justify-between items-center">
           {open && (

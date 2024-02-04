@@ -165,11 +165,11 @@ const Message = () => {
   };
 
   return (
-    <div className={`flex ${!isMobile ? "ml-72" : "ml-0"}`}>
-      <div className={`flex w-3/5 font-primary_font justify-center max-lg:w-full max-lg:m-2 m-auto  max-sm:w-full`}>
+    <div className={`flex`}>
+      <div className={` block overflow-auto scroll-bar w-3/4 h-screen font-primary_font justify-center items-center max-lg:w-full m-auto ml-[5%] max-sm:ml-0 max-sm:w-fulll`}>
         <div className="max-md:w-full max-sm:w-full">
           <div className={`flex h-screen`}>
-            <div className={`bg-grey-lighter gap-2 flex flex-col overflow-auto w-3/4 mr-2 border-r-2 border-cardBorder z-20 shadow-md `}>
+            <div className={`bg-grey-lighter gap-2 flex flex-col overflow-auto w-2/4 mr-2 border-r-2 border-cardBorder z-20 shadow-md `}>
               {userList.length > 0 && (
                 userList.map((user) => (
                   <div

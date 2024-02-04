@@ -15,7 +15,6 @@ import toast from "react-hot-toast";
 
 
 const Profile = () => {
-  const {isMobile, setOpen} = useContext(MenuContext);  
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -37,6 +36,7 @@ const Profile = () => {
       setLoading(false);
         }
     ).catch((err) => {
+      console.log(err);
       setLoading(false);
     })
 
@@ -56,15 +56,17 @@ const Profile = () => {
   }
   
   return (
-    <div className={`flex ${!isMobile ? " ml-72" : "ml-0"} `}>
-      <div className={` fixed lg:ml-[14%] overflow-x-scroll w-4/6 h-screen font-primary_font justify-center items-center max-lg:w-full max-lg:m-0 m-auto max-sm:w-full`}>
-        <div className=" max-md:w-full  max-sm:w-full">
+    <div className={`flex mt-8`}>
+      <div className={`block overflow-auto scroll-bar w-full h-screen font-primary_font justify-center items-center max-lg:w-full m-auto ml-[5%] max-sm:ml-5 max-sm:w-full`}>
+        <div className="max-md:w-full max-sm:w-full mb-5">
         {loading ? (
           <OurProfileSkeleton />
         ) : (
           <>
         <OurProfile data={userData}/>
-      
+      <div className="mt-28 w-full gap-5 h-full m-auto">
+          <h1 className="text-3xl font-bold text-center text-primary_dark">My Posts</h1>
+
         {posts && posts.map((post) => (
             <Post
               key={post.id}
@@ -84,13 +86,12 @@ const Profile = () => {
               afterDelete={getOwnPosts}
             />
           ))}
+      </div>
           </>
         )}
         
         </div>
       </div>
-
-      <div className={`fixed right-0 w-1/5 max-lg:hidden h-screen bg-slate-400 `}></div>
     </div>
   );
 };

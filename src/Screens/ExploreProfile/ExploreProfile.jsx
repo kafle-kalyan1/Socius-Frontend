@@ -10,7 +10,6 @@ import APICall from "../../Library/API/APICall";
 import CustomSegmentedControl from '../../components/Tabs/Tabs';
 
 const ExploreProfile = () => {
-  const { open, setOpen } = useContext(MenuContext);
   const [userList, setUserList] = useState([]);
   const [friendList, setFriendList] = useState([]);
   const [recommendedList, setRecommendedList] = useState([]);
@@ -55,16 +54,11 @@ const ExploreProfile = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      <div className={`block duration-300 z-20 ${open ? "w-1/5" : "w-1/12"}`}>
-        <Sidebar />
-      </div>
+    <div className="flex mt-8">
       <div
-        className={`block duration-300 ${
-          open ? "w-4/5" : "w-10/12"
-        } ml-10 mt-5`}
+        className={`block overflow-auto scroll-bar w-5/6 h-screen font-primary_font justify-center items-center max-lg:w-full m-auto ml-[5%] max-sm:ml-5 max-sm:w-full`}
       >
-        <span className="text-3xl">Explore Profiles</span>
+        <span className="w-full flex justify-center text-3xl text-center">Explore Profiles</span>
       <div className="w-full gap-2 flex align-center justify-center z-10"> 
       <CustomSegmentedControl
   options={[
