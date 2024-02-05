@@ -72,12 +72,12 @@ export function Sidebarr({ children }) {
 
   return (
     <aside className={`h-screen w-full block scroll-bar2 z-30`}>
-      <nav className="h-full scroll-bar2 flex flex-col bg-cardBg border-r border-cardBorder shadow-sm transition-width duration-300 ease-in-out">
+      <nav className="h-full scroll-bar2 flex flex-col bg-cardBg dark:bg-darkcardBg border-r border-cardBorder shadow-sm transition-width duration-300 ease-in-out">
         <div className="p-4 pb-2 flex justify-between items-center">
           {open && (
             <span className="flex gap-2">
               <img src={Logo} alt="logo" className="w-8 h-8" />
-              <h2 className="text-2xl text-main_text">Socius</h2>
+              <h2 className="text-2xl text-text1 dark:text-text2">Socius</h2>
             </span>
           )}
           {/* <button
@@ -94,7 +94,7 @@ export function Sidebarr({ children }) {
               e.preventDefault();
               console.log(search);
             }}
-            className="flex relative"
+            className="flex relative "
           >
             <input
               type="text"
@@ -103,7 +103,7 @@ export function Sidebarr({ children }) {
               ref={searchRef}
               value={search ? search : ""}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full mx-2 h-10 px-3 rounded-md bg-gray-200 text-sm focus:outline-none z-20"
+              className="w-full mx-2 h-10 px-3 rounded-md text-sm focus:outline-none z-20 dark:bg-darkcardBg2 dark:text-text2"
               autoComplete="off"
             />
             <Search
@@ -113,7 +113,7 @@ export function Sidebarr({ children }) {
                 e.preventDefault();
                 console.log(search);
               }}
-              className="absolute right-4 top-[50%] transform translate-y-[-50%] cursor-pointer text-text_ hover:text-main_text hover:scale-[1.1] hover:duration-200 z-20"
+              className="absolute right-4 top-[50%] transform translate-y-[-50%] cursor-pointer text-green_text  hover:scale-[1.1] hover:duration-200 z-20"
             />
           </form>
         )}
@@ -148,10 +148,10 @@ export function Sidebarr({ children }) {
                   title="Copy Username"
                   onClick={() => copy(profile.username)}
                 >
-                  <h4 className="font-semibold text-main_text cursor-pointer">
+                  <h4 className="text-text1 dark:text-text2 cursor-pointer font-poppins text-xs font-semibold space-x-3 leading-relaxed">
                     {profile?.fullname ? profile.fullname : "John Doe"}
                   </h4>
-                  <span className="text-xs text-main_text cursor-pointer">
+                  <span className="text-text1 dark:text-text2 font-poppins text-xs leading-relaxed">
                     @{profile?.username ? profile.username : "johndoe"}
                   </span>
                 </Tooltip>
@@ -184,8 +184,8 @@ export function SidebarItem({ icon, text, onClick, path, alert }) {
         transition-colors group duration-300 
         ${
           isActive
-            ? "bg-primary_btn_bg_very_light text-deep_primary_text"
-            : " hover:bg-indigo_bg text-gray-600"
+            ? "bg-primary_btn_light text-text_1 dark:bg-primary_btn_dark dark:text-white"
+            : " hover:bg-hover1 text-gray-600 dark:text-white"
         }
     `}
     >
@@ -211,7 +211,7 @@ export function SidebarItem({ icon, text, onClick, path, alert }) {
           className={`
             absolute left-full rounded-md px-2 py-1 ml-6
             bg-indigo-100 text-indigo-800 text-sm
-            invisible opacity-20 -translate-x-3 transition-all
+            invisible opacity-20 -translate-x-3 transition-all dark:text-white
             group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
           `}
         >

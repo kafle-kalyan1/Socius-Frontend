@@ -44,6 +44,8 @@ function App() {
         },
         Popover:{
           zIndexPopup:30,
+          margin:0,
+          padding:0,
         },
         Segmented:{
           itemSelectedBg:'rgba(33,150,243,.1)',

@@ -1,15 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  darkMode: ['class', '.dark-mode'],
+  darkMode: 'class',
   theme: {
     extend: {
-      darkMode: 'data-theme',
       colors: {
+        text1: "#111827", //for light mode 
+        text2: "#F9FAFB", //for dark mode
+        text3: "#6B7280", //for light mode 2
+        text4: "#374151", //for dark mode 2
+        raretext: "#00A400", //for rare text orange red
+        main_text:"#0eb0a1",
 
-
-        text_: "#131414", 
-        main_text:"#102f94",
         deep_primary_text:"#002ead",
 
         secondary_text:"#0eb0a1",
@@ -30,7 +32,9 @@ export default {
 
         
         cardBg: "#f2f4f5", 
-        card_bg_hover: "#d6f0ff",
+        darkcardBg: "#313436", 
+        cardBg2: "#d6f0ff",
+        darkcardBg2: "#1f1f1f",
 
         cardBorder: "#D1D5DB",
 
@@ -46,6 +50,7 @@ export default {
 
         green_text: "#4caf50",
         green_bg: 'rgba(10,210,110,.1)',
+        green_bg1: 'rgba(10,210,110,.5)',
         green_bg_hover: 'rgba(10,210,110,.2)',
 
         yellow_text: "#c9b406",
@@ -72,9 +77,10 @@ export default {
         indigo_bg: 'rgba(63,81,181,.1)',
         indigo_bg_hover: 'rgba(63,81,181,.2)',
 
-        blue_text: "#2196f3",
-        blue_bg: 'rgba(33,150,243,.1)',
-        blue_bg_hover: 'rgba(33,150,243,.2)',
+        blue_text: "#3b73f5",
+        blue_bg: 'rgba(59, 115, 245,.1)',
+        hover1: 'rgba(59, 115, 245,.3)',
+        blue_bg_hover: 'rgba(59, 115, 245,.3)',
 
         error_color: "#EF4444",
         info_clor: "#3B82F6",
@@ -116,9 +122,13 @@ export default {
         sans: ['Inter', 'sans-serif'],
         serif: ['ui-serif', 'Georgia'],
         mono: ['ui-monospace', 'SFMono-Regular'],
+        poppins: ["Poppins", "sans-serif"],
+        opensans: ["Open Sans", "sans-serif"],
         display: ['Oswald'],
         body: ['Open Sans'],
         primary_font: ["Poppins", "sans-serif"],
+        primary: ['Roboto', 'sans-serif'],
+        secondary: ['Open Sans', 'sans-serif'],
       },
       boxShadow: {
         '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
@@ -165,12 +175,6 @@ export default {
       backgroundImage: {
         'primary_btn_dark': 'linear-gradient(to top right, #6573f0, #5c6af7)',
         'primary_btn_light': 'linear-gradient(to top right, #8d97f0, #8690f7)',
-
-        'primary_btn_dark_hover': 'linear-gradient(to top right, #7a87fa, #5f6ce8)',
-        'primary_btn_light_hover': 'linear-gradient(to top right, #818be6, #7a84eb)',
-
-        'primary_btn_bg_very_light': 'linear-gradient(to top right, #cacded, #a0a7f2)',
-
       },
 
 

@@ -6,6 +6,7 @@ import { ProfileProvider } from "./context/ProfileContext/ProfileContext.jsx";
 import { Toaster } from "react-hot-toast";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { MenuContextProvider } from "./context/MenuContext/MenuContext.jsx";
+import { ThemeProvider } from "./context/ThemeContext/Index.jsx";
 // import MessageSocket from "./Socket/MessageSocket.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -17,11 +18,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   position="top-right"
   reverseOrder={false}
 />
+    <ThemeProvider>
+
     <ProfileProvider>
-    {/* <MessageSocket> */}
       <App />
-    {/* </MessageSocket> */}
     </ProfileProvider>
+    </ThemeProvider>
     </MenuContextProvider>
   </React.StrictMode>
   </GoogleOAuthProvider>

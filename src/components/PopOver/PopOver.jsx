@@ -14,15 +14,12 @@ const CustomPopover = ({ content, buttons, mainButton, placement = 'right' }) =>
   };
 
   const popoverContent = (
-    <div className='z-100 cursor-pointer'>
-      <div className='z-30'>
-        <p>{content}</p>
-      </div>
+    <div className='z-100 cursor-pointer text-text1 dark:text-text2 bg-cardBg2 dark:bg-darkcardBg2 p-0 m-0'>
       <hr className='border-red-500' />
-      <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column' }}>
+      <div className='text-text1 dark:text-text2' style={{ display: 'flex', flexDirection: 'column' }}>
         {buttons.map((button, index) => (
           button && <Button
-            className=" cursor-pointer hover:shadow-lg"
+            className=" cursor-pointer hover:shadow-lg text-text1 dark:text-text2"
             key={index}
             onClick={() => handleClick(button.onClick)}
           >
@@ -37,7 +34,7 @@ const CustomPopover = ({ content, buttons, mainButton, placement = 'right' }) =>
   );
 
   return (
-    <Popover className='cursor-pointer' content={popoverContent} title={null} trigger="click" placement={placement} visible={visible} onVisibleChange={handleVisibleChange}>
+    <Popover className='cursor-pointer text-text1 dark:text-text2 ' content={popoverContent} title={null} trigger="click" placement={placement} visible={visible} onVisibleChange={handleVisibleChange}>
       {mainButton}
     </Popover>
   );

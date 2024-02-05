@@ -1,32 +1,63 @@
-import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { FaCog, FaUser, FaBell, FaRocket } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+import { FaCog, FaUser, FaBell, FaRocket, FaBars } from 'react-icons/fa';
 
 function Sidebar() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+  const updateMedia = () => {
+    setIsMobile(window.innerWidth < 640);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", updateMedia);
+    return () => window.removeEventListener("resize", updateMedia);
+  }, []);
+
+  const menu = (
+    <ul className="sm:mt-16 mt-0 space-y-5">
+      <li className="px-2 py-2 transition-colors duration-200 flex w-full cursor-pointer justify-start items-center hover:bg-blue-500 hover:text-white">
+        <NavLink to="/settings/general" activeClassName="text-blue-500" className="flex items-center gap-4">
+          <FaCog className='hover:animate-spin' /> General
+        </NavLink>
+      </li>
+      <li className="px-2 py-2 transition-colors duration-200 flex w-full cursor-pointer justify-start items-center hover:bg-green-500 hover:text-white">
+        <NavLink to="/settings/account" activeClassName="text-green-500" className="flex items-center gap-4">
+          <FaUser className='hover:scale-150' /> Account
+        </NavLink>
+      </li>
+      <li className="px-2 py-2 transition-colors duration-200 flex w-full cursor-pointer justify-start items-center hover:bg-yellow-500 hover:text-white">
+        <NavLink to="/settings/notifications" activeClassName="text-yellow-500" className="flex items-center gap-4">
+          <FaBell className='hover:animate-bounce' /> Notifications
+        </NavLink>
+      </li>
+      <li className="px-2 py-2 transition-colors duration-200 flex w-full cursor-pointer justify-start items-center hover:bg-red-500 hover:text-white">
+        <NavLink to="/settings/advance" activeClassName="text-red-500" className="flex items-center gap-4">
+          <FaRocket className='hover:animate-pulse'/> Advanced
+        </NavLink>
+      </li>
+    </ul>
+  );
+
   return (
-    <div className="col-span-2 pt-10 h-full font-primary_font bg-cardBg">
-      <ul>
-        <li className="mt-5 cursor-pointer border-l-2 border-transparent px-2 py-2 font-semibold transition hover:border-l-blue-700 hover:text-blue-700 flex w-48 active:bg-red-400 ">
-          <Link exact  to="/settings/general" className="flex ml-2 gap-4 justify-center items-center" activeClassName="border-l-blue-700 text-blue-700  bg-red-500 red_gar " >
-            <FaCog className=' hover:animate-spin' /> General
-          </Link>
-        </li>
-        <li className="mt-5 cursor-pointer border-l-2 border-transparent px-2 py-2 font-semibold transition hover:border-l-blue-700 hover:text-blue-700 flex w-48 ">
-          <NavLink to="/settings/account" className="flex ml-2 gap-4 justify-center items-center" activeClassName="border-l-blue-700 text-blue-700">
-            <FaUser className=' hover:scale-x-50' /> Account
-          </NavLink>
-        </li>
-        <li className="mt-5 cursor-pointer border-l-2 border-transparent px-2 py-2 font-semibold transition hover:border-l-blue-700 hover:text-blue-700 flex w-48 ">
-          <NavLink to="/settings/notifications" className="flex ml-2 gap-4 justify-center items-center" activeClassName="border-l-blue-700 text-blue-700">
-            <FaBell className='hover:animate-pulse' /> Notifications
-          </NavLink>
-        </li>
-        <li className="">
-          <NavLink to="/settings/advance" className={`mt-5 cursor-pointer border-l-2 border-transparent px-2 py-2 font-semibold transition hover:border-l-blue-700 hover:text-blue-700 flex w-48  ml-2 gap-4 justify-center items-center1 ${(navData) => navData.isActive ? "border-l-blue-700 bg-blue-700":"bg-red-500"} `}>
-            <FaRocket /> Advanced
-          </NavLink>
-        </li>
-      </ul>
+    <div className=" text-deep_primary_text w-full">
+      {isMobile ? (
+        <div className="relative">
+          <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="text-deep_primary_text ml-5 p-2 w-">
+            <FaBars />
+          </button>
+          {isDropdownOpen && (
+            <div className="absolute ml-5 right-0 w-48 bg-cardBorder  rounded-md shadow-lg py-2 z-20">
+              {menu}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="min-h-screen sticky top-0 flex flex-col justify-between">
+          {menu}
+        </div>
+      )}
     </div>
   );
 }
