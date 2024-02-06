@@ -55,14 +55,20 @@ function App() {
        }}
       >
     <div className="w-screen h-screen font-primary_font dark:bg-dark_background bg-background m-0 p-0 overflow-y-auto max-h-[100vh] scroll-smooth  scroll-bar flex">
-    <div className="w-1/5 max-lg:w-2/6 max-md:w-0 block scroll-smooth overflow-auto scroll-bar left-0">
-   { window.location.pathname=='/login' || window.location.pathname=='/register' ? null : isMobile ? <MobileNavbar /> : 
+
+   { window.location.pathname=='/login' || window.location.pathname=='/register' ? null : isMobile ?    <div className="w-1/5 max-lg:w-2/6 max-md:w-0 block scroll-smooth overflow-auto scroll-bar left-0"> <MobileNavbar />     </div>: 
        <Sidebar />
    }
-    </div>
-   <div className="w-4/5 max-md:w-full scroll-smooth overflow-auto scroll-bar2 block right-0 max-md:h-[90%]">
+
+   { window.location.pathname=='/login' || window.location.pathname=='/register' ?
+   <div className="w-full scroll-smooth overflow-y-auto overflow-x-hidden block right-0 max-md:h-[90%]">
      <AppRoute />
    </div>
+   :
+   <div className="w-4/5 max-md:w-full scroll-smooth overflow-y-auto overflow-x-hidden block right-0 max-md:h-[90%]">
+     <AppRoute />
+   </div>
+   }
 
     </div>
 

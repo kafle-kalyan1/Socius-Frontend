@@ -9,6 +9,7 @@ import { ProfileContext } from "/src/context/ProfileContext/ProfileContext";
 import APICall from "../../Library/API/APICall";
 import toast from "react-hot-toast";
 import { Select } from "antd";
+import NotificationPannel from "../../components/Notification/NotificationPannel/NotificationPannel";
 
 const Home = () => {
   const { isMobile } = useContext(MenuContext);
@@ -45,8 +46,8 @@ const Home = () => {
   ]
 
   return (
-    <div className={`flex ml-0 `}>
-      <div className={` block w-3/4 h-screen font-primary_font overflow-auto scroll-bar justify-center items-center max-lg:w-full m-auto ml-[5%] max-sm:ml-0 max-sm:w-full `}>
+    <div className={`flex ml-0`}>
+      <div className={` p-10 w-auto max-w-[60%] h-screen font-primary_font overflow-auto scroll-bar justify-center items-center max-lg:w-full m-auto max-sm:ml-0 max-sm:w-full `}>
         <div className=" max-md:w-full  max-sm:w-full">
           <Button type="primary" text="Create Post" onClick={createPost2} width={"4px"} />
           <Select
@@ -82,7 +83,9 @@ const Home = () => {
         </div>
       </div>
 
-      <div className={`block right-0 w-1/4 max-lg:hidden h-screen bg-slate-400 `}></div>
+      <div className={`block w-auto max-lg:hidden h-screen`}>
+        <NotificationPannel/>
+      </div>
     </div>
   );
 };

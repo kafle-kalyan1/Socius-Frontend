@@ -55,6 +55,7 @@ export function Sidebarr({ children }) {
                 Cookies.remove("refresh");
                 navigate("/login");
                 hideAlertModal();
+                window.location.reload();
               },
             },
             {
@@ -276,7 +277,11 @@ export default function SIdebar() {
         <SidebarItem
           icon={<HelpCircle size={20} />}
           text="Help"
-          onClick={() => console.log("Help Clicked")}
+          onClick={() => {
+            window.open(
+              "mailto:kalyankafle123@gmail.com?subject=Socius Help"
+            );
+          }}
         />
       </Sidebarr>
     </main>
