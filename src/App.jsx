@@ -7,10 +7,12 @@ import { NotificationProvider, useNotification  } from './context/NotificationCo
 import  Sidebar  from '/src/components/Sidebar/Sidebar';
 import { useContext } from "react";
 import MobileNavbar from "./components/Sidebar/MobileNavbar";
+import { ThemeContext } from "./context/ThemeContext/Index";
 
 
 function App() {
   const { isMobile } = useContext(MenuContext);
+  const {isDarkTheme} = useContext(ThemeContext);
   return (
     <BrowserRouter>
     <NotificationProvider>
@@ -19,16 +21,20 @@ function App() {
        theme={{
       token: {
         colorPrimary: '#5C6BC0',
-        colorBgBase:'#f2f4f5',
+        colorBgBase:isDarkTheme ? "#4B5563" :'#D1D5DB',
         controlOutlineWidth:0,
         lineWidth:2,
         lineHeight:	1.8,
         colorBorder:'#d1d5db',
+        colorTextPlaceholder: isDarkTheme ? '#9CA3AF' : '#6B7280',
+        colorTextBase: isDarkTheme ? '#F9FAFB' : '#111827',
       },
       components:{
         Select:{
           lineWidth:2,
-          colorBgBase:'#f7f8fa',
+          colorBgBase:'#0eb0a1',
+          optionSelectedBg:'rgba(59, 115, 245,.5)',
+          
         },
         Upload:{
           colorPrimaryActive:'#d40000',
@@ -50,18 +56,27 @@ function App() {
         Segmented:{
           itemSelectedBg:'rgba(33,150,243,.1)',
           itemSelectedColor:'#2196f3',
+        },
+        Modal:{
+        colorBgBase:isDarkTheme ? "#0eb0a1" :'#0eb0a1',
+
+
+
+       
         }
       }
        }}
       >
-    <div className="w-screen h-screen font-primary_font dark:bg-dark_background bg-background m-0 p-0 overflow-y-auto max-h-[100vh] scroll-smooth  scroll-bar flex">
+    <div className="w-screen h-screen font-primary_font bg-cardBg2 dark:bg-darkcardBg2 m-0 p-0 overflow-y-auto max-h-[100vh] scroll-smooth  scroll-bar flex">
 
-   { window.location.pathname=='/login' || window.location.pathname=='/register' ? null : isMobile ?    <div className="w-1/5 max-lg:w-2/6 max-md:w-0 block scroll-smooth overflow-auto scroll-bar left-0"> <MobileNavbar />     </div>: 
-       <Sidebar />
+   { window.location.pathname=='/login' || window.location.pathname=='/register' ? null : isMobile ?  <MobileNavbar />  : 
+   <div className="w-1/5">
+     <Sidebar />
+    </div>
    }
 
    { window.location.pathname=='/login' || window.location.pathname=='/register' ?
-   <div className="w-full scroll-smooth overflow-y-auto overflow-x-hidden block right-0 max-md:h-[90%]">
+   <div className="w-full scroll-smooth overflow-y-auto overflow-x-hidden block right-0]">
      <AppRoute />
    </div>
    :

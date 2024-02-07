@@ -44,8 +44,6 @@ const Login = () => {
         .min(6, "Password must be at least 6 characters")
         .required("Password is required")
         .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/,"Password must contain at least one uppercase letter, one lowercase letter and one number"),
-        
-
     }),
     onSubmit: (values) => {
       showLoading(true)
@@ -124,13 +122,13 @@ console.log(email)
 
   return (
     <>
-      <div className="relative flex flex-col justify-center min-h-screen overflow-x-hidden ">
-      <div className="w-full p-6 m-auto bg-cardBg rounded-md shadow-xl sm:max-w-xl dark:bg-dark_cardBg border ">
+      <div className="relative flex bg-cardBg2 dark:bg-darkcardBg2 flex-col justify-center min-h-screen overflow-x-hidden ">
+      <div className="w-full p-6 m-auto bg-cardBg dark:bg-darkcardBg rounded-md shadow-xl sm:max-w-xl border border-cardBorder dark:border-darkcardBorder ">
       
         <h1 className="w-full m-auto -ml-1 flex -my-14 justify-center">
       <DynamicLogo/> 
         </h1>
-        <h2 className="text-xl mt-1 font-semibold text-center text-text_ dark:text-dark_textSecondary">
+        <h2 className="text-xl mt-1 font-semibold text-center text-text1 dark:text-text2">
           Sign in
         </h2>
         <form className="mt-6" onSubmit={formik.handleSubmit}>
@@ -159,7 +157,7 @@ console.log(email)
           <Link
             to="#"
             title="Reset Password here!"
-            className="text-xs text-text_ focus:text-red_text hover:text-red_text duration-100 hover:underline"
+            className="text-xs text-text1 dark:text-text2 focus:text-red_text hover:text-red_text duration-100 hover:underline"
           >
             Forget Password?
           </Link>
@@ -168,7 +166,7 @@ console.log(email)
           </div>
         </form>
         <div className="relative flex items-center justify-center w-full mt-6 border border-t">
-          <div className="absolute px-2 bg-cardBg text-text_">Or Login With</div>
+          <div className="absolute px-2 bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2">Or Login With</div>
         </div>
         <span></span>
         <div className="flex mt-4 gap-x-2 max-sm:flex-col max-sm:gap-y-2">
@@ -201,18 +199,21 @@ console.log(email)
           </button>
         </div>
 
-        <p className="mt-8 text-2xs font-light text-center text-textPrimary dark:text-dark_textPrimary">
+        <p className="mt-8 text-2xs font-light text-center text-text1 dark:text-text2">
           {" "}
           Don&apos;t have an account?{" "}
-          <Link to="/register" className="font-medium text-link_text hover:underline">
+          <Link to="/register" className="font-medium text-main_text hover:underline">
+           <b>
+
             Register Now?
+           </b>
           </Link>
         </p>
        
       </div>
       
     </div>
-     <Footer/>
+     {/* <Footer/> */}
     </>
 
   );

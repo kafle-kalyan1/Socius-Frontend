@@ -33,11 +33,11 @@ const Input = (props) => {
     }, [])
   return (
     <div className="mb-2">
-      <span className="flex">
+      <span className="flex text-text1 dark:text-text2">
         {Icon}
         <label
           htmlFor={name}
-          className="block ml-3 text-sm font-semibold text-textPrimary dark:text-dark_textPrimary"
+          className="block ml-3 text-sm font-semibold text-text1 dark:text-text2 tracking-widest"
         >
           {title}
         </label>
@@ -50,16 +50,17 @@ const Input = (props) => {
           value={formik.values[name]}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          autoComplete='nope'
           placeholder={
             formik.touched[name] && formik.errors[name]
               ? `${title} is required`
               : `${title}`
           }
-          className={`w-full px-4 py-2 mt-2 text-textPrimary dark:text-dark_textPrimary bg-background dark:bg-dark_background border-2 rounded-md font-mono  focus:outline-main_text border-cardBorder dark:border-dark_cardBorder hover:border-main_text flex
+          className={`w-full px-4 py-2 mt-2 text-text1 dark:text-text2 bg-background dark:bg-darkcardBorder border-2 rounded-md font-mono  border-cardBorder dark:border-dark_cardBorder hover:border-main_text flex
    ${
      formik.touched[name] && formik.errors[name]
        ? " border-red_text placeholder-red_text"
-       : "outline-cardBorder dark:outline-dark_cardBorder"
+       : "outline-cardBorder focus:outline-main_text dark:outline-dark_cardBorder"
    }`}
         />
 
@@ -71,7 +72,7 @@ const Input = (props) => {
               }}
             title={!show ? "Show" : "Hide"}
           >
-            {!show ? <EyeInvisibleOutlined/> : <EyeOutlined/>}
+            {show ? <EyeInvisibleOutlined/> : <EyeOutlined/>}
           </span>
         ) : null}
       </span>

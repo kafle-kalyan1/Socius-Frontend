@@ -12,11 +12,11 @@ formik.values[name] = value;
 
   return (
     <div className="mb-2 ">
-    <span className="flex">
+    <span className="flex text-text1 dark:text-text2">
       {Icon}
       <label
         htmlFor={name}
-        className="block text-sm font-semibold text-textPrimary dark:text-dark_textPrimary"
+        className="block ml-3 text-sm font-semibold text-text1 dark:text-text2"
       >
         {title}
       </label>
@@ -34,8 +34,8 @@ formik.values[name] = value;
     onBlur={formik.handleBlur}
     filterOption={filterOption}
     options={options}
-    rootClassName='outline-0 border ring-0 bg-background border-cardBorder dark:border-dark_cardBorder '
-    className={`block w-full mt-2 h-[42px] text-textPrimary dark:text-dark_textPrimary font-mono dark:bg-dark_background border-0 ring-0 outline-0 rounded-md border-cardBorder dark:border-dark_cardBorder bg-background`}
+    rootClassName='outline-0 border ring-0 bg-redd-200 bg-cardBorder dark:bg-darkcardBorder '
+    className={`block w-full mt-2 h-[42px] text-text1 dark:text-text2 font-mono dark:bg-darkcardBorder border-0 ring-0 outline-0 rounded-md border-cardBorder dark:border-darkcardBorder bg-background`}
   />
           </span>
 

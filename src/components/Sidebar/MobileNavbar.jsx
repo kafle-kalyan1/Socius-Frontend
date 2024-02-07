@@ -18,8 +18,14 @@ const MobileNavbar = () => {
   });
 
   return (
-    <animated.nav style={navSpring} className="fixed  bottom-0 w-full bg-transparent z-50 border-t shadow-lg">
-      <ul className="flex justify-around items-center bg-cardBg p-3">
+   <>
+    {
+      window.location.pathname=='/login' || window.location.pathname=='/register' ? 
+      <div className="bg-red-400">
+      </div>
+      :
+      <animated.nav style={navSpring} className="fixed bottom-0 w-full bg-transparent z-50 border-t shadow-lg">
+      <ul className="flex justify-around items-center bg-cardBg dark:bg-darkcardBg p-3">
         {menuItems.map((item, index) => (
           <li key={index}>
             <NavLink
@@ -34,6 +40,8 @@ const MobileNavbar = () => {
         ))}
       </ul>
     </animated.nav>
+    }
+   </>
   );
 };
 

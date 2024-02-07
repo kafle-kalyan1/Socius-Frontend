@@ -7,14 +7,12 @@ const TermsModal = (props) => {
   let { isShown, setIsShown, terms, change } = props;
   return (
     <Modal
-      title="Terms and Conditions"
       open={isShown}
       onOk={() => {
         setIsShown(false);
         change("terms", !terms);
       }}
-      style={{ top: 20,backgroundColor: isDarkTheme ? "red" : "red", padding: "0", margin: "0"}}
-      classNames={"bg-gray-100 dark:bg-gray-800"}
+      className="top-10 m-auto h-2/3 bg-cardBg dark:bg-darkcardBg overflow-auto scroll-bar"
       onCancel={() => setIsShown(false)}
       footer={
         <div className="flex justify-center">
@@ -40,7 +38,7 @@ const TermsModal = (props) => {
 
       centered
     >
-      <div className="bg-gray-100 dark:bg-gray-800 p-8 rounded-lg">
+      <div className="bg-cardBg dark:bg-darkcardBg p-8 rounded-lg">
         <h1 className="text-gray-800 dark:text-gray-100 text-3xl font-bold text-center">
           Socius - Terms and Conditions
         </h1>
@@ -89,10 +87,6 @@ const TermsModal = (props) => {
           <li>Your use of Socius is at your own risk.</li>
         </ul>
 
-        <p className="text-gray-600 dark:text-gray-300 text-lg mt-8">
-          Full terms and conditions can be found here [link]. By clicking Agree,
-          you accept our terms and conditions.
-        </p>
       </div>
     </Modal>
   );

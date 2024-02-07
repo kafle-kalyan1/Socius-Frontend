@@ -9,6 +9,7 @@ import { ProfileContext } from "/src/context/ProfileContext/ProfileContext";
 import APICall from "../../Library/API/APICall";
 import toast from "react-hot-toast";
 import { Select } from "antd";
+import "/src/index.css";
 import NotificationPannel from "../../components/Notification/NotificationPannel/NotificationPannel";
 
 const Home = () => {
@@ -46,8 +47,8 @@ const Home = () => {
   ]
 
   return (
-    <div className={`flex ml-0`}>
-      <div className={` p-10 w-auto max-w-[60%] h-screen font-primary_font overflow-auto scroll-bar justify-center items-center max-lg:w-full m-auto max-sm:ml-0 max-sm:w-full `}>
+<div className={`flex ml-0 w-full overflow-auto scroll-bar scroll-bar bg-cardBg2 dark:bg-darkcardBg2 `}>
+      <div className={`block p-10 w-auto  h-screen font-primary_font justify-center items-center max-lg:w-full m-auto max-sm:ml-0 max-sm:w-full `}>
         <div className=" max-md:w-full  max-sm:w-full">
           <Button type="primary" text="Create Post" onClick={createPost2} width={"4px"} />
           <Select
@@ -83,9 +84,9 @@ const Home = () => {
         </div>
       </div>
 
-      <div className={`block w-auto max-lg:hidden h-screen`}>
-        <NotificationPannel/>
-      </div>
+      <div className={`block w-[33%] max-lg:hidden h-full overflow-auto sticky top-0`}>
+    <NotificationPannel/>
+  </div>
     </div>
   );
 };

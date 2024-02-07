@@ -41,6 +41,8 @@ import Button from "/src/components/Button/Button";
 import { useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import ReactFacebookLogin from "react-facebook-login";
+import { FaGenderless } from "react-icons/fa";
+import { BsGenderAmbiguous } from "react-icons/bs";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(true);
@@ -73,6 +75,7 @@ const Register = () => {
     initialValues: {
       email: "",
       username: "",
+      fullname: "",
       password: "",
       gender: null,
       dob: "",
@@ -83,6 +86,7 @@ const Register = () => {
         .email("Invalid email address")
         .required("Email is required"),
       username: Yup.string().required("Username is required"),
+      fullname: Yup.string().required("Fullname is required"),
       password: Yup.string()
         .min(6, "Password must be at least 6 characters")
         .required("Password is required")
@@ -190,18 +194,18 @@ const Register = () => {
         />
       ) : null}
 
-      <div className="flex flex-col justify-center w-full min-h-screen mb-8 ">
-        <div className="w-full p-10 m-auto bg-cardBg rounded-md shadow-xl sm:max-w-xl dark:bg-dark_cardBg border">
+      <div className="flex flex-col justify-center w-full mt-4 bg-cardBg2 dark:bg-darkcardBg2 min-h-screen mb-8 ">
+        <div className="w-full p-10 m-auto bg-cardBg dark:bg-darkcardBg rounded-md shadow-xl sm:max-w-xl border border-cardBorder dark:border-darkcardBorder">
           <h1 className="w-full m-auto -ml-1 flex -my-14 justify-center">
             <DynamicLogo />
           </h1>
 
-          <h3 className="text-sm mt-3 font-semibold text-center text-textSecondary dark:text-dark_textSecondary">
+          <h3 className="text-sm mt-3 font-semibold text-center text-text1 dark:text-text2">
             By signing up, you agree to our
             <br />
             <p
               onClick={() => setIsTermsShown((p) => !p)}
-              className="font-medium text-link_text hover:underline mt-1 cursor-pointer"
+              className="font-medium text-raretext hover:underline mt-1 cursor-pointer"
             >
               Terms and Conditions
             </p>
@@ -223,6 +227,13 @@ const Register = () => {
             />
             <Input
               formik={formik}
+              Icon={<UserOutlined />}
+              title="Fullname"
+              name="fullname"
+              type="text"
+            />
+            <Input
+              formik={formik}
               Icon={<LockOutlined />}
               name="password"
               title="Password"
@@ -231,7 +242,7 @@ const Register = () => {
             />
             <SelectInput
               formik={formik}
-              Icon={<Gender />}
+              Icon={<BsGenderAmbiguous />}
               title="Select an Gender"
               name="gender"
               options={[
@@ -248,13 +259,13 @@ const Register = () => {
               name="dob"
               maxDate={Date.now()}
             />
-            <Link
+            {/* <Link
               to="#"
               title="Reset Password here!"
-              className="text-xs text-[#646262] dark:text-[#d7d6d6] focus:text-red-500 hover:text-red-500 hover:underline"
+              className="text-xs text-text1 dark:text-text2 focus:text-red-500 hover:text-red-500 hover:underline"
             >
               Forget Password?
-            </Link>
+            </Link> */}
             <div className="mt-6 w-full justify-center flex">
               {/* <button
                 type="submit"
@@ -270,7 +281,7 @@ const Register = () => {
             </div>
           </form>
           <div className="relative flex items-center justify-center w-full mt-6 border border-t">
-            <div className="absolute px-2 bg-cardBg dark:bg-dark_cardBg dark:text-dark_textPrimary text-textPrimary">
+            <div className="absolute px-2 bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2">
               Or Register With
             </div>
           </div>
@@ -309,12 +320,12 @@ const Register = () => {
             </button> */}
           </div>
 
-          <p className="mt-8 text-2xs font-light text-center text-textPrimary dark:text-dark_textPrimary">
+          <p className="mt-8 text-2xs font-light text-center text-text1 dark:text-text2">
             {" "}
             Already have an account?{" "}
             <Link
               to="/login"
-              className="font-medium text-link_text hover:underline"
+              className="font-medium text-main_text hover:underline"
             >
               Login
             </Link>

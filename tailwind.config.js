@@ -34,9 +34,10 @@ export default {
         cardBg: "#f2f4f5", 
         darkcardBg: "#313436", 
         cardBg2: "#d6f0ff",
-        darkcardBg2: "#1f1f1f",
+        darkcardBg2: "#18191A",
 
         cardBorder: "#D1D5DB",
+        darkcardBorder: "#4B5563",
 
 
 

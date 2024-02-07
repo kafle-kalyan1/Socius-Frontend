@@ -118,7 +118,7 @@ const DeletePost = async (e,id) =>{
 
   return (
     <div
-  className="bg-white text-gray-800 rounded-lg flex flex-col min-h-[300px] h-auto min-w-[250px] max-w-[650px] 3xl:max-w-[850px] 3xl:w-[800px]  space-y-6 p-5 py-7 mb-4 shadow-lg"
+  className="bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 rounded-lg flex flex-col min-h-[300px] h-auto min-w-[250px] max-w-[650px] 3xl:max-w-[850px] 3xl:w-[800px]  space-y-6 p-5 py-7 mb-4 shadow-lg"
   onMouseEnter={() => setIsMouseOver(true)}
   onMouseLeave={() => setIsMouseOver(false)}
 >
@@ -155,7 +155,7 @@ const DeletePost = async (e,id) =>{
   </div>
   <div>
     <p
-      className="post_text text-sm leading-6 text-gray-800"
+      className="post_text text-sm leading-6 text-text1 dark:text-text2"
       dangerouslySetInnerHTML={{ __html: truncatedText }}
     ></p>
     {postText.length > 3 && (
