@@ -69,13 +69,13 @@ function App() {
       >
     <div className="w-screen h-screen font-primary_font bg-cardBg2 dark:bg-darkcardBg2 m-0 p-0 overflow-y-auto max-h-[100vh] scroll-smooth  scroll-bar flex">
 
-   { window.location.pathname=='/login' || window.location.pathname=='/register' ? null : isMobile ?  <MobileNavbar />  : 
+   { window.location.pathname=='/login' || window.location.pathname=='/register' || window.location.pathname == "/forgetPassword" ? null : isMobile ?  <MobileNavbar />  : 
    <div className="w-1/5">
      <Sidebar />
     </div>
    }
 
-   { window.location.pathname=='/login' || window.location.pathname=='/register' ?
+   { window.location.pathname=='/login' || window.location.pathname=='/register' || window.location.pathname == "/forgetPassword" ?
    <div className="w-full scroll-smooth overflow-y-auto overflow-x-hidden block right-0]">
      <AppRoute />
    </div>

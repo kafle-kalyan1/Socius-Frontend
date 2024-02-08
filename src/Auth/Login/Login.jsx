@@ -75,9 +75,6 @@ const Login = () => {
             duration: 3000,
           });
           const email = err.response.headers.email;
-console.log(err)
-console.log(email)
-
           showOtpModal({title:"Verify OTP", message:"Enter the OTP sent to your email", icon:"", link:"Didn't get otp",data:{email:email, username:values.username, password:values.password}, submit:{title:"Verify", action:({data,hide})=>{
             axios.post("api/auth/verify/", data).then((res) => {
               if (res.status === 202) {
@@ -155,9 +152,9 @@ console.log(email)
 
           />
           <Link
-            to="#"
+            to="/forgetPassword"
             title="Reset Password here!"
-            className="text-xs text-text1 dark:text-text2 focus:text-red_text hover:text-red_text duration-100 hover:underline"
+            className="text-xs text-text1 dark:text-text2 focus:text-red_text hover:text-red_text dark:hover:text-red_text duration-100 hover:underline"
           >
             Forget Password?
           </Link>

@@ -25,6 +25,7 @@ const GeneralSettings = lazy(()=>import('./Screens/Settings/GeneralSettings'))
 const NotificationSettings = lazy(()=>import('./Screens/Settings/NotificationSettings'))
 const AccountSettings = lazy(()=>import('./Screens/Settings/AccountSettings'))
 const AdvanceSettings = lazy(()=>import('./Screens/Settings/AdvanceSettings'))
+const ForgetPassword = lazy(()=>import('./Auth/ForgetPassword/ForgetPassword'))
 
 import { ProfileContext } from '/src/context/ProfileContext/ProfileContext';
 import Sidebar  from '/src/components/Sidebar/Sidebar';
@@ -40,7 +41,6 @@ function AppRoute() {
 
   useEffect(() => {
    if(profile?.username){
-    const username = Cookies.get("username");
     const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
 
     newSocket.onopen = () => {
@@ -141,6 +141,16 @@ function AppRoute() {
         }
       />
 
+<Route
+        exact
+        path="/forgetPassword"
+        element={
+          <Suspense fallback={<div>Loading...</div>}>
+            <ForgetPassword />
+          </Suspense>
+        }
+      />
+
       <Route
         exact
         path=""
@@ -150,6 +160,7 @@ function AppRoute() {
           </Suspense>
         }
       />
+
       <Route
         exact
         path="/"
@@ -159,6 +170,7 @@ function AppRoute() {
           </Suspense>
         }
       />
+
       <Route
         exact
         path="/profile"
