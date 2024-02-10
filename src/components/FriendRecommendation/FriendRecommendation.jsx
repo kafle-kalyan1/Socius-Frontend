@@ -112,11 +112,11 @@ const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = fals
   );
 
   return (
-    <div className="bg-white dark:bg-cardBg rounded-lg shadow-md p-4 transition-colors duration-200 cursor-pointer" key={username}>
+    <div className="bg-cardBg dark:bg-indigo_bg  border-cardBorder dark:border-darkcardBorder text-text1 dark:text-text2 rounded-lg shadow-md p-4 transition-colors duration-200 cursor-pointer" key={username}>
       <img className="w-24 h-24 rounded-full mx-auto mb-4" src={profile_pic} alt={fullname} />
       <div className="text-center">
         <h4 className="text-xl font-semibold">{firstLetterCapital(fullname)}</h4>
-        <p className="text-gray-500">@{username}</p>
+        <p className="text-text1 dark:text-text2">@{username}</p>
       </div>
       <div className="flex justify-center mt-4">
         {actionButton}

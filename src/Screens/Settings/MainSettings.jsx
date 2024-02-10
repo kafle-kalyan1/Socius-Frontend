@@ -12,8 +12,7 @@ const MainSettings = () => {
    const navigate  = useNavigate();
 
   return (
-    <div className={`flex w-full font-primary_font justify-center items-center  m-auto overflow-auto max-sm:w-full mt-10`}>
-    {/* <Sidebar /> */}
+    <div className={`flex bg-cardBg2 dark:bg-darkcardBg  w-full font-primary_font justify-center items-center  m-auto overflow-auto max-sm:w-full mt-10`}>
     <div className='flex justify-evenly w-full m-auto flex-wrap gap-10  mb-20'>
     <span className="w-full flex justify-center text-3xl text-center">Settings</span>
 
@@ -47,8 +46,8 @@ const MainSettings = () => {
       description="Advanced settings like offline features, etc."
       Icon={MdOfflineBolt}
       onClick={() => navigate("/settings/account")}
-      textColor='#2196f3'
-      bgColor='rgba(33,150,243,.1)'
+      textColor='#20d7f5'
+      bgColor='#daf3f7'
       />
 
       <Card
@@ -56,8 +55,8 @@ const MainSettings = () => {
       description="Reset settings to default."
       Icon={MdResetTv}
       onClick={() => navigate("/settings/account")}
-      textColor='#f44336'
-      bgColor='rgba(244, 67, 54, 0.15)'
+      textColor='#e84343'
+      bgColor='#e9eff7'
       />
     </div>
 

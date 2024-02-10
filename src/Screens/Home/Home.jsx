@@ -11,19 +11,21 @@ import toast from "react-hot-toast";
 import { Select } from "antd";
 import "/src/index.css";
 import NotificationPannel from "../../components/Notification/NotificationPannel/NotificationPannel";
+import {defaultProfilePic} from './../../Library/Others/Others';
+import { hideBigPopup } from "../../components/BigPopup/BigPopup";
 
 const Home = () => {
-  const { isMobile } = useContext(MenuContext);
   const { profile } = useContext(ProfileContext);
   const [posts, setPosts] = useState([]);
   const [sort, setSort] = useState("default");
 
-  function createPost2() {
+  const createPost2 = () => {
     showBigPopup({
       id: "createPost",
       children: <CreatePost profile={profile} />,
       ask: true,
-    });
+      onClose: ()=>hideBigPopup('createPost',true)
+  });
   }
 
   useEffect(() => {
@@ -48,18 +50,39 @@ const Home = () => {
 
   return (
 <div className={`flex ml-0 w-full overflow-auto scroll-bar scroll-bar bg-cardBg2 dark:bg-darkcardBg2 `}>
-      <div className={`block p-10 w-auto  h-screen font-primary_font justify-center items-center max-lg:w-full m-auto max-sm:ml-0 max-sm:w-full `}>
+      <div className={`block p-10 max-sm:p-1 w-auto  h-screen font-primary_font justify-center items-center max-lg:w-full m-auto max-sm:m-0 max-sm:w-full `}>
         <div className=" max-md:w-full  max-sm:w-full">
-          <Button type="primary" text="Create Post" onClick={createPost2} width={"4px"} />
+        <div className="w-full p-4 ">
+        <div className="w-[100%] md:w-[95%] h-6 flex items-center justify-center gap-x-3">
+          <div className="w-[10%]">
+              <img
+                src={profile.profile_picture ? profile.profile_picture : defaultProfilePic}
+                alt="other-profile-pic"
+                className="w-[2rem] h-[2rem] rounded-full"
+              />
+          </div>
+          <div
+            className="w-[90%] flex items-center justify-start px-4 border-solid border-2 border-gray-200 bg-gray-50 rounded-3xl py-2 cursor-pointer"
+            onClick={createPost2}
+          >
+            <span className="font-poppins text-xs select-none">
+              What&apos;s on your mind? <span className=" max-[400px]:hidden">
+              {profile?.username}
+              </span>
+            </span>
+          </div>
           <Select
           showSearch
-          style={{ width: 200 }}
           placeholder="Search"
+          className="block max-sm:hidden"
           defaultValue={sort}
           optionFilterProp="children"
           options={filters}
           onChange={(value) => setSort(value)}
           />
+        </div>
+      </div>
+
           {posts && posts.map((post) => (
             <Post
               key={post.id}
@@ -84,7 +107,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className={`block w-[33%] max-lg:hidden h-full overflow-auto sticky top-0`}>
+      <div className={`block w-[33%] max-xl:hidden h-full overflow-auto sticky top-0`}>
     <NotificationPannel/>
   </div>
     </div>

@@ -60,7 +60,7 @@ hideBigPopup('createPost')
     showBigPopup({
       id: "preview-post",
       children: (
-        <div className="flex flex-col mt-0 bg-cardBg mx-auto w-full h-4/5 p-4 rounded-md overflow-scroll">
+        <div className="flex flex-col mt-0 bg-cardBg mx-auto w-full p-4 rounded-md overflow-scroll">
           <h1 className="text-2xl mb-2 text-center">Post Preview</h1>
           <PreviewPost
             profileImage={profile.profileImage ? "data:image/png;base64," + profile.profileImage : defaultProfilePic}
@@ -89,7 +89,7 @@ hideBigPopup('createPost')
   };
 
   return (
-    <div className="flex flex-col mt-0 bg-cardBg mx-auto w-full h-4/5  p-4 rounded-md  overflow-scroll">
+    <div className="flex flex-col mt-0 bg-cardBg mx-auto w-full  p-4 rounded-md  overflow-scroll">
       <h1 className="text-2xl mb-2 text-center">Create Post</h1>
       <TextArea 
         formik={formik}
@@ -106,7 +106,7 @@ hideBigPopup('createPost')
           formik.handleChange("content")(value);
         }}
       /> */}
-      <div className="flex gap-3 justify-evenly">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-5 mt-4 justify-evenly">
         <Button
           onClick={() => {
             formik.submitForm();
@@ -127,7 +127,7 @@ hideBigPopup('createPost')
         />
         <Button
           onClick={() => {
-            hideBigPopup(true);
+            hideBigPopup('createPost',true);
           }}
           text="<u>C</u>ancel"
           type="danger"

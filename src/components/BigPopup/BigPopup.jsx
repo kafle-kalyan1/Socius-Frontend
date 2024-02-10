@@ -9,8 +9,12 @@ const BigPopup = ({ id, onClose, children, ask = false }) => {
 
   useEffect(() => {
     const handleEsc = (event) => {
-      if(open){
-      if (event.keyCode === 27) {
+      if (!isOpen) {
+        window.removeEventListener('keydown', handleEsc);
+        return;
+      }
+  
+      if (isOpen && event.keyCode === 27) {
         if (ask) {
           showModal({
             type: "info",
@@ -21,6 +25,7 @@ const BigPopup = ({ id, onClose, children, ask = false }) => {
                 title: "Yes",
                 onclick: () => {
                   document.getElementById(id).style.display = 'none';
+                  setIsOpen(false);
                 },
               },
               {
@@ -35,19 +40,22 @@ const BigPopup = ({ id, onClose, children, ask = false }) => {
         } else {
           handleClose();
         }
-        window.addEventListener('keydown', handleEsc); 
       }
-      }
-   }
+    };
+  
+    window.addEventListener('keydown', handleEsc);
+  
     return () => {
       window.removeEventListener('keydown', handleEsc);
     };
-  });
+  }, [isOpen, ask, id]);
 
   const handleClose = () => {
-    setIsOpen(false);
     if (onClose) {
       onClose();
+    }
+    else{
+      setIsOpen(false);
     }
   };
 
@@ -61,7 +69,7 @@ const BigPopup = ({ id, onClose, children, ask = false }) => {
           >
             X
           </button>
-          <div className='mt-6 p-4 w-11/12 min-w-md bg-cardBg rounded-md shadow-md overflow-scroll'>
+          <div className='mt-6 p-4 w-11/12 min-w-md bg-cardBg rounded-md shadow-md overflow-auto'>
             {children}
           </div>
         </div>

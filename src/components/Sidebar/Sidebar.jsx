@@ -112,7 +112,7 @@ export function Sidebarr({ children }) {
               type="submit"
               onClick={(e) => {
                 e.preventDefault();
-                console.log(search);
+                navigate(`/search?q=${search}`);
               }}
               className="absolute right-4 top-[50%] transform translate-y-[-50%] cursor-pointer text-green_text  hover:scale-[1.1] hover:duration-200 z-20"
             />

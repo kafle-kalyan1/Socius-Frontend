@@ -57,15 +57,16 @@ const Profile = () => {
   
   return (
     <div className={`flex mt-8`}>
-      <div className={`block overflow-auto scroll-bar w-full h-screen font-primary_font justify-center items-center max-lg:w-full m-auto ml-[5%] max-sm:ml-5 max-sm:w-full`}>
+      <div className={`block overflow-auto scroll-bar w-full h-max font-primary_font justify-center items-center max-lg:w-full m-auto max-sm:w-full`}>
         <div className="max-md:w-full max-sm:w-full mb-5">
         {loading ? (
           <OurProfileSkeleton />
         ) : (
           <>
         <OurProfile data={userData}/>
-      <div className="mt-28 w-full gap-5 h-full m-auto">
-          <h1 className="text-3xl font-bold text-center text-primary_dark">My Posts</h1>
+      <div className="flex flex-col mt-28 w-full gap-5 h-full m-auto">
+          <h1 className="text-3xl font-bold text-center text-text1 dark:text-text2">My Posts</h1>
+          <div className=" justify-items-center m-auto">
 
         {posts && posts.map((post) => (
             <Post
@@ -86,6 +87,7 @@ const Profile = () => {
               afterDelete={getOwnPosts}
             />
           ))}
+          </div>
       </div>
           </>
         )}

@@ -11,7 +11,7 @@ import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import APICall from "../../Library/API/APICall";
-import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const Message = () => {
   const { open, setOpen, isMobile } = useContext(MenuContext);
@@ -26,14 +26,12 @@ const Message = () => {
   const navigate = useNavigate();
   const [hasMore, setHasMore] = useState(true);
 
-
   useEffect(() => {
     if (state?.currentChatUser) setCurrentChatUser(state?.currentChatUser);
     else if (username) setCurrentChatUser(username);
   }, [state, username]);
 
   useEffect(() => {
-    var access = Cookies.get("access");
     getData();
   }, []);
 
@@ -169,7 +167,7 @@ const Message = () => {
 
   return (
     <div
-      className={`block overflow-auto scroll-bar w-full h-screen font-primary_font justify-center items-center max-lg:w-full m-auto max-sm:ml-0 max-sm:w-fulll`}
+      className={`block overflow-auto scroll-bar w-full h-screen font-primary_font justify-center items-center max-lg:w-full m-auto max-sm:ml-0 max-sm:w-full max-lg:h-[100%]`}
     >
       <div className="max-md:w-full max-sm:w-full">
         <div className={`flex h-screen`}>
@@ -184,6 +182,7 @@ const Message = () => {
                     navigate(`/message/${user.username}/`, {
                       state: {
                         currentChatUser: user.username,
+                        profile_picture: user.profile_picture,
                       },
                     });
                     setCurrentChatUser(user.username);
@@ -247,7 +246,9 @@ const Message = () => {
                       </div>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src={`https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png`}
+                        src={user?.profile_picture
+                          ? user.profile_picture
+                          : defaultProfilePic}
                         alt={`Profile of ${currentChatUser}`}
                       />
                     </>
@@ -263,66 +264,71 @@ const Message = () => {
                 </span>
               </div>
             )}
-  <div
-    className="flex-1 overflow-auto bg-cardBg dark:bg-darkcardBg p-4 scroll-bar"
-    id="chatContainer"
-  >
-            <InfiniteScroll
-  dataLength={messages.length}
-  next={handleLoadMore}
-  hasMore={hasMore} // Use the hasMore state variable
-  loader={<h4>Loading...</h4>}
-  scrollableTarget="chatContainer"
->
-    {!currentChatUser && (
-      <p className="text-center text-text1 dark:text-text2">
-        Please Select any User to message
-      </p>
-    )}
-    {messages.reverse().map((msg, index) => ( // Reverse the order of the messages
-      <div
-        key={index}
-        className={`mb-2 flex w-full gap-4 ${
-          msg?.sender?.username == currentChatUser
-            ? "justify-start"
-            : "justify-end"
-        } `}
-      >
-        {msg?.sender?.username == currentChatUser ? (
-          <img
-            src={
-              msg.sender.userprofile.profile_picture
-                ? msg.sender.userprofile.profile_picture
-                : defaultProfilePic
-            }
-            alt=""
-            className=" block h-6 w-6 sm:h-12 sm:w-12 rounded-full"
-          />
-        ) : null}
-        <div
-          className={`relative float-right mx-3 inline-block rounded-md ${
-            msg?.sender?.username == currentChatUser
-              ? "  bg-cyan_text"
-              : " bg-blue_text"
-          }  py-3 px-4 text-white`}
-        >
-          <p className="text-sm">{msg.message}</p>
-        </div>
-        {msg?.sender?.username != currentChatUser ? (
-          <img
-            src={
-              msg.sender.userprofile.profile_picture
-                ? msg.sender.userprofile.profile_picture
-                : defaultProfilePic
-            }
-            alt=""
-            className=" inline-block h-6 w-6 sm:h-12 sm:w-12 rounded-full"
-          />
-        ) : null}
-      </div>
-    ))}
-</InfiniteScroll>
-  </div>
+            <div
+              className="flex-1 overflow-auto bg-cardBg  dark:bg-darkcardBg p-4 scroll-bar"
+              id="chatContainer"
+            >
+              <InfiniteScroll
+                dataLength={messages.length}
+                next={handleLoadMore}
+                hasMore={hasMore}
+                loader={<h4>Loading...</h4>}
+                scrollableTarget="chatContainer"
+              >
+                {!currentChatUser && (
+                  <p className="text-center text-text1 dark:text-text2">
+                    Please Select any User to message
+                  </p>
+                )}
+                {messages.reverse().map(
+                  (
+                    msg,
+                    index // Reverse the order of the messages
+                  ) => (
+                    <div
+                      key={index}
+                      className={`mb-2 flex w-full gap-4 ${
+                        msg?.sender?.username == currentChatUser
+                          ? "justify-start"
+                          : "justify-end"
+                      } `}
+                    >
+                      {msg?.sender?.username == currentChatUser ? (
+                        <img
+                          src={
+                            msg.sender.userprofile.profile_picture
+                              ? msg.sender.userprofile.profile_picture
+                              : defaultProfilePic
+                          }
+                          alt=""
+                          className=" block h-6 w-6 sm:h-12 sm:w-12 rounded-full"
+                        />
+                      ) : null}
+                      <div
+                        className={`relative float-right mx-3 inline-block rounded-md ${
+                          msg?.sender?.username == currentChatUser
+                            ? "  bg-cyan_text"
+                            : " bg-blue_text"
+                        }  py-3 px-4 text-white`}
+                      >
+                        <p className="text-sm">{msg.message}</p>
+                      </div>
+                      {msg?.sender?.username != currentChatUser ? (
+                        <img
+                          src={
+                            msg.sender.userprofile.profile_picture
+                              ? msg.sender.userprofile.profile_picture
+                              : defaultProfilePic
+                          }
+                          alt=""
+                          className=" inline-block h-6 w-6 sm:h-12 sm:w-12 rounded-full"
+                        />
+                      ) : null}
+                    </div>
+                  )
+                )}
+              </InfiniteScroll>
+            </div>
             {currentChatUser && (
               <div className="p-4 bg-cardBg dark:bg-darkcardBg border-t border-gray-300">
                 <>

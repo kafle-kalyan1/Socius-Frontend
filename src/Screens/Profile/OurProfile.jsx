@@ -62,11 +62,11 @@ const OurProfile = (props) => {
     }
 
     return (
-        <div className="block bg-cardBg">
-            <div className="container mx-auto my-5 p-5">
+        <div className="flex bg-cardBg2 dark:bg-darkcardBg2">
+            <div className="container my-5 p-5">
                 <div className="flex flex-col lg:flex-row md:-mx-2 ">
                     <div className="w-full lg:w-3/12 md:mx-2">
-                        <div className="bg-white p-3 border-t-4 border-green-400">
+                        <div className="bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 p-3 border-t-4 border-green-400">
                             <div className=" overflow-auto relative group">
                             {
                                 props.data?.profile_picture ? <img id='profile-img' className='h-40 w-40 mx-auto rounded-full' src={props.data.profile_picture}  />
@@ -92,7 +92,7 @@ const OurProfile = (props) => {
                                         </button>
                                     </div>
                                 </div>:<div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black bg-opacity-50 transition-opacity">
-                                    <div className="text-white text-center">
+                                    <div className="text-text1 dark:text-text2  text-center">
                                         <button
                                             className="px-4 py-2 bg-blue-500 rounded-full mx-2"
                                             onClick={handleEditProfile}
@@ -103,11 +103,11 @@ const OurProfile = (props) => {
                                 </div>
                                 }
                             </div>
-                            <h1 className="text-gray-900 font-bold text-xl leading-8 my-1 text-center">{props?.data.fullname}</h1>
+                            <h1 className="text-text1 dark:text-text2 font-bold text-xl leading-8 my-1 text-center">{props?.data.fullname}</h1>
                             <h3 className="text-gray-600 font-lg text-semibold leading-6">{ }</h3>
-                            <p className="text-sm text-gray-500 hover:text-gray-600 leading-6">{props?.data.bio}</p>
+                            <p className="text-sm text-text1 dark:text-text2 leading-6">{props?.data.bio}</p>
                             <ul
-                                className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
+                                className="bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                                 <li className="flex items-center py-3">
                                     <span>Status</span>
                                     <span className="ml-auto">
@@ -167,8 +167,8 @@ const OurProfile = (props) => {
                         </div> */}
                     </div>
                     <div className="w-full lg:w-9/12 mx-2 h-64">
-                        <div className="bg-white p-3 shadow-sm rounded-sm">
-                            <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
+                        <div className="bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 p-3 shadow-sm rounded-sm">
+                            <div className="flex items-center space-x-2 font-semibold text-text1 dark:text-text2 leading-8">
                                 <span className="text-green-500">
                                     <svg className="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke="currentColor">
@@ -178,7 +178,7 @@ const OurProfile = (props) => {
                                 </span>
                                 <span className="tracking-wide">About</span>
                             </div>
-                            <div className="text-gray-700">
+                            <div className="text-text1 dark:text-text2">
                                 <div className="grid grid-cols-1 text-sm">
                                     <div className="grid grid-cols-2">
                                         <div className="px-4 py-2 font-semibold">First Name</div>
@@ -199,7 +199,7 @@ const OurProfile = (props) => {
                                     <div className="grid grid-cols-2">
                                         <div className="px-4 py-2 font-semibold">Email.</div>
                                         <div className="px-4 py-2">
-                                            <a className="text-blue-800" href={`mailto:${props?.data.email}`}>{props?.data?.email}</a>
+                                            <a className="text-blue_text" href={`mailto:${props?.data.email}`}>{props?.data?.email}</a>
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2">
@@ -209,7 +209,7 @@ const OurProfile = (props) => {
                                 </div>
                             </div>
                             <button onClick={()=>editProfile()}
-                                className="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Edit My Details</button>
+                                className="block w-full text-green_text bg-green_bg text-sm font-semibold rounded-lg hover:bg-green_bg_hover focus:outline-none focus:shadow-outline focus:bg-green_bg_hover hover:shadow-xs p-3 my-4">Edit My Details</button>
                         </div>
 
                         <div className="my-4"></div>

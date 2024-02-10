@@ -80,7 +80,7 @@ function App() {
      <AppRoute />
    </div>
    :
-   <div className="w-4/5 max-md:w-full scroll-smooth overflow-y-auto overflow-x-hidden block right-0 max-md:h-[90%]">
+   <div className="w-4/5 max-md:w-full scroll-smooth overflow-y-auto overflow-x-hidden block right-0 max-md:h-[92%]">
      <AppRoute />
    </div>
    }

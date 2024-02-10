@@ -80,7 +80,7 @@ const Alert = ({title, message, type, buttons, outSideAction, closeButton, hideD
       className="min-w-screen h-screen animated fadeIn faster left-0 top-0 flex justify-center items-center  outline-none focus:outline-none bg-no-repeat bg-center bg-cover bg-opacity-60 fixed inset-0 bg-black backdrop-blur-md z-50"
       id="modal-id"
     >
-      <div className="w-full max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg bg-slate-200">
+      <div className="w-full max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg bg-text2 dark:bg-text4">
       <div title="close" className="closeBTN cursor-pointer absolute right-3 top-1 bg-red-500 w-8 h-8 flex justify-center items-center rounded-full hover:bg-red-600 transition-colors duration-300 ease-in-out spin-once" onClick={hide}>
         <span className="text-white text-lg font-bold">X</span>
       </div>
@@ -92,19 +92,19 @@ const Alert = ({title, message, type, buttons, outSideAction, closeButton, hideD
             <h2 className={`text-xl font-bold py-4 text-${color}-500`}>
               {title}
             </h2>
-            <p className="text-sm text-textSecondary px-8">{message}</p>
+            <p className="text-sm text-text1 dark:text-text2 px-8">{message}</p>
           </div>
           <div className="p-3 mt-2 text-center space-x-4 md:block">
             <button
               onClick={()=>{butOnclick(); hide();}}
-              className={`mb-2 md:mb-0 bg-${color}-500 border border-${color}-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-${color}-600`}
+              className={`mb-2 md:mb-0 bg-${color}-500 border border-${color}-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-text1 dark:text-text2 rounded-full hover:shadow-lg hover:bg-${color}-600`}
             >
               {butTitle}
             </button>
 
             <button
               onClick={()=>{butOnclick2; hide();}}
-              className="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100"
+              className="mb-2 md:mb-0 text-text3 dark:text-text2 px-5 py-2 text-sm shadow-sm font-medium tracking-wider border rounded-full hover:shadow-lg "
             >
               {butTitle2}
             </button>
