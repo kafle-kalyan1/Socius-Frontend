@@ -14,7 +14,7 @@ const MainSettings = () => {
   return (
     <div className={`flex bg-cardBg2 dark:bg-darkcardBg  w-full font-primary_font justify-center items-center  m-auto overflow-auto max-sm:w-full mt-10`}>
     <div className='flex justify-evenly w-full m-auto flex-wrap gap-10  mb-20'>
-    <span className="w-full flex justify-center text-3xl text-center">Settings</span>
+    <span className="w-full flex justify-center text-3xl text-center text-text1 dark:text-text2">Settings</span>
 
     <Card 
       title="General"
