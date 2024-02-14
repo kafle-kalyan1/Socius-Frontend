@@ -1,7 +1,7 @@
 import CryptoAES from 'crypto-js/aes';
 import CryptoENC from 'crypto-js/enc-utf8';
 import Cookies from 'js-cookie';
-import { useContext, useEffect, useLayoutEffect } from 'react';
+import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ProfileContext } from '/src/context/ProfileContext/ProfileContext';
 import { SHA256 } from 'crypto-js';
@@ -183,3 +183,32 @@ export function EncryptString(data){
     return days + ' days ago';
   }
   }
+
+  export function useScrollToTop() {
+    const navigate = useNavigate();
+  
+    useLayoutEffect(() => {
+      window.scrollTo(0, 0);
+    }, [navigate]);
+  }
+
+  export function useScrollToTopOnMount() {
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
+  }
+
+export const useThemeDetector = () => {
+  const getCurrentTheme = () => window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const [isDarkTheme, setIsDarkTheme] = useState(getCurrentTheme());  
+  const mqListener = (e => {
+      setIsDarkTheme(e.matches);
+  });
+  
+  useEffect(() => {
+    const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
+    darkThemeMq.addListener(mqListener);
+    return () => darkThemeMq.removeListener(mqListener);
+  }, []);
+  return isDarkTheme;
+}

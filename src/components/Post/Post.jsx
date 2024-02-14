@@ -77,7 +77,7 @@ const Post = ({
   }
 
   function viewProfile(username) {
-    navigate(`u/${username}`);
+    navigate(`/u/${username}`);
   }
 
   const truncatedText = showFullText ? postText : postText.slice(0, 200);

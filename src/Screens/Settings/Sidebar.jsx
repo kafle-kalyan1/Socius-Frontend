@@ -41,20 +41,20 @@ function Sidebar() {
   );
 
   return (
-    <div className=" text-deep_primary_text w-full">
+    <div className="text-text1 m-0  bg-cardBorder dark:bg-darkcardBg dark:text-text2 w-full">
       {isMobile ? (
         <div className="relative">
-          <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="text-deep_primary_text ml-5 p-2 w-">
+          <button onClick={() => setIsDropdownOpen(!isDropdownOpen)} className="text-text1 dark:text-text2 ml-5 p-2 w-">
             <FaBars />
           </button>
           {isDropdownOpen && (
-            <div className="absolute ml-5 right-0 w-48 bg-cardBorder  rounded-md shadow-lg py-2 z-20">
+            <div className="absolute ml-10 right-0 w-48 text-text1 dark:text-text2 bg-cardBorder dark:bg-darkcardBg rounded-md shadow-lg py-2 z-20">
               {menu}
             </div>
           )}
         </div>
       ) : (
-        <div className="min-h-screen sticky top-0 flex flex-col justify-between">
+        <div className="min-h-screen ml-6 sticky top-0 flex flex-col justify-between text-text1 dark:text-text2">
           {menu}
         </div>
       )}

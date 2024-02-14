@@ -8,26 +8,15 @@ import { hideBigPopup } from "/src/components/BigPopup/BigPopup";
 import axios from "axios";
 import OurProfileSkeleton from "./../Profile/OurProfileSkeleton";
 import { defaultProfilePic } from "../../Library/Others/Others";
+import APICall from "../../Library/API/APICall";
+import toast from "react-hot-toast";
+import { w3cwebsocket } from "websocket";
 
-const OtherUserProfile = () => {
+
+const OtherUserProfile = (props) => {
   const navigate = useNavigate();
-  const [profile, setProfile] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  //get username from url
-  const username = window.location.pathname.split("/")[2];
-
-  useEffect(() => {
-    axios
-      .get(`/api/user/getProfile/${username}/`)
-      .then((res) => {
-        setProfile(res.data.data);
-        setIsLoaded(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
+  const {getProfile, profile, isLoaded,username} = props;
+ 
   const handleViewProfile = () => {
     let a = document.getElementById("profile-img");
     a = a.src;
@@ -35,9 +24,55 @@ const OtherUserProfile = () => {
     window.open(Object(a), "_blank");
   };
 
-  const handleUnfriend = () => {
-    console.log("Unfriend clicked");
+  const handleUnfriend = async () => {
+    let response = await APICall("/api/user/removeFriend/","POST",{"friend": username})
+    if(response.status == 200){
+    toast.success(`Unfriended ${username}`);
+    getProfile()
+    }
+    };
+
+    const sendRequestTo = async () => {
+
+      let response = await APICall("/api/user/sendFriendRequest/","POST",{"friend": username})
+      if(response.status == 200){
+
+      toast.success(`Request sent to ${username}`);
+
+      const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
+    newSocket.onopen = () => {
+      console.log("WebSocket connected");
+      newSocket.send(
+        JSON.stringify({
+          "type":"friend_request",
+          "data":{
+            "sender_username":username,
+          },
+        })
+      );
+    };
+    getProfile()
+      }
+
   };
+
+  const cancelRequest = async (username) => {
+    let response = await APICall("/api/user/cancelFriendRequest/","POST",{"friend": username})
+    if(response.status == 200){
+    toast.success(`Cancelled request to ${username}`);
+    getProfile()
+    }
+};
+
+const acceptRequest = async (username) => {
+
+  let response = await APICall("/api/user/acceptFriendRequest/","POST",{"friend": username})
+  if(response.status == 200){
+  toast.success(`Accepted request from ${username}`);
+  getProfile()
+  }
+};
+
 
   return (
     <div className="bg-gray-100">
@@ -50,7 +85,7 @@ const OtherUserProfile = () => {
                     <img
                       id="profile-img"
                       className="h-40 w-40 mx-auto rounded-full"
-                      src={profile.profile_picture || defaultProfilePic}
+                      src={profile.data.profile_picture || defaultProfilePic}
                       alt=""
                     />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black bg-opacity-50 transition-opacity">
@@ -65,13 +100,13 @@ const OtherUserProfile = () => {
                   </div>
                 </div>
                 <h1 className="text-gray-900 font-bold text-xl leading-8 my-1 text-center">
-                  {profile.fullname}
+                  {profile.data.fullname}
                 </h1>
                 <h3 className="text-gray-600 font-lg text-semibold leading-6">
                   {}
                 </h3>
                 <p className="text-sm text-gray-500 hover:text-gray-600 leading-6">
-                  {profile.bio}
+                  {profile.data.bio}
                 </p>
                 <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                   <li className="flex items-center py-3">
@@ -92,7 +127,7 @@ const OtherUserProfile = () => {
                     <span>Member since</span>
                     <span className="ml-auto">
                       {profile.profile_picture
-                        ? dateFormat(profile.date_joined, true)
+                        ? dateFormat(profile.data.date_joined, true)
                         : ""}
                     </span>
                   </li>
@@ -126,21 +161,21 @@ const OtherUserProfile = () => {
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">First Name</div>
                       <div className="px-4 py-2">
-                        {profile.first_name
-                          ? firstLetterCapital(profile.first_name)
-                          : profile.fullname
-                          ? firstLetterCapital(profile.fullname?.split(" ")[0])
+                        {profile.data.first_name
+                          ? firstLetterCapital(profile.data.first_name)
+                          : profile.data.fullname
+                          ? firstLetterCapital(profile.data.fullname?.split(" ")[0])
                           : ""}
                       </div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Last Name</div>
                       <div className="px-4 py-2">
-                        {profile.last_name
-                          ? firstLetterCapital(profile.last_name)
-                          : profile.fullname
+                        {profile.data.last_name
+                          ? firstLetterCapital(profile.data.last_name)
+                          : profile.data.fullname
                           ? firstLetterCapital(
-                              profile.fullname?.split(" ").pop()
+                              profile.data.fullname?.split(" ").pop()
                             )
                           : ""}
                       </div>
@@ -148,19 +183,19 @@ const OtherUserProfile = () => {
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Gender</div>
                       <div className="px-4 py-2">
-                        {firstLetterCapital(profile.gender)}
+                        {firstLetterCapital(profile.data.gender)}
                       </div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Contact No.</div>
-                      <div className="px-4 py-2">{profile.phone_number}</div>
+                      <div className="px-4 py-2">{profile.data.phone_number}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Email.</div>
                       <div className="px-4 py-2">
                         <a
                           className="text-blue-800"
-                          href={`mailto:${profile.email}`}
+                          href={`mailto:${profile.data.email}`}
                         >
                           {profile.email}
                         </a>
@@ -169,16 +204,31 @@ const OtherUserProfile = () => {
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Birthday</div>
                       <div className="px-4 py-2">
-                        {dateFormat(profile.date_of_birth)}
+                        {dateFormat(profile.data.date_of_birth)}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-                 <div className="flex justify-evenly gap-10">
-                  <Button text="Message" onClick={()=>navigate(`/message/${profile.username}`,{state:{"currentChatUser":profile.username}})} type="primary"  />
-                 <Button text="Unfriend" onClick={handleUnfriend} type="secondary"  />
-                  <Button text="Report" onClick={handleUnfriend} type="danger"  />
+                 <div className="flex justify-evenly gap-10 mt-10">
+                  <Button text="Message" onClick={()=>navigate(`/message/${profile.data.username}`,{state:{"currentChatUser":profile.data.username}})} type="primary"  />
+
+                  {
+                    profile.is_friend ?
+                    <Button text="Unfriend" onClick={handleUnfriend} type="danger"  />
+                    :
+                    profile.is_requested ?
+                     !profile.is_requested_by_me ?
+                    <Button text="Cancel Request" onClick={cancelRequest} type="danger"   />
+                    :
+                    <Button text="Accept Request" onClick={acceptRequest} type="primary"   />
+                    :
+                    <Button text="Add Friend" onClick={sendRequestTo} type="primary"  />
+
+
+                  }
+                 
+                  <Button text="Report" onClick={handleUnfriend} type="danger"  disabled={true}  />
                  </div>
             </div>
           </div>
