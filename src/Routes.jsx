@@ -31,6 +31,7 @@ import { ProfileContext } from '/src/context/ProfileContext/ProfileContext';
 import Sidebar  from '/src/components/Sidebar/Sidebar';
 import MobileNavbar from './components/Sidebar/MobileNavbar';
 import { MenuContext } from '/src/context/MenuContext/MenuContext';
+import { defaultProfilePic } from "./Library/Others/Others";
 
 function AppRoute() {
   const { notifications, addNotification, removeNotification } = useNotification();
@@ -55,43 +56,48 @@ function AppRoute() {
       const shortenedMessage = message.split(' ').slice(0, 100).join(' ');
 
       toast((t) => (
-        <div className="flex items-center space-x-4">
-        <img className="w-8 h-8 rounded-full" src={res_data.profile_picture} alt={res_data.sender} />
-        <span>{res_data.fullname}</span>
-        <div>
-          <p>{shortenedMessage}</p>
-          <button
-            className="bg-blue-500 text-white rounded px-2 py-1"
-            onClick={() => {
+<>
+      <div className="relative w-auto bg-gray-100 p-4 rounded-md shadow-md">
+  <div className="flex">
+    <img className="h-12 w-12 rounded-full mr-3" src={res_data.profile_picture ? res_data.profile_picture : defaultProfilePic} alt={res_data.sender}/>
+    <div className="">
+      <p className="font-bold text-gray-700">{res_data.fullname}</p>
+      <p className="text-gray-500">{shortenedMessage}.</p>
+    </div>
+  </div>
+  <div className="flex items-center mt-2">
+    <button type="button" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" onClick={() => {
               toast.dismiss(t.id);
               navigate(`/message/${res_data.sender}`)
             }}
           >
-            Check
-          </button>
-        </div>
-      </div>
+            View</button>
+  </div>
+</div>
+  
+</>
       ));
       }
       else if(res_data.type == "friend_request"){
-        //create a toast for friend request
         toast((t) => (
-          <div className="flex items-center space-x-4">
-            <img className="w-8 h-8 rounded-full" src={res_data.profile_picture} alt={res_data.sender} />
-            <span>{res_data.fullname}</span>
-            <div>
-              <p>Friend request</p>
-              <button
-                className="bg-blue-500 text-white rounded px-2 py-1"
-                onClick={() => {
-                  toast.dismiss(t.id);
-                  navigate(`/u/${res_data.sender}`)
-                }}
-              >
-                Check
-              </button>
-            </div>
-          </div>
+          <div className="relative w-auto bg-gray-100 p-4 rounded-md shadow-md">
+  <div className="flex">
+    <img className="h-12 w-12 rounded-full mr-3" src={res_data.profile_picture ? res_data.profile_picture : defaultProfilePic} alt={res_data.sender}/>
+    <div className="">
+      <p className="font-bold text-gray-700">{res_data.fullname}</p>
+      <p className="text-gray-500">Friend Request.</p>
+    </div>
+  </div>
+  <div className="flex justify-center items-center mt-2">
+    <button type="button" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" onClick={() => {
+              toast.dismiss(t.id);
+              navigate(`/u/${res_data.sender}`)
+            }}
+          >
+            View</button>
+            <button type="button" className="px-4 py-2 ml-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">Decline</button>
+  </div>
+</div>
         ));
       }
     };

@@ -31,7 +31,7 @@ const RecPost = ({data}) => {
       <h1 className="text-2xl font-bold">People you may know</h1>
       <p className="text-gray-500">Based on your activity</p>
     </div>
-      <div className="grid grid-cols-2 text-text1 dark:text-text2 mt-4 gap-4"> 
+      <div className="grid grid-cols-2 max-lg:grid-cols-1 text-text1 dark:text-text2 mt-4 gap-4"> 
      {
       posts && posts.length > 0 ? posts.map((post) => {
         return (

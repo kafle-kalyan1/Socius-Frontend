@@ -1,14 +1,14 @@
 import React from "react";
 import { useSpring, animated } from "react-spring";
-import { Home, Compass, MessageCircle, UsersIcon, UserCircle } from "lucide-react";
+import { Home, Compass, MessageCircle, UsersIcon, UserCircle, Search, MessageCircleHeartIcon, LucideSettings2, LucideSettings } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const MobileNavbar = () => {
   const menuItems = [
     { icon: <Home size={20} />, label: "Home", path: "/" },
-    { icon: <Compass size={20} />, label: "Explore", path: "/profile-explore" },
-    { icon: <MessageCircle size={20} />, label: "Messages", path: "/message" },
-    { icon: <UsersIcon size={20} />, label: "Friends", path: "/friends" },
+    { icon: <Search size={20} />, label: "Search", path: "/search" },
+    { icon: <MessageCircleHeartIcon size={20} />, label: "Messages", path: "/message" },
+    { icon: <LucideSettings size={20} />, label: "Settings", path: "/settings" },
     { icon: <UserCircle size={20} />, label: "Profile", path: "/profile" },
   ];
 
