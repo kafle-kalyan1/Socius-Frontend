@@ -103,7 +103,7 @@ export function EncryptString(data){
     toast.success("Copied to clipboard");
   };
 
-  export const defaultProfilePic = "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";
+  export const defaultProfilePic = "https://st2.depositphotos.com/4841789/10331/v/450/depositphotos_103319338-stock-illustration-male-head-icon.jpg";
 
   export function ShortcutKey(key,callback){
     key=key.toUpperCase().charCodeAt(0);

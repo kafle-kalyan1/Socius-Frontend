@@ -1,10 +1,10 @@
 
 const TextArea = (props) => {
-   const { formik, Icon, title, name, ref_, rows, cols } = props;
+   const { formik, Icon, title, name, ref_, rows, cols,showTitle=true } = props;
  
    return (
      <div className="mb-2">
-       <span className="flex">
+       { showTitle &&  <span className="flex">
          {Icon}
          <label
            htmlFor={name}
@@ -13,6 +13,7 @@ const TextArea = (props) => {
            {title}
          </label>
        </span>
+       }
        <span className="flex w-full">
          <textarea
            name={name}

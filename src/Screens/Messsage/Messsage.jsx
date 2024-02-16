@@ -9,14 +9,17 @@ import Cookies from "js-cookie";
 import { dateFormat, defaultProfilePic } from "../../Library/Others/Others";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, SendIcon } from "lucide-react";
 import APICall from "../../Library/API/APICall";
 import InfiniteScroll from "react-infinite-scroll-component";
+import FriendList from "./FriendList";
+import ThinkingSVG from "./Utils/ThinkingSVG";
 
 const Message = () => {
-  const { open, setOpen, isMobile } = useContext(MenuContext);
+  const { open, setOpen } = useContext(MenuContext);
   const [userList, setUserList] = useState([]);
   const [currentChatUser, setCurrentChatUser] = useState(null);
+  const [currentChatUserDetails, setCurrentChatUserDetails] = useState({});
   const [user, setUser] = useState(null);
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -25,6 +28,7 @@ const Message = () => {
   const { username } = useParams();
   const navigate = useNavigate();
   const [hasMore, setHasMore] = useState(true);
+  const {isMobile} = useContext(MenuContext);
 
   useEffect(() => {
     if (state?.currentChatUser) setCurrentChatUser(state?.currentChatUser);
@@ -86,10 +90,19 @@ const Message = () => {
     }
   }, [currentChatUser, user, socket, state, username]);
 
+  
+  useEffect(() => {
+   setPage(1);
+  }, [currentChatUser]);
+
   useEffect(() => {
     if (currentChatUser) {
       fetchMessages();
     }
+    else{
+      setMessages([]);
+    }
+
   }, [currentChatUser, page]);
 
   useEffect(() => {
@@ -108,6 +121,7 @@ const Message = () => {
         const reversedMessages = response.data.reverse();
         setMessages((prevMessages) => [...reversedMessages, ...prevMessages]);
         setPage((prevPage) => prevPage + 1);
+        setCurrentChatUserDetails(response.user);
       }
     } catch (error) {
       console.log(error);
@@ -135,23 +149,6 @@ const Message = () => {
     },
   });
 
-  const setThisUser = (username) => {
-    var access = Cookies.get("access");
-    axios
-      .get(`/api/chat/getMessages/?username=${username}`, {
-        headers: {
-          Authorization: `Bearer ${access}`,
-        },
-      })
-      .then((res) => {
-        setMessages(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    setCurrentChatUser(username);
-  };
 
   const scrollChatToBottom = () => {
     const chatContainer = document.getElementById("chatContainer");
@@ -171,96 +168,62 @@ const Message = () => {
     >
       <div className="max-md:w-full max-sm:w-full">
         <div className={`flex h-screen`}>
-          <div
-            className={` bg-cardBg dark:bg-darkcardBg gap-2 flex flex-col overflow-auto w-2/5 border-r-2 border-cardBorder z-20 shadow-md `}
-          >
-            {userList.length > 0 &&
-              userList.map((user) => (
-                <div
-                  key={user.username}
-                  onClick={() => {
-                    navigate(`/message/${user.username}/`, {
-                      state: {
-                        currentChatUser: user.username,
-                        profile_picture: user.profile_picture,
-                      },
-                    });
-                    setCurrentChatUser(user.username);
-                    setMessages([]);
-                    if (open) setOpen(false);
-                  }}
-                  className="bg-cardBg dark:bg-darkcardBg px-3 flex items-center hover:bg-cardBg2 dark:hover:bg-darkcardBg2 cursor-pointer border-b border-gray-300 text-text1 dark:text-text2"
-                >
-                  <div>
-                    <img
-                      className="h-12 w-12 rounded-full"
-                      src={
-                        user.profile_picture
-                          ? user.profile_picture
-                          : defaultProfilePic
-                      }
-                      alt={`Profile of ${user.username}`}
-                    />
-                  </div>
-                  <div className="ml-4 flex-1 py-4">
-                    <div className="flex items-bottom justify-between">
-                      <p className="text-text1 dark:text-text2 font-semibold">
-                        {user.username}
-                      </p>
-                      <p className="text-xs text-text4 dark:text-text3">
-                        {dateFormat(user.timestamp)}
-                      </p>
-                    </div>
-                    <p className="text-text4 dark:text-text3 mt-1 text-sm">
-                      {user.last_message
-                        ? user.last_message
-                        : "Click to start a chat"}
-                    </p>
-                  </div>
-                </div>
-              ))}
+          <div className="flex h-full max-sm:hidden lg:w-4/6 xl:w-2/5 ">
+          <FriendList
+            userList={userList}
+            open={open}
+            setOpen={setOpen}
+            setCurrentChatUser={setCurrentChatUser}
+            setMessages={setMessages}
+            currentChatUserDetails={currentChatUserDetails}
+          />
           </div>
           <div
-            className={`flex flex-col ${open ? "w-3/4" : "w-full"} ${
+            className={`flex flex-col w-full max-lg:w-2/6 max-xl:w-2/5 max-md:w-full ${
               !currentChatUser
                 ? "max-sm:hidden"
                 : open
                 ? "max-sm:block"
-                : "max-sm:block ml-[10%]"
+                : "max-sm:block"
             } `}
           >
             {currentChatUser && (
               <div className="flex items-center justify-between bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 p-4 border-b border-gray-300">
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center w-full space-x-2">
                   {currentChatUser && (
-                    <>
-                      <div className="hidden max-sm:block">
+                    <span className="flex w-full">
                         <ArrowLeft
                           className="h-6 w-6 text-text1 dark:text-text2 cursor-pointer"
                           onClick={() => {
                             navigate("/message");
                             setCurrentChatUser(null);
                             setMessages([]);
+                            setCurrentChatUserDetails({});
                           }}
                         />
-                      </div>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src={user?.profile_picture
-                          ? user.profile_picture
+                      <span className="flex gap-4 justify-center items-center w-full m-auto justify-items-center align-middle text-center font-semibold"
+                      >
+                     <img
+                        className="h-8 w-8 rounded-full cursor-pointer"
+                        src={currentChatUserDetails?.profile_picture
+                          ? currentChatUserDetails.profile_picture
                           : defaultProfilePic}
                         alt={`Profile of ${currentChatUser}`}
+                        onClick={() => {
+                        navigate(`/u/${currentChatUser}`);
+                      }}
                       />
-                    </>
-                  )}
-                  {currentChatUser && (
-                    <span className="font-semibold text-lg">
-                      {currentChatUser}
+                      <span className="block  cursor-pointer" onClick={() => {
+                        navigate(`/u/${currentChatUser}`);
+                      }}>
+                      <p>{currentChatUserDetails?.fullname}</p>
+                      <p className="text-sm">{currentChatUser}</p>
+                      </span>
+                    </span>
                     </span>
                   )}
                 </div>
                 <span className="text-xs text-gray-600">
-                  {/* Add online status or last seen time here */}
                 </span>
               </div>
             )}
@@ -268,18 +231,22 @@ const Message = () => {
               className="flex-1 overflow-auto bg-cardBg  dark:bg-darkcardBg p-4 scroll-bar"
               id="chatContainer"
             >
+                {!currentChatUser && (
+                  <div className="grid h-full place-content-center text-text1 dark:text-text2">
+                    <span className="">
+                    Please Select any User to message
+                    </span>
+                    <div className="w-96"> 
+                    <ThinkingSVG/>
+                    </div>
+                  </div>
+                )}
               <InfiniteScroll
                 dataLength={messages.length}
                 next={handleLoadMore}
                 hasMore={hasMore}
-                loader={<h4>Loading...</h4>}
                 scrollableTarget="chatContainer"
               >
-                {!currentChatUser && (
-                  <p className="text-center text-text1 dark:text-text2">
-                    Please Select any User to message
-                  </p>
-                )}
                 {messages.reverse().map(
                   (
                     msg,
@@ -327,24 +294,26 @@ const Message = () => {
                     </div>
                   )
                 )}
+                
               </InfiniteScroll>
             </div>
             {currentChatUser && (
-              <div className="p-4 bg-cardBg dark:bg-darkcardBg border-t border-gray-300">
+              <div className=" flex justify-between gap-2 py-0 p-4 bg-cardBg dark:bg-darkcardBg border-t border-gray-300">
                 <>
                   <TextArea
                     formik={formik}
                     name="message"
                     title="Enter a message"
                     rows={1}
-                    cols={6}
+                    cols={100}
+                    showTitle={false}
                   />
                   <div className="mt-2">
                     <Button
+                      icon={<SendIcon size={20} />}
                       onClick={formik.handleSubmit}
                       type={"primary"}
-                      text={"Send"}
-                      width={40}
+                      text={isMobile ? "" : "Send"}
                     />
                   </div>
                 </>
