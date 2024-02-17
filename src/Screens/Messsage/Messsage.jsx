@@ -168,7 +168,12 @@ const Message = () => {
     >
       <div className="max-md:w-full max-sm:w-full">
         <div className={`flex h-screen`}>
-          <div className="flex h-full max-sm:hidden lg:w-4/6 xl:w-2/5 ">
+          <div className={`flex h-full max-sm:w-full lg:w-4/6 ${
+              currentChatUser
+                ? "max-sm:hidden"
+                : "max-sm:block"
+            }
+             xl:w-2/5 `}>
           <FriendList
             userList={userList}
             open={open}
@@ -182,8 +187,6 @@ const Message = () => {
             className={`flex flex-col w-full max-lg:w-2/6 max-xl:w-2/5 max-md:w-full ${
               !currentChatUser
                 ? "max-sm:hidden"
-                : open
-                ? "max-sm:block"
                 : "max-sm:block"
             } `}
           >
@@ -298,7 +301,7 @@ const Message = () => {
               </InfiniteScroll>
             </div>
             {currentChatUser && (
-              <div className=" flex justify-between gap-2 py-0 p-4 bg-cardBg dark:bg-darkcardBg border-t border-gray-300">
+              <div className=" flex justify-between gap-2 py-0 p-4 bg-cardBg dark:bg-darkcardBg border-t border-gray-300 max-md:fixed max-md:bottom-14">
                 <>
                   <TextArea
                     formik={formik}
