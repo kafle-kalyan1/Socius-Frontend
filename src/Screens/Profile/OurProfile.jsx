@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+/* eslint-disable react/prop-types */
+import React, { useContext, useEffect, useState } from 'react'
 import Button from '/src/components/Button/Button'
 import { dateFormat, firstLetterCapital } from '/src/Library/Others/Others'
 import { useNavigate } from 'react-router-dom'
@@ -9,24 +10,26 @@ import { blobToDataURL } from '/src/Library/Others/Others';
 import { hideBigPopup } from '/src/components/BigPopup/BigPopup';
 import ChangePassword from '/src/Auth/Others/ChangePassword'
 import { defaultProfilePic } from '../../Library/Others/Others'
+import { ProfileContext } from '../../context/ProfileContext/ProfileContext'
 
-const OurProfile = (props) => {
-    const navigate = useNavigate()
-    console.log(props.data)
+const OurProfile = ({data,getOwnPosts,getUserProfile}) => {
+    const {fetchProfileData} = useContext(ProfileContext);
+
     const handleEditProfile = () => {
         showBigPopup({
             onClose: () => {
                 hideBigPopup('profile-pic')
             },
             children:(
-                <ChangeProfilePic profile_picture={props.data.profile_picture}/>
+                <ChangeProfilePic profile_picture={data.profile_picture} getOwnPosts={getOwnPosts} getUserProfile={getUserProfile} fetchProfileData={fetchProfileData}/>
                 ),
             id: 'profile-pic'
             },
         )
     }
-    const handleViewProfile = (img) => {
+    const handleViewProfile = () => {
         let a = document.getElementById('profile-img')
+        if(a == null) return
         a = a.src
         console.log(a)
         window.open(Object(a), '_blank')
@@ -39,7 +42,7 @@ const OurProfile = (props) => {
             },
             children:
             (
-                <SetupAccount />
+                <SetupAccount getOwnPosts={getOwnPosts} getUserProfile={getUserProfile} fetchProfileData={fetchProfileData}/>
             ),
             id:"profile-setup"
     })
@@ -47,7 +50,6 @@ const OurProfile = (props) => {
     }
 
     const changepassword = () => {
-        console.log("sdad")
         showBigPopup({
             onClose: () => {
                 hideBigPopup('change-password')
@@ -69,14 +71,14 @@ const OurProfile = (props) => {
                         <div className="bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 p-3 border-t-4 border-green-400">
                             <div className=" overflow-auto relative group">
                             {
-                                props.data?.profile_picture ? <img id='profile-img' className='h-40 w-40 mx-auto rounded-full' src={props.data.profile_picture}  />
+                                data?.profile_picture ? <img id='profile-img' className='h-40 w-40 mx-auto rounded-full' src={data.profile_picture}  />
                                  : <img className="h-40 w-40 mx-auto rounded-full"
                                     src={defaultProfilePic}
                                     alt="" />
                             }
                                 
                                 {
-                                    props?.data?.profile_picture ? <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black bg-opacity-50 transition-opacity">
+                                    data?.profile_picture ? <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black bg-opacity-50 transition-opacity">
                                     <div className="text-white text-center">
                                         <button
                                             className="px-4 py-2 bg-blue-500 rounded-full mx-2"
@@ -86,7 +88,7 @@ const OurProfile = (props) => {
                                         </button>
                                         <button
                                             className="px-4 py-2 bg-green-500 rounded-full mx-2"
-                                            onClick={(e) => handleViewProfile(props.data.profile_picture)}
+                                            onClick={handleViewProfile}
                                         >
                                             View Profile
                                         </button>
@@ -103,26 +105,27 @@ const OurProfile = (props) => {
                                 </div>
                                 }
                             </div>
-                            <h1 className="text-text1 dark:text-text2 font-bold text-xl leading-8 my-1 text-center">{props?.data.fullname}</h1>
+                            <h1 className="text-text1 dark:text-text2 font-bold text-xl leading-8 my-1 text-center">{data.fullname}</h1>
                             <h3 className="text-gray-600 font-lg text-semibold leading-6">{ }</h3>
-                            <p className="text-sm text-text1 dark:text-text2 leading-6">{props?.data.bio}</p>
+                            <p className="text-sm text-text1 dark:text-text2 leading-6">{data.bio}</p>
                             <ul
                                 className="bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                                 <li className="flex items-center py-3">
                                     <span>Status</span>
                                     <span className="ml-auto">
                                         {
-                                            props?.data?.is_active == true ? <span className="bg-green-500 py-1 px-2 rounded text-white text-sm">Active</span> : <span className="bg-red-500 py-1 px-2 rounded text-white text-sm">Inactive</span>
+                                            data?.is_active == true ? <span className="bg-green-500 py-1 px-2 rounded text-white text-sm">Active</span> : <span className="bg-red-500 py-1 px-2 rounded text-white text-sm">Inactive</span>
                                         }
 
                                     </span>
                                 </li>
                                 <li className="flex items-center py-3">
                                     <span>Member since</span>
-                                    <span className="ml-auto">{props.data ? dateFormat(props?.data.date_joined,true) : ''}</span>
+                                    <span className="ml-auto">{data ? dateFormat(data.date_joined,true) : ''}</span>
                                 </li>
                                 <li>
-                                    <Button className="w-full" type="txtPrimary" text="Change Password" onClick={()=>changepassword()} />
+                                <button onClick={()=>changepassword()}
+                                className="block w-full text-red_text bg-red_bg text-sm font-semibold rounded-lg hover:bg-red_bg_hover focus:outline-none focus:shadow-outline focus:bg-red_bg_hover hover:shadow-xs p-3 my-4">Change Password</button>
                                 </li>
                             </ul>
                         </div>
@@ -182,29 +185,29 @@ const OurProfile = (props) => {
                                 <div className="grid grid-cols-1 text-sm">
                                     <div className="grid grid-cols-2">
                                         <div className="px-4 py-2 font-semibold">First Name</div>
-                                        <div className="px-4 py-2">{props?.data?.first_name ? firstLetterCapital(props?.data?.first_name) : (props?.data?.fullname) ? firstLetterCapital(props?.data?.fullname?.split(" ")[0]) : '-'}</div>
+                                        <div className="px-4 py-2">{data?.first_name ? firstLetterCapital(data?.first_name) : (data?.fullname) ? firstLetterCapital(data?.fullname?.split(" ")[0]) : '-'}</div>
                                     </div>
                                     <div className="grid grid-cols-2">
                                         <div className="px-4 py-2 font-semibold">Last Name</div>
-                                        <div className="px-4 py-2">{props?.data?.last_name ? firstLetterCapital(props?.data?.last_name) : props?.data?.fullname ? firstLetterCapital(props?.data?.fullname?.split(" ").pop()) :'-'}</div>
+                                        <div className="px-4 py-2">{data?.last_name ? firstLetterCapital(data?.last_name) : data?.fullname ? firstLetterCapital(data?.fullname?.split(" ").pop()) :'-'}</div>
                                     </div>
                                     <div className="grid grid-cols-2">
                                         <div className="px-4 py-2 font-semibold">Gender</div>
-                                        <div className="px-4 py-2">{firstLetterCapital(props?.data?.gender)}</div>
+                                        <div className="px-4 py-2">{firstLetterCapital(data?.gender)}</div>
                                     </div>
                                     <div className="grid grid-cols-2">
                                         <div className="px-4 py-2 font-semibold">Contact No.</div>
-                                        <div className="px-4 py-2">{props?.data?.phone_number}</div>
+                                        <div className="px-4 py-2">{data?.phone_number}</div>
                                     </div>
                                     <div className="grid grid-cols-2">
                                         <div className="px-4 py-2 font-semibold">Email.</div>
                                         <div className="px-4 py-2">
-                                            <a className="text-blue_text" href={`mailto:${props?.data.email}`}>{props?.data?.email}</a>
+                                            <a className="text-blue_text" href={`mailto:${data.email}`}>{data?.email}</a>
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-2">
                                         <div className="px-4 py-2 font-semibold">Birthday</div>
-                                        <div className="px-4 py-2">{dateFormat(props?.data.date_of_birth)}</div>
+                                        <div className="px-4 py-2">{dateFormat(data.date_of_birth)}</div>
                                     </div>
                                 </div>
                             </div>

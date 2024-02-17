@@ -4,11 +4,11 @@ const TextArea = (props) => {
  
    return (
      <div className="mb-2">
-       { showTitle &&  <span className="flex">
+       { showTitle &&  <span className="flex text-text1 dark:text-text2">
          {Icon}
          <label
            htmlFor={name}
-           className="block ml-3 text-sm font-semibold text-textPrimary dark:text-dark_textPrimary"
+           className="block ml-3 text-sm font-semibold text-text1 dark:text-text2 tracking-widest"
          >
            {title}
          </label>
@@ -28,11 +28,11 @@ const TextArea = (props) => {
            }
            rows={rows}
            cols={cols}
-           className={`block w-full px-4 py-2 mt-2 text-textPrimary dark:text-dark_textPrimary bg-background dark:bg-dark_background border-2 rounded-md focus:outline-primary_text border-cardBorder dark:border-dark_cardBorder hover:border-primary_text
+           className={`w-full px-4 py-2 mt-2 text-text1 dark:text-text2 bg-background dark:bg-darkcardBorder border-2 rounded-md font-mono  border-cardBorder dark:border-dark_cardBorder hover:border-main_text flex
     ${
       formik.touched[name] && formik.errors[name]
-        ? "border-red_text placeholder-red_text"
-        : "outline-cardBorder dark:outline-dark_cardBorder"
+       ? " border-red_text placeholder-red_text"
+       : "outline-cardBorder focus:outline-main_text dark:outline-dark_cardBorder"
     }`}
          />
        </span>

@@ -56,7 +56,7 @@ const Home = () => {
         <div className="w-[100%] md:w-[95%] h-6 flex items-center justify-center gap-x-3">
           <div className="w-[10%]">
               <img
-                src={profile.profile_picture ? profile.profile_picture : defaultProfilePic}
+                src={profile?.profile_picture ? profile.profile_picture : defaultProfilePic}
                 alt="other-profile-pic"
                 className="w-[2rem] h-[2rem] rounded-full"
               />

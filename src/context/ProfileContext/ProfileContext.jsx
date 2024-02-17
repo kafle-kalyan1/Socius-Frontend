@@ -45,7 +45,6 @@ const ProfileProvider = ({ children }) => {
       return;
     }
     try {
-      console.log(access);
         const response = await axios.get("/api/auth/user/", {
           headers: {
             Authorization: `Bearer ${access}`,

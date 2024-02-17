@@ -23,32 +23,23 @@ const Profile = () => {
 
   // useEffect to get user data from backend
   useEffect(() => {
-    let accessToken = Cookies.get("access");
-    console.log(accessToken)
-    axios.get("api/auth/user/",{
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    }).then((res) => 
-    {
-      console.log(res.data)
-      setUserData(res.data.data);
-      setLoading(false);
-        }
-    ).catch((err) => {
-      console.log(err);
-      setLoading(false);
-    })
-
-  
+    getUserProfile();
     getOwnPosts()
-  
   }, [])
+
+  const getUserProfile = async () => {
+    try {
+      const response = await APICall("/api/auth/user/", "GET", {});
+      setUserData(response.data);
+      setLoading(false);
+    } catch (error) {
+      toast.error("Something went wrong!");
+    }
+  }
   
   async function getOwnPosts (){
     try {
       const response = await APICall("/api/posts/getOwnPost/", "GET", {});
-      console.log(response);
       setPosts(response); 
     } catch (error) {
       toast.error("Something went wrong!");
@@ -63,8 +54,8 @@ const Profile = () => {
           <OurProfileSkeleton />
         ) : (
           <>
-        <OurProfile data={userData}/>
-      <div className="flex flex-col mt-28 w-full gap-5 h-full m-auto">
+        <OurProfile data={userData} getUserProfile={getUserProfile} getOwnPosts={getOwnPosts}/>
+      <div className="flex flex-col mt-6 w-full gap-5 h-full m-auto">
           <h1 className="text-3xl font-bold text-center text-text1 dark:text-text2">My Posts</h1>
           <div className=" justify-items-center m-auto">
 

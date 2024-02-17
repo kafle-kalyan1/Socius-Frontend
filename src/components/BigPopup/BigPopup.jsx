@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import { showModal } from '/src/components/Alert/Alert';
-import Cookies from 'js-cookie';
 import { hideAlertModal } from '/src/components/Alert/Alert';
+import { IoMdClose } from "react-icons/io";
 
-const BigPopup = ({ id, onClose, children, ask = false }) => {
+const BigPopup = ({ id, onClose, children, ask = false, closeOnOutsideClick = false }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const modalRef = useRef();
 
   useEffect(() => {
     const handleEsc = (event) => {
@@ -42,13 +43,37 @@ const BigPopup = ({ id, onClose, children, ask = false }) => {
         }
       }
     };
+
+    const handleClickOutside = (event) => {
+      if (modalRef.current && closeOnOutsideClick) {
+        if (!modalRef.current.contains(event.target)) {
+          const isButtonDescendant = Array.from(modalRef.current.querySelectorAll('button')).some(button => button.contains(event.target));
+          if (!isButtonDescendant) {
+            handleClose();
+          }
+        }
+      }
+    };
   
     window.addEventListener('keydown', handleEsc);
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Disable tab navigation on background elements
+    const backgroundElements = document.querySelectorAll('body > :not(#' + id + ')');
+    backgroundElements.forEach(element => {
+      element.setAttribute('tabIndex', isOpen ? '-1' : '0');
+    });
   
     return () => {
       window.removeEventListener('keydown', handleEsc);
+      document.removeEventListener('mousedown', handleClickOutside);
+
+      // Restore tab navigation on background elements when the modal is closed
+      backgroundElements.forEach(element => {
+        element.setAttribute('tabIndex', '0');
+      });
     };
-  }, [isOpen, ask, id]);
+  }, [isOpen, ask, id, closeOnOutsideClick]);
 
   const handleClose = () => {
     if (onClose) {
@@ -59,28 +84,26 @@ const BigPopup = ({ id, onClose, children, ask = false }) => {
     }
   };
 
-  return (
-    <>
-      {isOpen && (
-        <div className='fixed inset-0 flex justify-center items-center z-40 mx-auto bg-opacity-50 bg-gray-800' id={id}>
-          <button
-            className='fixed block top-2 right-2 w-8 h-8 rounded-md text-white hover:bg-red-500 duration-200 bg-black opacity-50 cursor-pointer'
-            onClick={handleClose}
-          >
-            X
-          </button>
-          <div className='mt-6 p-4 w-11/12 min-w-md bg-cardBg rounded-md shadow-md overflow-auto'>
-            {children}
-          </div>
+  return isOpen ? (
+    <div className='fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-70' id={id}>
+      <div className="relative" ref={modalRef}>
+        <button
+          className='absolute top-4 -right-2 z-50 w-8 h-8 rounded-md text-text1  duration-200 dark:text-text2 hover:bg-red-500 dark:hover:bg-red-600 cursor-pointer bg-cardBorder dark:bg-darkcardBorder focus:outline-none focus:bg-red-600 dark:focus:bg-red-600'
+          onClick={handleClose}
+        >
+          <IoMdClose className='w-8 h-8'/>
+        </button>
+        <div className='mt-6 p-0 w-auto min-w-md max-h-[90vh] bg-cardBg2 dark:bg-darkcardBg2 rounded-md shadow-md overflow-auto scrollbar scrollbar-thumb-gray-500 scrollbar-track-gray-200 scrollbar-thin' onClick={(e) => e.stopPropagation()}>
+          {children}
         </div>
-      )}
-    </>
-  );
+      </div>
+    </div>
+  ) : null;
 };
 
 let modals = [];
 
-export function showBigPopup({ id, onClose, children, ask = false }) {
+export function showBigPopup({ id, onClose, children, ask = false, closeOnOutsideClick = false }) {
   const modalContainer = document.getElementById(id);
 
   if (!modalContainer) {
@@ -89,7 +112,7 @@ export function showBigPopup({ id, onClose, children, ask = false }) {
     document.body.appendChild(newModalContainer);
   }
 
-  modals.push({ id, onClose, children, ask });
+  modals.push({ id, onClose, children, ask, closeOnOutsideClick });
 
   updateModalsState();
 }
@@ -136,6 +159,7 @@ const updateModalsState = () => {
           id={modal.id}
           onClose={modal.onClose}
           ask={modal.ask}
+          closeOnOutsideClick={modal.closeOnOutsideClick}
         >
           {modal.children}
         </BigPopup>

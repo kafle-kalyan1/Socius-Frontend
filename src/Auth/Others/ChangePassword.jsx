@@ -9,10 +9,11 @@ import toast from 'react-hot-toast';
 import DynamicLogo  from '/src/DynamicLogo';
 import { LockOutlined } from '@ant-design/icons';
 import { hideBigPopup } from '/src/components/BigPopup/BigPopup';
+import APICall from '../../Library/API/APICall';
 
 
 
-const ChangePassword = () => {
+const ChangePassword = ({getOwnPosts, getUserProfile, fetchProfileData }) => {
   
   const access = Cookies.get("access");
 
@@ -35,18 +36,19 @@ const ChangePassword = () => {
         .required("Password is required")
         .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/,"Password must contain at least one uppercase letter, one lowercase letter and one number"),
               }),
-    onSubmit: (values) => {
-      axios.post("api/auth/changePassword/", values, {
-        headers: {
-          Authorization: `Bearer ${access}`
-        }
-      }).then((res) => {
+    onSubmit: async () => {
+      var response = await APICall('/api/auth/changePassword/', 'post', formik.values)
+      if(response.status == 200){
         toast.success("Password changed successfully");
-        hideBigPopup();
-      }).catch((err) => {
-        console.log(err)
-        toast.error("Something went wrong");
-      })
+        hideBigPopup('change-password');
+        getOwnPosts();
+        getUserProfile();
+        fetchProfileData();
+      }
+      else{
+        toast.error('Something went wrong')
+      }
+
     }
   })
 
@@ -54,16 +56,13 @@ const ChangePassword = () => {
 
   return (
     <>
-    <div className="relative mt-2 flex flex-col justify-center min-h-screen overflow-x-hidden max-sm:block w-full">
-    <div className="w-full p-12 m-auto bg-cardBg rounded-md shadow-xl sm:max-w-xl dark:bg-dark_cardBg border ">
+    <div className="flex flex-col mx-auto bg-cardBg2 dark:bg-darkcardBg2 text-text1 dark:text-text2 rounded-md h-fit p-8 my-0 gap-4 w-[30vw] max-md:w-full">
             <h1 className="w-full m-auto -ml-1 flex -my-14 justify-center">
               <DynamicLogo />
             </h1>
             <h4 className="text-sm font-bold text-center text-primary">
               Change Password
             </h4>
-
-            <form onSubmit={formik.handleSubmit}>
 
             <Input
               formik={formik}
@@ -93,13 +92,13 @@ const ChangePassword = () => {
               placeholder="Confirm Password"
             />
             
-            <Button type="primary" text="Change Password" />
-          </form>
-        
-
-
-
-    </div>
+            <Button 
+            type="primary" 
+            text="Change Password" 
+            onClick={formik.handleSubmit}
+            icon={<LockOutlined/>}
+            />
+      
     </div>
     </>
   )

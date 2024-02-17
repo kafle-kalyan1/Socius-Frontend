@@ -1,32 +1,78 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Aboutme, Gender } from "/src/Library/Icons/Icons";
 import Input from "/src/components/Input/Input";
 import DynamicLogo from "/src/DynamicLogo";
 import { useEffect, useState } from "react";
 import SelectInput from "/src/components/Select/Select";
-import DatePicker from "/src/components/DatePicker/DatePicker";
-import ImageUploader from "/src/components/FileUploader/ImageUploader";
-import FileUploader from "/src/components/FileUploader/FileUploader";
-
 import { MailOutlined, UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined, PhoneOutlined, CalendarOutlined } from '@ant-design/icons';
 import TextArea from "/src/components/Input/TextArea";
-import Loading, { showLoading } from "/src/components/Loading/Loading";
-import { useLocation } from "react-router-dom";
-import { showOtpModal } from '/src/components/Alert/OtpAlert';
 import FormSkeleton from "./SetupSkeleton";
 import axios from "axios";
 import Cookies from "js-cookie";
-import {Cloudinary} from "@cloudinary/url-gen";
-import {CloudinaryImage} from "@cloudinary/url-gen/assets/CloudinaryImage";
 import toast from "react-hot-toast";
 import { hideBigPopup } from "../../components/BigPopup/BigPopup";
+import Button from "../../components/Button/Button";
+import { Save, SaveIcon } from "lucide-react";
+import { FaSave } from "react-icons/fa";
+import { FaUserPen } from "react-icons/fa6";
+import { MdFemale, MdMale, MdTransgender } from "react-icons/md";
+import APICall from "../../Library/API/APICall";
 
-const SetupAccount = () => {
+
+const SetupAccount = ({getOwnPosts,
+  getUserProfile,
+  fetchProfileData}) => {
 
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+
+  const formik = useFormik({
+    initialValues: {
+      dob: "",
+      bio: "",
+      gender: null,
+      secondary_email: "",
+      phone_number: "", 
+      fullname: "",
+      first_name: "",
+      last_name: "",
+    },
+    validationSchema: Yup.object({
+      dob: Yup.date("Please enter valid date").required("Date of Birth is required").max(new Date(), "Date of Birth cannot be in future"),
+      gender: Yup.string().required("Gender is required"),
+    }),
+    onSubmit: async (values) => {
+    //   const acess = Cookies.get("access");
+    //   axios.post('/api/auth/update/',values,{
+    //     headers: {
+    //       Authorization: `Bearer ${acess}`
+    //     },
+    //   },).then(() => {
+    //     toast.success('Profile Updated successfully')
+    //   window.location.reload();
+    // }
+    //   ).catch((err) => {
+    //     toast.error(err)
+    //     console.log(err);
+    //   })
+
+      var response = await APICall('/api/auth/update/', 'post', values)
+      console.log(response) 
+      if(response.status == 200){
+        toast.success('Profile Updated successfully')
+        hideBigPopup('profile-setup');
+        getOwnPosts();
+        getUserProfile();
+        fetchProfileData();
+      }
+      else{
+        toast.error('Something went wrong')
+      }
+    },
+  });
 
   useEffect(() => {
     let accessToken = Cookies.get("access");
@@ -50,63 +96,29 @@ const SetupAccount = () => {
       setLoading(false);
     }
     ).catch((err) => {
-      console.log(err)
       setLoading(false);
     })
 
-  }, [])
+  },[])
 
-  const formik = useFormik({
-    initialValues: {
-      dob: "",
-      bio: "",
-      gender: null,
-      secondary_email: "",
-      phone_number: "", 
-      fullname: "",
-      first_name: "",
-      last_name: "",
-    },
-    validationSchema: Yup.object({
-      dob: Yup.date("Please enter valid date").required("Date of Birth is required").max(new Date(), "Date of Birth cannot be in future"),
-      gender: Yup.string().required("Gender is required"),
-    }),
-    onSubmit: (values) => {
-      const acess = Cookies.get("access");
-      axios.post('/api/auth/update/',values,{
-        headers: {
-          Authorization: `Bearer ${acess}`
-        },
-      },).then((res) => {
-        toast.success('Profile Updated successfully')
-      window.location.reload();
-    }
-      ).catch((err) => {
-        toast.error(err)
-        console.log(err);
-      })
-    },
-  });
+
 
   return (<>
     {
       loading ? (<FormSkeleton />) : (
-        <div className="relative mt-2 flex flex-col justify-center min-h-screen overflow-x-hidden max-sm:block w-full">
-          <div className="w-full p-12 m-auto bg-cardBg rounded-md shadow-xl sm:max-w-xl dark:bg-dark_cardBg border ">
-            <h1 className="w-full m-auto -ml-1 flex -my-14 justify-center">
-              <DynamicLogo />
-            </h1>
+        <div className="flex flex-col mx-auto bg-cardBg dark:bg-darkcardBg rounded-md h-fit p-8 my-0 space-y-4 w-[40vw] max-md:w-full">
+        <h1 className="w-full m-auto -ml-1 flex -my-14 justify-center">
+          <DynamicLogo />
+        </h1>
             <h4 className="text-sm font-bold text-center text-primary">
               Setup Account
             </h4>
             <p className="text-sm text-center text-gray-500">
-              Hi  !
+              Hi  {formik.values.fullname}!
             </p>
-            <form onSubmit={formik.handleSubmit}>
-
               <TextArea
                 formik={formik}
-                Icon={<Aboutme />}
+                Icon={<FaUserPen />}
                 title="Bio"
                 name="bio"
                 type="text"
@@ -128,7 +140,7 @@ const SetupAccount = () => {
 
               <SelectInput
                 formik={formik}
-                Icon={<Gender />}
+                Icon={formik.values.gender == 'male' ? <MdMale/> : formik.values.gender == 'female' ? <MdFemale/> : <MdTransgender/>}
                 title="Select an Gender"
                 name="gender"
                 options={[
@@ -163,16 +175,14 @@ const SetupAccount = () => {
               name="last_name"
               type="text"
               />
+  <br />
+              <Button
+              type="primary"
+              text="Save"
+              icon={<FaSave/>}
+              onClick={()=>formik.handleSubmit(formik.values)}
+              />
 
-              <button
-                type="submit"
-                className="w-full  px-4 py-2 tracking-wide text-dark_textPrimary dark:text-dark_textPrimary transition-colors duration-200 transform bg-primary rounded-md hover:bg-buttonHover focus:outline-none focus:bg-primary_hover"
-              >
-                Save Info
-              </button>
-
-            </form>
-          </div>
         </div>
       )
     }

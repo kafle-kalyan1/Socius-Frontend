@@ -73,9 +73,9 @@ const Button = ({ width, text, type, onClick, shortCutKey, icon, disabled=false 
 
   return (
     <button
-      onClick={handleClick}
+      onClick={(e)=>handleClick(e)}
       type="submit"
-      className={`transition disabled:cursor-not-allowed ease-linear duration-100 shadow-md ${buttonClasses} ${typeClass} hover:shadow-lg justify-center`}
+      className={`transition focus:ring-2 focus:border-main_text  disabled:cursor-not-allowed ease-linear duration-100 shadow-md ${buttonClasses} ${typeClass} hover:shadow-lg justify-center`}
       disabled={disabled}
     >
           {icon && <span className="mt-1 mr-3">{icon}</span>}
