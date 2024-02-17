@@ -16,6 +16,7 @@ import Button from "../Button/Button";
 import SinglePostComponent from "./Component/SinglePostComponent";
 import toast from "react-hot-toast";
 import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
+import { w3cwebsocket } from "websocket";
 
 
 
@@ -39,6 +40,20 @@ const SinglePost = () => {
          }
         let response = await APICall(`/api/posts/commentPost/`,"POST",values)
         if(response.status == 201){
+            const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
+          newSocket.onopen = () => {
+            newSocket.send(
+              JSON.stringify({
+                "type":"post_comment",
+                "data":{
+                  "commenter_username":profile.username,
+                  "post_id": postData.id,
+                  "comment":values.comment,
+                  "receiver":postData.username
+                },
+              })
+            );
+          }
          setPostData({
             ...postData,
             comments:response.data

@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable react/prop-types */
 import Button from "/src/components/Button/Button";
 import { dateFormat, firstLetterCapital } from "/src/Library/Others/Others";
 import { useNavigate } from "react-router-dom";
-import BigPopup, { showBigPopup } from "/src/components/BigPopup/BigPopup";
-import { blobToDataURL } from "/src/Library/Others/Others";
-import { hideBigPopup } from "/src/components/BigPopup/BigPopup";
-import axios from "axios";
 import OurProfileSkeleton from "./../Profile/OurProfileSkeleton";
 import { defaultProfilePic } from "../../Library/Others/Others";
 import APICall from "../../Library/API/APICall";
@@ -56,7 +52,7 @@ const OtherUserProfile = (props) => {
 
   };
 
-  const cancelRequest = async (username) => {
+  const cancelRequest = async () => {
     let response = await APICall("/api/user/cancelFriendRequest/","POST",{"friend": username})
     if(response.status == 200){
     toast.success(`Cancelled request to ${username}`);
@@ -64,7 +60,7 @@ const OtherUserProfile = (props) => {
     }
 };
 
-const acceptRequest = async (username) => {
+const acceptRequest = async () => {
 
   let response = await APICall("/api/user/acceptFriendRequest/","POST",{"friend": username})
   if(response.status == 200){
@@ -75,21 +71,21 @@ const acceptRequest = async (username) => {
 
 
   return (
-    <div className="bg-gray-100">
+    <div className="flex bg-cardBg2 dark:bg-darkcardBg2">
       {isLoaded ? (
-        <div className="container mx-auto my-5 p-5">
-          <div className="md:flex no-wrap md:-mx-2 ">
-            <div className="w-full md:w-3/12 md:mx-2">
-              <div className="bg-white p-3 border-t-4 border-green-400">
-                <div className=" overflow-hidden relative group">
+            <div className="container my-5 p-5">
+                <div className="flex flex-col lg:flex-row md:-mx-2 ">
+                    <div className="w-full lg:w-3/12 md:mx-2">
+                        <div className="bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 p-3 border-t-4 border-green-400">
+                            <div className=" overflow-auto relative group">
                     <img
                       id="profile-img"
                       className="h-40 w-40 mx-auto rounded-full"
                       src={profile.data.profile_picture || defaultProfilePic}
                       alt=""
                     />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black bg-opacity-50 transition-opacity">
-                    <div className="text-white text-center">
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-opacity-50 transition-opacity">
+                    <div className=" text-center">
                       <button
                         className="px-4 py-2 bg-blue-500 rounded-full mx-2"
                         onClick={handleViewProfile}
@@ -99,7 +95,7 @@ const acceptRequest = async (username) => {
                     </div>
                   </div>
                 </div>
-                <h1 className="text-gray-900 font-bold text-xl leading-8 my-1 text-center">
+                <h1 className="text-text1 dark:text-text2 font-bold text-xl leading-8 my-1 text-center">
                   {profile.data.fullname}
                 </h1>
                 <h3 className="text-gray-600 font-lg text-semibold leading-6">
@@ -108,11 +104,11 @@ const acceptRequest = async (username) => {
                 <p className="text-sm text-gray-500 hover:text-gray-600 leading-6">
                   {profile.data.bio}
                 </p>
-                <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
+                <ul className="bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                   <li className="flex items-center py-3">
                     <span>Status</span>
                     <span className="ml-auto">
-                      {profile.is_active == true ? (
+                      {profile.data.is_active == true ? (
                         <span className="bg-green-500 py-1 px-2 rounded text-white text-sm">
                           Active
                         </span>
@@ -126,8 +122,8 @@ const acceptRequest = async (username) => {
                   <li className="flex items-center py-3">
                     <span>Member since</span>
                     <span className="ml-auto">
-                      {profile.profile_picture
-                        ? dateFormat(profile.data.date_joined, true)
+                      {profile.data
+                        ? dateFormat(profile.data.date_joined, false)
                         : ""}
                     </span>
                   </li>
@@ -135,30 +131,21 @@ const acceptRequest = async (username) => {
               </div>
               <div className="my-4"></div>
             </div>
-            <div className="w-full md:w-9/12 mx-2 h-64">
-              <div className="bg-white p-3 shadow-sm rounded-sm">
-                <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
-                  <span className="text-green-500">
-                    <svg
-                      className="h-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                      />
-                    </svg>
-                  </span>
-                  <span className="tracking-wide">About</span>
-                </div>
-                <div className="text-gray-700">
-                  <div className="grid md:grid-cols-2 text-sm">
-                    <div className="grid grid-cols-2">
+            <div className="w-full lg:w-9/12 mx-2 h-64">
+                        <div className="bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 p-3 shadow-sm rounded-sm">
+                            <div className="flex items-center space-x-2 font-semibold text-text1 dark:text-text2 leading-8">
+                                <span className="text-green-500">
+                                    <svg className="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </span>
+                                <span className="tracking-wide">About</span>
+                            </div>
+                            <div className="text-text1 dark:text-text2">
+                                <div className="grid grid-cols-1 text-sm">
+                                    <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">First Name</div>
                       <div className="px-4 py-2">
                         {profile.data.first_name
@@ -210,7 +197,7 @@ const acceptRequest = async (username) => {
                   </div>
                 </div>
               </div>
-                 <div className="flex justify-evenly gap-10 mt-10">
+                 <div className="flex justify-evenly gap-10 mt-5">
                   <Button text="Message" onClick={()=>navigate(`/message/${profile.data.username}`,{state:{"currentChatUser":profile.data.username}})} type="primary"  />
 
                   {

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useState } from "react";
 import {
   HeartOutlined,
@@ -17,6 +19,7 @@ import { FaThumbsUp } from "react-icons/fa";
 import { ThumbsUp, ThumbsUpIcon } from "lucide-react";
 import APICall from "../../Library/API/APICall";
 import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
+import { w3cwebsocket } from "websocket";
 
 const Post = ({
   id,
@@ -87,6 +90,23 @@ const Post = ({
     e.stopPropagation();
    let res =  await APICall('/api/posts/likePost/','POST',{'post_id':id})
     if(res.status == 200){
+      
+      if(!userHasLiked){
+        const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
+      newSocket.onopen = () => {
+        newSocket.send(
+          JSON.stringify({
+            "type":"post_like",
+            "data":{
+              "liker_username":profile.username,
+              "post_id": id,
+              "receiver":username
+            },
+          })
+        );
+      };
+      }
+
    console.log(res.status)
    setUserHasLiked((p)=>!p)
    setCount((prevCount) => ({ ...prevCount, likes: res.data }));

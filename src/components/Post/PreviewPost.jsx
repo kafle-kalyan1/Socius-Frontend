@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import React, { useContext, useEffect, useState } from "react";
 import {
   HeartOutlined,
   CommentOutlined,
@@ -12,6 +14,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import CustomPopover from "../PopOver/PopOver";
 import '/src/index.css'
+import APICall from "../../Library/API/APICall";
+import { w3cwebsocket } from "websocket";
+import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
 
 const PreviewPost = ({
   profileImage,
@@ -25,6 +30,7 @@ const PreviewPost = ({
   fullname,
 }) => {
   const [showFullText, setShowFullText] = useState(false);
+  const {profile} = useContext(ProfileContext)
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -33,6 +39,7 @@ const PreviewPost = ({
   const [count, setCount] = useState(
     {likes: 0, comments: 0}
   );
+  const [userHasLiked, setUserHasLiked] = useState(false);
 
   
 
@@ -62,8 +69,30 @@ const PreviewPost = ({
   const truncatedText = showFullText ? postText : postText.slice(0, 200);
 
 
-  const handleLike = () => {
-    setCount((prevCount) => ({ ...prevCount, likes: prevCount.likes + 1 }));
+  const handleLike = async () => {
+    let res =  await APICall('/api/posts/likePost/','POST',{'post_id':id})
+     if(res.status == 200){
+       
+       if(!userHasLiked){
+         const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
+      //  newSocket.onopen = () => {
+      //    newSocket.send(
+      //      JSON.stringify({
+      //        "type":"post_like",
+      //        "data":{
+      //          "liker_username":profile.username,
+      //          "post_id": id,
+      //          "receiver":username
+      //        },
+      //      })
+      //    );
+      //  };
+       }
+ 
+    console.log(res.status)
+    setUserHasLiked((p)=>!p)
+    setCount((prevCount) => ({ ...prevCount, likes: res.data }));
+      }
   };
 
   

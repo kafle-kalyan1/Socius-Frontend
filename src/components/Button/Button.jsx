@@ -38,7 +38,8 @@ const Button = ({ width, text, type, onClick, shortCutKey, icon, disabled=false 
     };
   }, [shortCutKey]);
 
-  const handleClick = async () => {
+  const handleClick = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
     try {
       await onClick();

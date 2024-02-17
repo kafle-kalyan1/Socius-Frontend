@@ -32,12 +32,12 @@ const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = fals
 
       const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
     newSocket.onopen = () => {
-      console.log("WebSocket connected");
       newSocket.send(
         JSON.stringify({
           "type":"friend_request",
           "data":{
-            "sender_username":username,
+            "sender_username":profile.username,
+            "receiver_username": username
           },
         })
       );
@@ -69,6 +69,18 @@ const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = fals
       let response = await APICall("/api/user/acceptFriendRequest/","POST",{"friend": username})
       if(response.status == 200){
       toast.success(`Accepted request from ${username}`);
+      const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
+      newSocket.onopen = () => {
+        newSocket.send(
+          JSON.stringify({
+            "type":"accept_request",
+            "data":{
+              "sender_username":profile.username,
+              "receiver_username": username
+            },
+          })
+        );
+      };
       load_data()
       }
   };
@@ -112,9 +124,13 @@ const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = fals
   );
 
   return (
-    <div className="bg-cardBg dark:bg-indigo_bg  border-cardBorder dark:border-darkcardBorder text-text1 dark:text-text2 rounded-lg shadow-md p-4 transition-colors duration-200 cursor-pointer" key={username}>
-      <img className="w-24 h-24 rounded-full mx-auto mb-4" src={profile_pic} alt={fullname} />
-      <div className="text-center">
+    <div className="bg-cardBg dark:bg-indigo_bg  border-cardBorder dark:border-darkcardBorder text-text1 dark:text-text2 rounded-lg shadow-md p-4 transition-colors duration-200 " key={username}>
+      <img onClick={()=>
+      navigate('/u/'+username)
+    } className="w-24 h-24 rounded-full cursor-pointer mx-auto mb-4" src={profile_pic} alt={fullname} />
+      <div onClick={()=>
+      navigate('/u/'+username)
+    } className="text-center cursor-pointer">
         <h4 className="text-xl font-semibold">{firstLetterCapital(fullname)}</h4>
         <p className="text-text1 dark:text-text2">@{username}</p>
       </div>

@@ -128,7 +128,6 @@ const Login = () => {
         <h2 className="text-xl mt-1 font-semibold text-center text-text1 dark:text-text2">
           Sign in
         </h2>
-        <form className="mt-6" onSubmit={formik.handleSubmit}>
 
            <Input
               formik={formik}
@@ -159,9 +158,8 @@ const Login = () => {
             Forget Password?
           </Link>
           <div className="mt-6 w-full justify-center flex">
-            <Button type="primary" text="Login" width="full" icon={<FaLockOpen/>} />
+            <Button type="primary" text="Login" width="full" icon={<FaLockOpen/>} onClick={()=>formik.handleSubmit(formik.values)} />
           </div>
-        </form>
         <div className="relative flex items-center justify-center w-full mt-6 border border-t">
           <div className="absolute px-2 bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2">Or Login With</div>
         </div>

@@ -49,6 +49,7 @@ function AppRoute() {
     };
 
     newSocket.onmessage = (event) => {
+
       let res_data =  JSON.parse(event.data)
       console.log(res_data)
       if(res_data.type == "message"){
@@ -85,7 +86,7 @@ function AppRoute() {
     <img className="h-12 w-12 rounded-full mr-3" src={res_data.profile_picture ? res_data.profile_picture : defaultProfilePic} alt={res_data.sender}/>
     <div className="">
       <p className="font-bold text-gray-700">{res_data.fullname}</p>
-      <p className="text-gray-500">Friend Request.</p>
+      <p className="text-gray-500">{res_data.message}</p>
     </div>
   </div>
   <div className="flex justify-center items-center mt-2">
@@ -100,6 +101,72 @@ function AppRoute() {
 </div>
         ));
       }
+      else if(res_data.type == "accept_request"){
+        toast((t)=>(
+          <div className="relative w-auto bg-gray-100 p-4 rounded-md shadow-md">
+          <div className="flex">
+            <img className="h-12 w-12 rounded-full mr-3" src={res_data.profile_picture ? res_data.profile_picture : defaultProfilePic} alt={res_data.sender}/>
+            <div className="">
+              <p className="font-bold text-gray-700">{res_data.fullname}</p>
+              <p className="text-gray-500">{res_data.message}.</p>
+            </div>
+          </div>
+          <div className="flex justify-center items-center mt-2">
+            <button type="button" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" onClick={() => {
+                      toast.dismiss(t.id);
+                      navigate(`/u/${res_data.sender}`)
+                    }}
+                  >
+                    View</button>
+          </div>
+        </div>
+        ))
+      }
+
+      else if(res_data.type == "post_like"){
+        toast((t)=>(
+          <div className="relative w-auto bg-gray-100 p-4 rounded-md shadow-md">
+          <div className="flex">
+            <img className="h-12 w-12 rounded-full mr-3" src={res_data.profile_picture ? res_data.profile_picture : defaultProfilePic} alt={res_data.fullname}/>
+            <div className="">
+              <p className="font-bold text-gray-700">{res_data.fullname}</p>
+              <p className="text-gray-500">{res_data.message}.</p>
+            </div>
+          </div>
+          <div className="flex justify-center items-center mt-2">
+            <button type="button" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" onClick={() => {
+                      toast.dismiss(t.id);
+                      navigate(`/post/${res_data.post}`)
+                    }}
+                  >
+                    View</button>
+          </div>
+        </div>
+        ))
+      }
+
+      else if(res_data.type == "post_comment" && profile.username != res_data.sender){
+        toast((t)=>(
+          <div className="relative w-auto bg-gray-100 p-4 rounded-md shadow-md">
+          <div className="flex">
+            <img className="h-12 w-12 rounded-full mr-3" src={res_data.profile_picture ? res_data.profile_picture : defaultProfilePic} alt={res_data.fullname}/>
+            <div className="">
+              <p className="font-bold text-gray-700">{res_data.fullname}</p>
+              <p className="text-gray-500">{res_data.message}.</p>
+            </div>
+          </div>
+          <div className="flex justify-center items-center mt-2">
+            <button type="button" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" onClick={() => {
+                      toast.dismiss(t.id);
+                      navigate(`/post/${res_data.post}`)
+                    }}
+                  >
+                    View</button>
+          </div>
+        </div>
+        ))
+      }
+
     };
 
     newSocket.onclose = () => {
