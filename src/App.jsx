@@ -5,7 +5,7 @@ import { ProfileProvider  } from "./context/ProfileContext/ProfileContext";
 import { MenuContext, MenuContextProvider } from "./context/MenuContext/MenuContext";
 import { NotificationProvider, useNotification  } from './context/NotificationContext/NotificationContext';
 import  Sidebar  from '/src/components/Sidebar/Sidebar';
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import MobileNavbar from "./components/Sidebar/MobileNavbar";
 import { ThemeContext } from "./context/ThemeContext/Index";
 
@@ -13,6 +13,8 @@ import { ThemeContext } from "./context/ThemeContext/Index";
 function App() {
   const { isMobile } = useContext(MenuContext);
   const {isDarkTheme} = useContext(ThemeContext);
+  const {open, SetOpen} = useContext(MenuContext)
+
   return (
     <BrowserRouter>
     <NotificationProvider>
@@ -71,6 +73,11 @@ function App() {
     <div className="w-screen h-screen font-primary_font bg-cardBg2 dark:bg-darkcardBg2 m-0 p-0 overflow-y-auto max-h-[100vh] scroll-smooth  scroll-bar flex">
 
    { window.location.pathname=='/login' || window.location.pathname=='/register' || window.location.pathname == "/forgetPassword" ? null : isMobile ?  <MobileNavbar />  : 
+   location.pathname.startsWith('/message') ?
+   <div className="w-fit">
+     <Sidebar />
+    </div>
+   :
    <div className="w-1/5">
      <Sidebar />
     </div>
@@ -78,6 +85,11 @@ function App() {
 
    { window.location.pathname=='/login' || window.location.pathname=='/register' || window.location.pathname == "/forgetPassword" ?
    <div className="w-full scroll-smooth overflow-y-auto overflow-x-hidden block right-0]">
+     <AppRoute />
+   </div>
+   :
+   location.pathname.startsWith('/message') ?
+   <div className=" w-full max-md:w-full scroll-smooth overflow-y-auto overflow-x-hidden block right-0 max-md:h-[92%]">
      <AppRoute />
    </div>
    :

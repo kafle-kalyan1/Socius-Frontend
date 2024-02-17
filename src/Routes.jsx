@@ -7,7 +7,7 @@ import {
   useLayoutEffect,
   useState,
 } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import LostPage from "./Screens/404/NotFound";
 import ServerError from "./Screens/ServerError/ServerError";
 import Logout from "./Auth/LogOut/LogOut";
@@ -55,8 +55,10 @@ function AppRoute() {
   const { notifications, addNotification, removeNotification } =
     useNotification();
   const { profile } = useContext(ProfileContext);
-  const { isMobile, setIsMobile } = useContext(MenuContext);
+  const { isMobile, setIsMobile, setOpen } = useContext(MenuContext);
   const navigate = useNavigate();
+  const location = useLocation();
+
 
   useEffect(() => {
     if (profile?.username) {
@@ -271,6 +273,18 @@ function AppRoute() {
       };
     }
   });
+
+  useEffect(() => {
+    changeSidebar()
+   });
+ 
+   const changeSidebar = () =>{
+     if (location.pathname.startsWith('/message')) {
+       setOpen(false);
+     } else {
+       setOpen(true);
+     }
+   }
 
   return (
     <>

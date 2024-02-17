@@ -14,6 +14,7 @@ import APICall from "../../Library/API/APICall";
 import InfiniteScroll from "react-infinite-scroll-component";
 import FriendList from "./FriendList";
 import ThinkingSVG from "./Utils/ThinkingSVG";
+import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
 
 const Message = () => {
   const { open, setOpen } = useContext(MenuContext);
@@ -29,6 +30,7 @@ const Message = () => {
   const navigate = useNavigate();
   const [hasMore, setHasMore] = useState(true);
   const {isMobile} = useContext(MenuContext);
+  const {profile} = useContext(ProfileContext)
 
   useEffect(() => {
     if (state?.currentChatUser) setCurrentChatUser(state?.currentChatUser);
@@ -66,6 +68,9 @@ const Message = () => {
               timestamp: new_message.timestamp,
               sender: {
                 username: new_message.username_from,
+                userprofile :{
+                  profile_picture: profile.profile_picture
+                }
               },
             },
           ]);
@@ -118,7 +123,7 @@ const Message = () => {
       if (response.data.length === 0) {
         setHasMore(false);
       } else {
-        const reversedMessages = response.data.reverse();
+        const reversedMessages = response.data;
         setMessages((prevMessages) => [...reversedMessages, ...prevMessages]);
         setPage((prevPage) => prevPage + 1);
         setCurrentChatUserDetails(response.user);
@@ -164,16 +169,16 @@ const Message = () => {
 
   return (
     <div
-      className={`block overflow-auto scroll-bar w-full h-screen font-primary_font justify-center items-center max-lg:w-full m-auto max-sm:ml-0 max-sm:w-full max-lg:h-[100%]`}
+      className={`block overflow-auto scroll-bar w-full h-screen font-primary_font justify-center items-center max-lg:w-full m-auto ml-0 max-sm:w-full max-lg:h-[100%]`}
     >
       <div className="max-md:w-full max-sm:w-full">
         <div className={`flex h-screen`}>
-          <div className={`flex h-full max-sm:w-full lg:w-4/6 ${
+          <div className={`flex h-full w-fit ${
               currentChatUser
                 ? "max-sm:hidden"
                 : "max-sm:block"
             }
-             xl:w-2/5 `}>
+             `}>
           <FriendList
             userList={userList}
             open={open}
@@ -184,7 +189,7 @@ const Message = () => {
           />
           </div>
           <div
-            className={`flex flex-col w-full max-lg:w-2/6 max-xl:w-2/5 max-md:w-full ${
+            className={`flex flex-col w-full max-md:h-[90%] max-md:w-full ${
               !currentChatUser
                 ? "max-sm:hidden"
                 : "max-sm:block"
@@ -231,7 +236,7 @@ const Message = () => {
               </div>
             )}
             <div
-              className="flex-1 overflow-auto bg-cardBg  dark:bg-darkcardBg p-4 scroll-bar"
+              className="flex-1 overflow-auto bg-cardBg max-md:h-[90%] dark:bg-darkcardBg p-4 scroll-bar"
               id="chatContainer"
             >
                 {!currentChatUser && (
