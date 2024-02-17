@@ -31,6 +31,7 @@ const Message = () => {
   const [hasMore, setHasMore] = useState(true);
   const {isMobile} = useContext(MenuContext);
   const {profile} = useContext(ProfileContext)
+  const [isFriend, setIsFriend] = useState(true)
 
   useEffect(() => {
     if (state?.currentChatUser) setCurrentChatUser(state?.currentChatUser);
@@ -127,6 +128,7 @@ const Message = () => {
         setMessages((prevMessages) => [...reversedMessages, ...prevMessages]);
         setPage((prevPage) => prevPage + 1);
         setCurrentChatUserDetails(response.user);
+        setIsFriend(response.is_friend)
       }
     } catch (error) {
       console.log(error);
@@ -312,6 +314,7 @@ const Message = () => {
                     formik={formik}
                     name="message"
                     title="Enter a message"
+                    disabled={!isFriend}
                     rows={1}
                     cols={100}
                     showTitle={false}
@@ -321,6 +324,7 @@ const Message = () => {
                       icon={<SendIcon size={20} />}
                       onClick={formik.handleSubmit}
                       type={"primary"}
+                      disabled={!isFriend}
                       text={isMobile ? "" : "Send"}
                     />
                   </div>

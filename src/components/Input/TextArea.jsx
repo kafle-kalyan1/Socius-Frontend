@@ -1,6 +1,6 @@
 
 const TextArea = (props) => {
-   const { formik, Icon, title, name, ref_, rows, cols,showTitle=true } = props;
+   const { formik, Icon, title, name, ref_, rows, cols,showTitle=true,                     disabled=false  } = props;
  
    return (
      <div className="mb-2">
@@ -21,6 +21,7 @@ const TextArea = (props) => {
            value={formik.values[name]}
            onChange={formik.handleChange}
            onBlur={formik.handleBlur}
+           disabled={disabled}
            placeholder={
              formik.touched[name] && formik.errors[name]
                ? `${title} is required`
@@ -28,7 +29,7 @@ const TextArea = (props) => {
            }
            rows={rows}
            cols={cols}
-           className={`w-full px-4 py-2 mt-2 text-text1 dark:text-text2 bg-background dark:bg-darkcardBorder border-2 rounded-md font-mono  border-cardBorder dark:border-dark_cardBorder hover:border-main_text flex
+           className={`w-full px-4 py-2 mt-2 text-text1 dark:text-text2 bg-background dark:bg-darkcardBorder border-2 rounded-md font-mono  border-cardBorder dark:border-dark_cardBorder hover:border-main_text flex disabled:cursor-not-allowed 
     ${
       formik.touched[name] && formik.errors[name]
        ? " border-red_text placeholder-red_text"
