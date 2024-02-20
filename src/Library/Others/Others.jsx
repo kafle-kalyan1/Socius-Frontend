@@ -213,4 +213,4 @@ export const useThemeDetector = () => {
   return isDarkTheme;
 }
 
-export const socketLink = "ws://192.168.1.3:8000";
+export const socketLink = "ws://localhost:8000";

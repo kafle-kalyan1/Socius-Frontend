@@ -23,6 +23,7 @@ import Cookies from "js-cookie";
 import CustomPopover from "../PopOver/PopOver";
 import { showModal, hideAlertModal } from "/src/components/Alert/Alert";
 import { defaultProfilePic } from "../../Library/Others/Others";
+import { MessageNotificationContext } from "../../context/NotificationContext/MessageNotificationContext";
 
 export const SidebarContext = createContext();
 
@@ -199,12 +200,11 @@ export function SidebarItem({ icon, text, onClick, path, alert }) {
         {text}
       </span>
 
-      {alert && isActive && (
+      {alert > 0  && (
         <div
-          className={`absolute right-2 w-2 h-2 ml-1 rounded bg-primary_btn_dark ${
-            open ? "" : "top-2"
+          className={`absolute right-2  ml-1 bg-primary_btn_dark bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center
           }`}
-        ></div>
+        >{alert}</div>
       )}
 
       {!open && !isActive && (
@@ -231,6 +231,8 @@ export function SidebarItem({ icon, text, onClick, path, alert }) {
 
 export default function SIdebar() {
   const { open, setOpen } = useContext(MenuContext);
+  const {totalNotification} = useContext(MessageNotificationContext)
+
   return   (
     <main className="App">
       <Sidebarr>
@@ -255,7 +257,7 @@ export default function SIdebar() {
           icon={<MessageCircle size={20} />}
           text="Messages"
           path="/message"
-          alert={true}
+          alert={totalNotification}
         />
         <SidebarItem
           icon={<UsersIcon size={20} />}

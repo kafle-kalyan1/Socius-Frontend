@@ -1,14 +1,22 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { dateFormat, defaultProfilePic } from '../../Library/Others/Others';
 import { useNavigate } from 'react-router-dom';
+import imgSrc from './Utils/no.gif'
+import Button from '../../components/Button/Button';
+import { TbFriends } from 'react-icons/tb';
+import imgSrc2 from './Utils/no2.gif'
+import { ThemeContext } from '../../context/ThemeContext/Index';
+
 
 const FriendList = ({userList, open, setOpen, setCurrentChatUser, setMessages,currentChatUserDetails}) => {
    const navigate = useNavigate();
+   const {isDarkTheme} = useContext(ThemeContext);
+
   return (
    <div
    className={` bg-cardBg dark:bg-darkcardBg gap-2 flex flex-col overflow-auto w-full  max-md:w-full max-md:h-full border-r-2 border-cardBorder z-10 shadow-md `}
  >
-   {userList.length > 0 &&
+   {userList.length > 0 ?
      userList.map((user) => (
        <div
          key={user.username}
@@ -52,7 +60,32 @@ const FriendList = ({userList, open, setOpen, setCurrentChatUser, setMessages,cu
            </p>
          </div>
        </div>
-     ))}
+     ))
+     :
+     <div className='max-h-[70%]'>
+              <img
+                src={isDarkTheme ? imgSrc2 : imgSrc}
+                alt="No messages"
+                className="w-full  m-auto my-20 "
+              />
+              
+              <div className="text-text1 dark:text-text2 text-center text-lg font-primary_font mx-4 tracking-normal">
+                <p>
+                No friends to Message
+                </p>
+                <br />
+                <p>
+                  Start a chat with someone by becoming friends with them
+                </p>
+                <Button
+                type={"primary"}
+                onClick={() => navigate('/friends', { state: { activeSection: 'recommended' } })}
+                text={"Find Friends"}
+                icon={<TbFriends/>}
+                />
+              </div>
+     </div>
+   }
  </div>
    )
 }

@@ -53,6 +53,7 @@ import Sidebar from "/src/components/Sidebar/Sidebar";
 import MobileNavbar from "./components/Sidebar/MobileNavbar";
 import { MenuContext } from "/src/context/MenuContext/MenuContext";
 import { defaultProfilePic, socketLink } from "./Library/Others/Others";
+import { MessageNotificationContext } from "./context/NotificationContext/MessageNotificationContext";
 
 function AppRoute() {
   const { notifications, addNotification, removeNotification } =
@@ -61,6 +62,7 @@ function AppRoute() {
   const { isMobile, setIsMobile, setOpen } = useContext(MenuContext);
   const navigate = useNavigate();
   const location = useLocation();
+  const {setTotalNotification, totalNotification} = useContext(MessageNotificationContext);
 
 
   useEffect(() => {
@@ -80,6 +82,7 @@ function AppRoute() {
           const message = res_data.message;
           const shortenedMessage = message.split(" ").slice(0, 100).join(" ");
 
+          setTotalNotification(totalNotification+1);
           toast((t) => (
             <>
               <div className="relative w-auto bg-gray-100 p-4 rounded-md shadow-md">

@@ -58,11 +58,7 @@ const MainSettings = () => {
       textColor='#e84343'
       bgColor='#e9eff7'
       />
-    </div>
-
-
-      
-    
+    </div>    
     
    </div>
    

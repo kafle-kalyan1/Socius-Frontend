@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { defaultProfilePic } from "../../Library/Others/Others";
 import APICall from "../../Library/API/APICall";
 import CustomSegmentedControl from '../../components/Tabs/Tabs';
+import { useLocation } from "react-router-dom";
 
 const ExploreProfile = () => {
   const [userList, setUserList] = useState([]);
@@ -17,10 +18,15 @@ const ExploreProfile = () => {
   const [sentRequestList, setSentRequestList] = useState([]); 
   const [activeSection, setActiveSection] = useState("requests");
 
-  useEffect(() => {   
-    load_data()
-    
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.activeSection) {
+      setActiveSection(location.state.activeSection);
+    }
+    load_data();
   }, []);
+
   async function load_data(){
     let response = await APICall("/api/user/friends/","GET",{})
     if(response.status == 200){

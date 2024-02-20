@@ -42,7 +42,8 @@ const OtherUserProfile = (props) => {
         JSON.stringify({
           "type":"friend_request",
           "data":{
-            "sender_username":username,
+            "sender_username":profile.username,
+            "receiver_username": username
           },
         })
       );
@@ -65,6 +66,18 @@ const acceptRequest = async () => {
   let response = await APICall("/api/user/acceptFriendRequest/","POST",{"friend": username})
   if(response.status == 200){
   toast.success(`Accepted request from ${username}`);
+  const newSocket = new w3cwebsocket(`${socketLink}/notifications/${profile.username}/`);
+      newSocket.onopen = () => {
+        newSocket.send(
+          JSON.stringify({
+            "type":"accept_request",
+            "data":{
+              "sender_username":profile.username,
+              "receiver_username": username
+            },
+          })
+        );
+      };
   getProfile()
   }
 };
@@ -205,7 +218,7 @@ const acceptRequest = async () => {
                     <Button text="Unfriend" onClick={handleUnfriend} type="danger"  />
                     :
                     profile.is_requested ?
-                     !profile.is_requested_by_me ?
+                     profile.is_requested_by_me ?
                     <Button text="Cancel Request" onClick={cancelRequest} type="danger"   />
                     :
                     <Button text="Accept Request" onClick={acceptRequest} type="primary"   />

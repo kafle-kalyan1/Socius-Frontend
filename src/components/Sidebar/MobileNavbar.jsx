@@ -4,15 +4,17 @@ import { Home, Compass, MessageCircle, UsersIcon, UserCircle, Search, MessageCir
 import { NavLink } from "react-router-dom";
 import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
 import { defaultProfilePic } from "../../Library/Others/Others";
+import { MessageNotificationContext } from './../../context/NotificationContext/MessageNotificationContext';
 
 
 const MobileNavbar = () => {
   const {profile} = useContext(ProfileContext)
+  const {totalNotification} = useContext(MessageNotificationContext)
   const UserProfile = () => <img src={profile?.profile_picture?profile.profile_picture:defaultProfilePic} alt="profile" className="w-6 h-6 rounded-full" />;
   const menuItems = [
     { icon: <Home size={20} />, label: "Home", path: "/" },
     { icon: <Search size={20} />, label: "Search", path: "/search" },
-    { icon: <MessageCircleHeartIcon size={20} />, label: "Messages", path: "/message" },
+    { icon: <MessageCircleHeartIcon size={20} />, label: "Messages", path: "/message", notification:totalNotification },
     { icon: <UserProfile/>, label: "Profile", path: "/profile" },
     { icon: <MoreHorizontal size={20} />, label: "Others", path: "/extras" },
   ];
@@ -33,15 +35,20 @@ const MobileNavbar = () => {
       <ul className="flex justify-around items-center bg-cardBg dark:bg-darkcardBg p-3">
         {menuItems.map((item, index) => (
           <li key={index}>
-            <NavLink
-              to={item.path}
-              activeClassName="text-blue-500 bg-red-400"
-              className="flex flex-col items-center text-gray-500 transition-all hover:text-blue-500"
-            >
-              {item.icon}
-              <span className="text-xs">{item.label}</span>
-            </NavLink>
-          </li>
+    <NavLink
+      to={item.path}
+      activeClassName="text-blue-500 bg-red-400"
+      className="flex flex-col items-center text-gray-500 transition-all hover:text-blue-500"
+    >
+      {item.icon}
+      <span className="text-xs">{item.label}</span>
+      {item.notification > 0 && (
+        <span className=" absolute top-1  ml-5 bg-primary_btn_dark bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+          {item.notification}
+        </span>
+      )}
+    </NavLink>
+  </li>
         ))}
       </ul>
     </animated.nav>

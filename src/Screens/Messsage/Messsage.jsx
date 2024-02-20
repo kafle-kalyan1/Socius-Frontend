@@ -15,6 +15,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import FriendList from "./FriendList";
 import ThinkingSVG from "./Utils/ThinkingSVG";
 import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
+import ImageSrc from "./Utils/Texting.gif";
+
 
 const Message = () => {
   const { open, setOpen } = useContext(MenuContext);
@@ -242,13 +244,16 @@ const Message = () => {
               id="chatContainer"
             >
                 {!currentChatUser && (
-                  <div className="grid h-full place-content-center text-text1 dark:text-text2">
-                    <span className="">
+                  <div className="block  w-full h-full place-content-center text-text1 dark:text-text2">
+                   
+                    <img
+                      src={ImageSrc}
+                      alt="No messages"
+                      className="w-auto  m-auto "
+                    />
+                     <span className="text-text1 dark:text-text2 flex justify-center items-center text-2xl font-primary_font mx-4 tracking-normal">
                     Please Select any User to message
                     </span>
-                    <div className="w-96"> 
-                    <ThinkingSVG/>
-                    </div>
                   </div>
                 )}
               <InfiniteScroll

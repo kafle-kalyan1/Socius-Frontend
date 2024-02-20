@@ -8,17 +8,17 @@ import  Sidebar  from '/src/components/Sidebar/Sidebar';
 import { useContext, useEffect } from "react";
 import MobileNavbar from "./components/Sidebar/MobileNavbar";
 import { ThemeContext } from "./context/ThemeContext/Index";
+import { MessageNotificationProvider } from "./context/NotificationContext/MessageNotificationContext";
 
 
 function App() {
   const { isMobile } = useContext(MenuContext);
   const {isDarkTheme} = useContext(ThemeContext);
-  const {open, SetOpen} = useContext(MenuContext)
 
   return (
     <BrowserRouter>
     <NotificationProvider>
-    <ProfileProvider >
+    <ProfileProvider>
       <ConfigProvider
        theme={{
       token: {
