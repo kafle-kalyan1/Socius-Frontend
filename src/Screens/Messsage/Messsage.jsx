@@ -6,7 +6,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import { MenuContext } from "/src/context/MenuContext/MenuContext";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { dateFormat, defaultProfilePic } from "../../Library/Others/Others";
+import { dateFormat, defaultProfilePic, socketLink } from "../../Library/Others/Others";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, SendIcon } from "lucide-react";
@@ -52,7 +52,7 @@ const Message = () => {
     if (currentChatUser && user) {
       if (!socket) {
         const newSocket = new W3CWebSocket(
-          `ws://localhost:8000/chat/${user}/${currentChatUser}/`
+          `${socketLink}/chat/${user}/${currentChatUser}/`
         );
         setSocket(newSocket);
 
@@ -70,7 +70,7 @@ const Message = () => {
               sender: {
                 username: new_message.username_from,
                 userprofile :{
-                  profile_picture: profile.profile_picture
+                  profile_picture: new_message.profile_picture
                 }
               },
             },
@@ -175,7 +175,7 @@ const Message = () => {
     >
       <div className="max-md:w-full max-sm:w-full">
         <div className={`flex h-screen`}>
-          <div className={`flex h-full w-fit ${
+          <div className={`flex h-full w-fit xl:w-[30%] md:w-[40%] sm:w-[40%] ${
               currentChatUser
                 ? "max-sm:hidden"
                 : "max-sm:block"

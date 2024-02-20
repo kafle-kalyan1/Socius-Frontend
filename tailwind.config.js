@@ -31,9 +31,9 @@ export default {
         textSecondary: "#0f0f0f", 
 
         
-        cardBg: "#f2f4f5", 
+        cardBg: "#f5f8fa", 
         darkcardBg: "#313436", 
-        cardBg2: "#d6f0ff",
+        cardBg2: "#f1f1f1",
         darkcardBg2: "#18191A",
 
         cardBorder: "#D1D5DB",

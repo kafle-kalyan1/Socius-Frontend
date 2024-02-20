@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useSpring, animated } from "react-spring";
-import { Home, Compass, MessageCircle, UsersIcon, UserCircle, Search, MessageCircleHeartIcon, LucideSettings2, LucideSettings } from "lucide-react";
+import { Home, Compass, MessageCircle, UsersIcon, UserCircle, Search, MessageCircleHeartIcon, LucideSettings2, LucideSettings, MoreVertical, MoreHorizontal } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
+import { defaultProfilePic } from "../../Library/Others/Others";
+
 
 const MobileNavbar = () => {
+  const {profile} = useContext(ProfileContext)
+  const UserProfile = () => <img src={profile?.profile_picture?profile.profile_picture:defaultProfilePic} alt="profile" className="w-6 h-6 rounded-full" />;
   const menuItems = [
     { icon: <Home size={20} />, label: "Home", path: "/" },
     { icon: <Search size={20} />, label: "Search", path: "/search" },
     { icon: <MessageCircleHeartIcon size={20} />, label: "Messages", path: "/message" },
-    { icon: <LucideSettings size={20} />, label: "Settings", path: "/settings" },
-    { icon: <UserCircle size={20} />, label: "Profile", path: "/profile" },
+    { icon: <UserProfile/>, label: "Profile", path: "/profile" },
+    { icon: <MoreHorizontal size={20} />, label: "Others", path: "/extras" },
   ];
 
   const navSpring = useSpring({

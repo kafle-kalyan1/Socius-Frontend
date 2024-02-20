@@ -21,7 +21,7 @@ export function Notification_socket(){
   const {profile} = useContext(ProfileContext);
   return(
     profile?.username ?
-    new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`)
+    new w3cwebsocket(`${socketLink}/notifications/${profile.username}/`)
     : null
     )
 }
@@ -212,3 +212,5 @@ export const useThemeDetector = () => {
   }, []);
   return isDarkTheme;
 }
+
+export const socketLink = "ws://192.168.1.3:8000";

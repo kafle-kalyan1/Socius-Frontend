@@ -32,7 +32,6 @@ const Home = () => {
     const getPosts = async () => {
       try {
         const response = await APICall("/api/posts/getPosts/?sort="+sort, "GET", {});
-        console.log(response);
         setPosts(response); 
       } catch (error) {
         toast.error("Something went wrong!");
@@ -50,7 +49,7 @@ const Home = () => {
 
   return (
 <div className={`flex ml-0 w-full overflow-auto scroll-bar scroll-bar bg-cardBg2 dark:bg-darkcardBg2 `}>
-      <div className={`block p-10 max-sm:p-1 w-auto  h-screen font-primary_font justify-center items-center max-lg:w-full m-auto max-sm:m-0 max-sm:w-full `}>
+      <div className={`block p-10 max-sm:p-1 w-[60%]  h-screen font-primary_font justify-center items-center max-lg:w-full m-auto max-sm:m-0 max-sm:w-full `}>
         <div className=" max-md:w-full  max-sm:w-full">
         <div className="w-full p-4 ">
         <div className="w-[100%] md:w-[95%] h-6 flex items-center justify-center gap-x-3">
@@ -62,7 +61,7 @@ const Home = () => {
               />
           </div>
           <div
-            className="w-[90%] flex items-center justify-start px-4 border-solid border-2 border-gray-200 bg-gray-50 rounded-3xl py-2 cursor-pointer"
+            className="w-[100%] flex items-center justify-start px-4 border-solid border-2 border-gray-200 bg-gray-50 rounded-3xl py-2 cursor-pointer"
             onClick={createPost2}
           >
             <span className="font-poppins text-xs select-none">

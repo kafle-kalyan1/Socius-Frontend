@@ -6,7 +6,7 @@ const FriendList = ({userList, open, setOpen, setCurrentChatUser, setMessages,cu
    const navigate = useNavigate();
   return (
    <div
-   className={` bg-cardBg dark:bg-darkcardBg gap-2 flex flex-col overflow-auto w-max max-md:w-full max-md:h-full border-r-2 border-cardBorder z-10 shadow-md `}
+   className={` bg-cardBg dark:bg-darkcardBg gap-2 flex flex-col overflow-auto w-full  max-md:w-full max-md:h-full border-r-2 border-cardBorder z-10 shadow-md `}
  >
    {userList.length > 0 &&
      userList.map((user) => (

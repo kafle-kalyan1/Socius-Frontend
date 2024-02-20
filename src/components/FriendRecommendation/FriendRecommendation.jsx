@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import Button from '../Button/Button';
 import { showModal } from '../Alert/Alert';
-import { firstLetterCapital } from '../../Library/Others/Others';
+import { firstLetterCapital, socketLink } from '../../Library/Others/Others';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -30,7 +30,7 @@ const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = fals
 
       toast.success(`Request sent to ${username}`);
 
-      const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
+      const newSocket = new w3cwebsocket(`${socketLink}/notifications/${profile.username}/`);
     newSocket.onopen = () => {
       newSocket.send(
         JSON.stringify({
@@ -69,7 +69,7 @@ const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = fals
       let response = await APICall("/api/user/acceptFriendRequest/","POST",{"friend": username})
       if(response.status == 200){
       toast.success(`Accepted request from ${username}`);
-      const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
+      const newSocket = new w3cwebsocket(`${socketLink}/notifications/${profile.username}/`);
       newSocket.onopen = () => {
         newSocket.send(
           JSON.stringify({

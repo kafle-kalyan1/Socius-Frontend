@@ -17,6 +17,7 @@ import '/src/index.css'
 import APICall from "../../Library/API/APICall";
 import { w3cwebsocket } from "websocket";
 import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
+import { socketLink } from "../../Library/Others/Others";
 
 const PreviewPost = ({
   profileImage,
@@ -74,7 +75,7 @@ const PreviewPost = ({
      if(res.status == 200){
        
        if(!userHasLiked){
-         const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
+         const newSocket = new w3cwebsocket(`${socketLink}/notifications/${profile.username}/`);
       //  newSocket.onopen = () => {
       //    newSocket.send(
       //      JSON.stringify({

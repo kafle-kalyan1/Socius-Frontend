@@ -14,7 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import CustomPopover from "../PopOver/PopOver";
 import '/src/index.css'
-import { defaultProfilePic, timeAgo } from "../../Library/Others/Others";
+import { defaultProfilePic, socketLink, timeAgo } from "../../Library/Others/Others";
 import { FaThumbsUp } from "react-icons/fa";
 import { ThumbsUp, ThumbsUpIcon } from "lucide-react";
 import APICall from "../../Library/API/APICall";
@@ -92,7 +92,7 @@ const Post = ({
     if(res.status == 200){
       
       if(!userHasLiked){
-        const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
+        const newSocket = new w3cwebsocket(`${socketLink}/notifications/${profile.username}/`);
       newSocket.onopen = () => {
         newSocket.send(
           JSON.stringify({

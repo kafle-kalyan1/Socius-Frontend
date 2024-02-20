@@ -14,7 +14,7 @@ const Card = ({ bgColor = '#e0f9ed', title, description, textColor = '#39c983', 
 
   return (
     <div
-      className={`w-1/3 bg-[${bgColor}] border-[1px] border-[${bgColor} p-6 rounded-md flex flex-col gap-y-4 shadow-lg cursor-pointer h-max max-sm:w-5/6`}
+      className={`w-1/3 bg-[${bgColor}] border-[1px] border-[${bgColor} p-6 rounded-md flex flex-col gap-y-4 shadow-md cursor-pointer h-max max-sm:w-5/6 hover:shadow-xl transition-all duration-300 ease-in-out`}
       style={{ backgroundColor: bgColor, borderColor: bgColor}}
       onClick={handleClick}
     >

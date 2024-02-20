@@ -4,7 +4,7 @@ export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
    // State to track the theme
-   const [isDarkTheme, setIsDarkTheme] = useState(true);
+   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
    useEffect(() => {
       document.documentElement.className = isDarkTheme ? 'dark' : '';

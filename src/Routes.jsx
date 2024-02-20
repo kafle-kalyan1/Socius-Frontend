@@ -44,12 +44,15 @@ const AdvanceSettings = lazy(() =>
 const ForgetPassword = lazy(() =>
   import("./Auth/ForgetPassword/ForgetPassword")
 );
+const ExtraPage = lazy(() => import("./Screens/Extras/Index"));
+
+const Notifications = lazy(() => import("./Screens/Notification/Notification"));
 
 import { ProfileContext } from "/src/context/ProfileContext/ProfileContext";
 import Sidebar from "/src/components/Sidebar/Sidebar";
 import MobileNavbar from "./components/Sidebar/MobileNavbar";
 import { MenuContext } from "/src/context/MenuContext/MenuContext";
-import { defaultProfilePic } from "./Library/Others/Others";
+import { defaultProfilePic, socketLink } from "./Library/Others/Others";
 
 function AppRoute() {
   const { notifications, addNotification, removeNotification } =
@@ -63,7 +66,7 @@ function AppRoute() {
   useEffect(() => {
     if (profile?.username) {
       const newSocket = new w3cwebsocket(
-        `ws://localhost:8000/notifications/${profile.username}/`
+        `${socketLink}/notifications/${profile.username}/`
       );
 
       newSocket.onopen = () => {
@@ -489,6 +492,26 @@ function AppRoute() {
           element={
             <Suspense fallback={<div>Loading...</div>}>
               <AdvanceSettings />
+            </Suspense>
+          }
+        />
+
+        <Route
+          exact
+          path="/extras"
+          element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <ExtraPage />
+            </Suspense>
+          }
+        />
+
+        <Route
+          exact
+          path="/notifications"
+          element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <Notifications />
             </Suspense>
           }
         />

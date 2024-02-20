@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import APICall from "../../Library/API/APICall";
-import { copy, defaultProfilePic, timeAgo } from "../../Library/Others/Others";
+import { copy, defaultProfilePic, socketLink, timeAgo } from "../../Library/Others/Others";
 import PostSkeleton from "./PostSkeleton";
 import { MenuContext } from '/src/context/MenuContext/MenuContext';
 import CustomPopover from "../PopOver/PopOver";
@@ -40,7 +40,7 @@ const SinglePost = () => {
          }
         let response = await APICall(`/api/posts/commentPost/`,"POST",values)
         if(response.status == 201){
-            const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
+            const newSocket = new w3cwebsocket(`${socketLink}/notifications/${profile.username}/`);
           newSocket.onopen = () => {
             newSocket.send(
               JSON.stringify({
@@ -141,7 +141,7 @@ const SinglePost = () => {
          }
 
   return (
-   <div className={`flex ${!isMobile ? " ml-72" : "ml-0"} `}>
+   <div className={`flex `}>
    <div className={` fixed 2xl:ml-[14%] overflow-x-scroll w-4/6 mt-10 h-screen font-primary_font justify-center items-center max-xl:w-full max-xl:m-0 m-auto max-sm:w-full `}>
    {
    isLoading ? <PostSkeleton/> : <> <SinglePostComponent postData={postData}/>
@@ -223,7 +223,6 @@ const SinglePost = () => {
 
 </div>
 
-<div className={`fixed right-0 w-1/5 max-lg:hidden h-screen bg-slate-400 `}></div>
 </div>
   );
 };

@@ -3,7 +3,7 @@ import Button from "/src/components/Button/Button";
 import { dateFormat, firstLetterCapital } from "/src/Library/Others/Others";
 import { useNavigate } from "react-router-dom";
 import OurProfileSkeleton from "./../Profile/OurProfileSkeleton";
-import { defaultProfilePic } from "../../Library/Others/Others";
+import { defaultProfilePic, socketLink } from "../../Library/Others/Others";
 import APICall from "../../Library/API/APICall";
 import toast from "react-hot-toast";
 import { w3cwebsocket } from "websocket";
@@ -35,7 +35,7 @@ const OtherUserProfile = (props) => {
 
       toast.success(`Request sent to ${username}`);
 
-      const newSocket = new w3cwebsocket(`ws://localhost:8000/notifications/${profile.username}/`);
+      const newSocket = new w3cwebsocket(`${socketLink}/notifications/${profile.username}/`);
     newSocket.onopen = () => {
       console.log("WebSocket connected");
       newSocket.send(
