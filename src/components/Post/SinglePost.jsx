@@ -141,11 +141,10 @@ const SinglePost = () => {
          }
 
   return (
-   <div className={`flex `}>
-   <div className={` fixed 2xl:ml-[14%] overflow-x-scroll w-4/6 mt-10 h-screen font-primary_font justify-center items-center max-xl:w-full max-xl:m-0 m-auto max-sm:w-full `}>
+<div className={`block ml-0 w-full overflow-auto scrollbar  bg-cardBg2 dark:bg-darkcardBg2 `}>
    {
    isLoading ? <PostSkeleton/> : <> <SinglePostComponent postData={postData}/>
-   <div className=" block ml-5 w-3/6 mt-2 h-fit mb-20 font-primary_font justify-center items-center max-xl:w-full m-0 max-sm:w-full  bg-white rounded-lg border p-10">
+   <div className=" block ml-5 w-4/6 mt-2 h-fit mb-20 font-primary_font justify-center items-center max-xl:w-full m-0 max-sm:w-full  bg-white rounded-lg border p-10">
 
    <div className="m-2 mt-0">
 
@@ -221,7 +220,6 @@ const SinglePost = () => {
 }
 
 
-</div>
 
 </div>
   );
