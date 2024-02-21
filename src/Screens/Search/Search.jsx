@@ -26,7 +26,7 @@ const Search = () => {
     const formik = useFormik({
       initialValues: {
         search: "",
-        type:"",
+        type:"all",
         page:1,
       },
       onSubmit: (values) => {

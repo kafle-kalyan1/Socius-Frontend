@@ -51,7 +51,7 @@ import { ProfileContext } from "/src/context/ProfileContext/ProfileContext";
 import Sidebar from "/src/components/Sidebar/Sidebar";
 import MobileNavbar from "./components/Sidebar/MobileNavbar";
 import { MenuContext } from "/src/context/MenuContext/MenuContext";
-import { defaultProfilePic, socketLink } from "./Library/Others/Others";
+import { DecryptString, defaultProfilePic, socketLink } from "./Library/Others/Others";
 import { MessageNotificationContext } from "./context/NotificationContext/MessageNotificationContext";
 
 function AppRoute() {
@@ -76,7 +76,7 @@ function AppRoute() {
         let res_data = JSON.parse(event.data);
         console.log(res_data);
         if (res_data.type == "message") {
-          const message = res_data.message;
+          const message = DecryptString(res_data.message);
           const shortenedMessage = message.split(" ").slice(0, 100).join(" ");
 
           setTotalNotification(totalNotification+1);

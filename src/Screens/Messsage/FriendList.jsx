@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { dateFormat, defaultProfilePic } from '../../Library/Others/Others';
+import { DecryptString, dateFormat, defaultProfilePic } from '../../Library/Others/Others';
 import { useNavigate } from 'react-router-dom';
 import imgSrc from './Utils/no.gif'
 import Button from '../../components/Button/Button';
@@ -55,7 +55,7 @@ const FriendList = ({userList, open, setOpen, setCurrentChatUser, setMessages,cu
            </div>
            <p className="text-text4 dark:text-text3 mt-1 text-sm">
              {user.last_message
-               ? user.last_message
+               ? DecryptString(user.last_message)
                : "Click to start a chat"}
            </p>
          </div>

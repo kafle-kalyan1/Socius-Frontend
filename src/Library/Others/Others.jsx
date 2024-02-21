@@ -28,14 +28,24 @@ export function Notification_socket(){
 
 
 export function EncryptString(data){
+  if(!data) return null;
+  if(typeof data == "object"){
+    data = JSON.stringify(data);
+  }
+  if(data == "") return "";
    var enc_string= CryptoAES.encrypt(data,VITE_PASSWORD_KEY ).toString();
    return enc_string;
  }
 
 
  export function DecryptString(data){
-   var bytes  = CryptoAES.decrypt(data,VITE_PASSWORD_KEY );
-   var originalText = bytes.toString(CryptoENC);
+  var originalText;
+  try {
+    var bytes  = CryptoAES.decrypt(data,VITE_PASSWORD_KEY );
+     originalText = bytes.toString(CryptoENC);
+  } catch {
+     originalText = data
+  }
    return originalText;
  }    
 

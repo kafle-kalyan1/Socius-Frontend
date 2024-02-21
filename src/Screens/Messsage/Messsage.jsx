@@ -6,7 +6,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import { MenuContext } from "/src/context/MenuContext/MenuContext";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { dateFormat, defaultProfilePic, socketLink } from "../../Library/Others/Others";
+import { DecryptString, EncryptString, dateFormat, defaultProfilePic, socketLink } from "../../Library/Others/Others";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, SendIcon } from "lucide-react";
@@ -82,7 +82,7 @@ const Message = () => {
             var index = userList.findIndex(
               (user) => user.username === currentChatUser
             );
-            userList[index].last_message = new_message.message;
+            userList[index].last_message = (new_message.message);
             userList[index].timestamp = new_message.timestamp;
             return [...userList];
           });
@@ -145,7 +145,7 @@ const Message = () => {
       if (socket && socket.readyState === WebSocket.OPEN) {
         socket.send(
           JSON.stringify({
-            message: values.message,
+            message: EncryptString(values.message),
             to: currentChatUser,
             from: user,
             timestamp: new Date(),
@@ -293,7 +293,7 @@ const Message = () => {
                             : " bg-blue_text"
                         }  py-3 px-4 text-white`}
                       >
-                        <p className="text-sm">{msg.message}</p>
+                        <p className="text-sm">{DecryptString(msg.message)}</p>
                       </div>
                       {msg?.sender?.username != currentChatUser ? (
                         <img
