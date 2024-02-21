@@ -1,57 +1,56 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { NotificationContext } from '../../../context/NotificationContext/NotificationContext';
+import { Notification } from '../../../Screens/Notification/Notification';
+import toast from 'react-hot-toast';
 
 const NotificationPannel = () => {
+  const { notificationList,setNotificationList } = useContext(NotificationContext);
+
+  const clearNotifications = () => {
+    setNotificationList([]);
+    toast.success("All notifications cleared!",{
+      position: 'top-center'
+    });
+    }
   return (
 <>
 
     <div
-      className="h-screen w-full block scroll-bar2 r-0 z-30 m-0  overflow-x-hidden transform translate-x-0 transition ease-in-out duration-700 "
+      className=" w-full pt-5 block r-0 z-30 m-0  overflow-x-hidden transform translate-x-0 transition ease-in-out duration-700 bg-cardBg  scroll-bar overflow-y-hidden dark:bg-darkcardBg h-screen foucs:overflow-y-auto hover:overflow-y-auto p-4 text-text1 dark:text-text2"
       id="notification"
     >
-      <div className="bg-cardBg dark:bg-darkcardBg h-screen overflow-y-auto p-8 text-text1 dark:text-text2">
         <div className="flex items-center justify-between">
-          <p
-            tabIndex={0}
-            className="focus:outline-none text-2xl font-semibold leading-6 text-text1 dark:text-text2"
-          >
-            Notifications
-          </p>
+          <div className="inline-flex items-center justify-between w-full">
+        <h3 className="font-bold text-xl sm:text-2xl text-gray-800  dark:text-white">Notifications</h3>
+        <button className="inline-flex text-sm bg-white justify-center px-4 py-2 w-auto text-red-500 items-center rounded font-medium shadow border focus:outline-none transform active:scale-75 transition-transform duration-700 hover:bg-red-500 hover:text-white hover:-translate-y-1 hover:scale-110 dark:hover:bg-white dark:text-gray-800 dark:hover:text-gray-800"
+        onClick={() => clearNotifications()}
+        >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 sm:mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Clear all notifications
+      </button>
+      </div>
         </div>
-        <div className="w-full p-3 mt-8 bg-cardBg2 dark:bg-darkcardBg2 rounded flex">
-          <div
-            tabIndex={0}
-            aria-label="heart icon"
-            role="img"
-            className="focus:outline-none w-8 h-8 border rounded-full border-gray-200 flex items-center justify-center"
-          >
-            <svg
-              width={16}
-              height={16}
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8.00059 3.01934C9.56659 1.61334 11.9866 1.66 13.4953 3.17134C15.0033 4.68334 15.0553 7.09133 13.6526 8.662L7.99926 14.3233L2.34726 8.662C0.944589 7.09133 0.997256 4.67934 2.50459 3.17134C4.01459 1.662 6.42992 1.61134 8.00059 3.01934Z"
-                fill="#EF4444"
-              />
-            </svg>
-          </div>
-          <div className="pl-3">
-            <p tabIndex={0} className="focus:outline-none text-sm leading-none">
-              <span className=" text-main_text">James Doe</span> favourited an{" "}
-              <span className=" text-main_text">item</span>
-            </p>
-            <p
-              tabIndex={0}
-              className="focus:outline-none text-xs leading-3 pt-1 text-text1 dark:text-text2"
-            >
-              2 hours ago
-            </p>
-          </div>
+        <div className="w-full p-1 m-0 mt-8 rounded flex-wrap">
+        {
+        notificationList.length > 0 ? 
+        notificationList.map((notification, index) => (
+          <Notification
+            key={index}
+            iconSrc={notification.iconSrc}
+            title={notification.title}
+            time={notification.time}
+            message={notification.message}
+            onClick={notification.onClick}
+          />
+        ))
+        :
+        (<p className="mt-4 text-gray-500 dark:text-white">No new notifications</p>)
+
+      }
         </div>
 
-      </div>
     </div>
 </>
   )

@@ -48,7 +48,7 @@ const Home = () => {
   ]
 
   return (
-<div className={`flex ml-0 w-full overflow-auto scroll-bar scroll-bar bg-cardBg2 dark:bg-darkcardBg2 `}>
+<div className={`flex ml-0 w-full overflow-auto scrollbar  bg-cardBg2 dark:bg-darkcardBg2 `}>
       <div className={`block p-10 max-sm:p-1 w-[60%]  h-screen font-primary_font justify-center items-center max-lg:w-full m-auto max-sm:m-0 max-sm:w-full `}>
         <div className=" max-md:w-full  max-sm:w-full">
         <div className="w-full p-4 ">
@@ -106,7 +106,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className={`block w-[33%] max-xl:hidden h-full overflow-auto sticky top-0`}>
+      <div className={`block w-[33%] max-xl:hidden h-full overflow-auto sticky right-2 scrollbar  top-0`}>
     <NotificationPannel/>
   </div>
     </div>

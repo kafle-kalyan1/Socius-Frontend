@@ -3,12 +3,10 @@ import AppRoute from "./Routes";
 import { ConfigProvider } from "antd";
 import { ProfileProvider  } from "./context/ProfileContext/ProfileContext";
 import { MenuContext, MenuContextProvider } from "./context/MenuContext/MenuContext";
-import { NotificationProvider, useNotification  } from './context/NotificationContext/NotificationContext';
 import  Sidebar  from '/src/components/Sidebar/Sidebar';
 import { useContext, useEffect } from "react";
 import MobileNavbar from "./components/Sidebar/MobileNavbar";
 import { ThemeContext } from "./context/ThemeContext/Index";
-import { MessageNotificationProvider } from "./context/NotificationContext/MessageNotificationContext";
 
 
 function App() {
@@ -17,7 +15,6 @@ function App() {
 
   return (
     <BrowserRouter>
-    <NotificationProvider>
     <ProfileProvider>
       <ConfigProvider
        theme={{
@@ -102,7 +99,6 @@ function App() {
 
     </ConfigProvider>
     </ProfileProvider>
-    </NotificationProvider>
     </BrowserRouter>
   );
 }

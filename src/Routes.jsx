@@ -13,7 +13,6 @@ import ServerError from "./Screens/ServerError/ServerError";
 import Logout from "./Auth/LogOut/LogOut";
 import ExploreProfile from "./Screens/ExploreProfile/ExploreProfile";
 import Messsage from "./Screens/Messsage/Messsage";
-import { useNotification } from "./context/NotificationContext/NotificationContext";
 import { w3cwebsocket } from "websocket";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
@@ -56,8 +55,6 @@ import { defaultProfilePic, socketLink } from "./Library/Others/Others";
 import { MessageNotificationContext } from "./context/NotificationContext/MessageNotificationContext";
 
 function AppRoute() {
-  const { notifications, addNotification, removeNotification } =
-    useNotification();
   const { profile } = useContext(ProfileContext);
   const { isMobile, setIsMobile, setOpen } = useContext(MenuContext);
   const navigate = useNavigate();
@@ -531,13 +528,6 @@ function AppRoute() {
 
         <Route path="*" element={<LostPage />} />
       </Routes>
-      <div>
-        {notifications.map((notification) => (
-          <div key={notification.id} onClick={() => console.log(notification)}>
-            {notification.message}
-          </div>
-        ))}
-      </div>
     </>
   );
 }

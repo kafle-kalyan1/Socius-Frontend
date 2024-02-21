@@ -10,6 +10,7 @@ import {
   UserCircle,
   Settings,
   HelpCircle,
+  BellRing,
 } from "lucide-react";
 import { useContext, createContext, useState, useEffect, useRef } from "react";
 import { MenuContext } from "/src/context/MenuContext/MenuContext";
@@ -24,6 +25,8 @@ import CustomPopover from "../PopOver/PopOver";
 import { showModal, hideAlertModal } from "/src/components/Alert/Alert";
 import { defaultProfilePic } from "../../Library/Others/Others";
 import { MessageNotificationContext } from "../../context/NotificationContext/MessageNotificationContext";
+import { MdNotifications } from 'react-icons/md';
+import { NotificationContext } from "../../context/NotificationContext/NotificationContext";
 
 export const SidebarContext = createContext();
 
@@ -202,7 +205,7 @@ export function SidebarItem({ icon, text, onClick, path, alert }) {
 
       {alert > 0  && (
         <div
-          className={`absolute right-2  ml-1 bg-primary_btn_dark bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center
+          className={`absolute right-2 ml-1 bg-main_text text-white text-xs rounded-full w-4 h-4 flex items-center justify-center
           }`}
         >{alert}</div>
       )}
@@ -232,6 +235,7 @@ export function SidebarItem({ icon, text, onClick, path, alert }) {
 export default function SIdebar() {
   const { open, setOpen } = useContext(MenuContext);
   const {totalNotification} = useContext(MessageNotificationContext)
+  const { numOfNotification, notificationList } = useContext(NotificationContext);
 
   return   (
     <main className="App">
@@ -263,6 +267,12 @@ export default function SIdebar() {
           icon={<UsersIcon size={20} />}
           text="Friends"
           path="/friends"
+        />
+        <SidebarItem
+          icon={<BellRing size={20} />}
+          text="Notifications"
+          path="/notifications"
+          alert={notificationList.length}
         />
 
         <hr className="my-3 mt-6" />

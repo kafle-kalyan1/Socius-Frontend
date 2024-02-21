@@ -177,7 +177,7 @@ const Message = () => {
     >
       <div className="max-md:w-full max-sm:w-full">
         <div className={`flex h-screen`}>
-          <div className={`flex h-full w-fit xl:w-[30%] md:w-[40%] sm:w-[40%] ${
+          <div className={`flex h-full w-fit xl:w-[30%] md:w-[40%] ${
               currentChatUser
                 ? "max-sm:hidden"
                 : "max-sm:block"
@@ -193,7 +193,7 @@ const Message = () => {
           />
           </div>
           <div
-            className={`flex flex-col w-full max-md:h-[90%] max-md:w-full ${
+            className={`flex flex-col w-full max-md:h-[90%] max-sm:w-full ${
               !currentChatUser
                 ? "max-sm:hidden"
                 : "max-sm:block"

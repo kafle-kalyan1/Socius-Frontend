@@ -46,16 +46,7 @@
   width: 0px; 
   /* margin-left: 10px; */
 }
-/* .scroll-bar::-webkit-scrollbar-track {
-  background: #202a5a;
-  } */
-  /* .scroll-bar::-webkit-scrollbar:hover { */
-   /* background-color: red;
-   width: 10px;
-  } */
-  /* .scroll-bar::-webkit-scrollbar-track:active {
-  background: #55fceb;
-  } */
+
 
  .scroll-bar2::-webkit-scrollbar-thumb {
   background-color: #438e1a; 
@@ -113,3 +104,82 @@
   background-color: red;
 }
  
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  .scroll-bar {
+    scrollbar-width: thin !important;
+    scrollbar-color: #ababab #efe6e6 !important;
+  }
+
+  /* Chrome, Edge, and Safari */
+  .scroll-bar::-webkit-scrollbar {
+    width: 3px !important;
+  }
+
+  .scroll-bar::-webkit-scrollbar-track {
+    background: #efe6e6 !important;
+  }
+
+  .scroll-bar::-webkit-scrollbar-thumb {
+    background-color: #ababab !important;
+    border-radius: 4px !important;
+    border: 2px ridge #537aee !important;
+  }
+
+  .scroll-bar::-webkit-scrollbar-thumb:hover {
+    background-color: #ababab !important;
+  }
+
+  .scroll-bar::-webkit-scrollbar-thumb:active {
+    background-color: #ababab !important;
+  }
+
+  .scroll-bar::-webkit-scrollbar-thumb:window-inactive {
+    background-color: #ababab !important;
+  }
+
+  .scroll-bar::-webkit-scrollbar-thumb:window-inactive {
+    background-color: #ababab !important;
+  }
+
+  /* Light mode scrollbar */
+:root {
+  --scrollbar-track-color-light: #a3a3a3;
+  --scrollbar-thumb-color-light: #e5e1e1;
+}
+
+/* Dark mode scrollbar */
+.dark {
+  --scrollbar-track-color-dark: #8d2424;
+  --scrollbar-thumb-color-dark: #ff0000;
+}
+
+/* Light mode scrollbar */
+.dark .scrollbar {
+  scrollbar-color: #a4a4a8 #5e5c5c;
+  scrollbar-width: thin !important;
+
+}
+
+/* Dark mode scrollbar */
+.scrollbar {
+  scrollbar-color: #939393 #d2d2d2;
+  scrollbar-width: thin !important;
+
+}
+
+/* Chrome, Edge, and Safari */
+.scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Make the scrollbar track transparent */
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color);
+  border-radius: 4px;
+  border: 4px groove #537aee;
+}
+
