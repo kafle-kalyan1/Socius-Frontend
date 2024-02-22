@@ -88,7 +88,7 @@ const BigPopup = ({ id, onClose, children, ask = false, closeOnOutsideClick = fa
     <div className='fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-70' id={id}>
       <div className="relative" ref={modalRef}>
         <button
-          className='absolute top-4 -right-2 z-50 w-8 h-8 rounded-md text-text1  duration-200 dark:text-text2 hover:bg-red-500 dark:hover:bg-red-600 cursor-pointer bg-cardBorder dark:bg-darkcardBorder focus:outline-none focus:bg-red-600 dark:focus:bg-red-600'
+          className='absolute top-4 -right-2 z-30 w-8 h-8 rounded-md text-text1  duration-200 dark:text-text2 hover:bg-red-500 dark:hover:bg-red-600 cursor-pointer bg-cardBorder dark:bg-darkcardBorder focus:outline-none focus:bg-red-600 dark:focus:bg-red-600'
           onClick={handleClose}
         >
           <IoMdClose className='w-8 h-8'/>

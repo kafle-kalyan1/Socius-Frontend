@@ -14,12 +14,16 @@ import {
 import { useNavigate } from "react-router-dom";
 import CustomPopover from "../PopOver/PopOver";
 import '/src/index.css'
-import { defaultProfilePic, socketLink, timeAgo } from "../../Library/Others/Others";
+import { dateFormat, defaultProfilePic, socketLink, timeAgo } from "../../Library/Others/Others";
 import { FaThumbsUp } from "react-icons/fa";
-import { ThumbsUp, ThumbsUpIcon } from "lucide-react";
+import { MoreHorizontalIcon, ThumbsUp, ThumbsUpIcon } from "lucide-react";
 import APICall from "../../Library/API/APICall";
 import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
 import { w3cwebsocket } from "websocket";
+import {  Tooltip } from "antd";
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+
 
 const Post = ({
   id,
@@ -58,26 +62,17 @@ const Post = ({
   }, [likes, comments])
 
   function openImageinNewTab(e) {
-    
     window.open(e.target.src, "_blank");
   }
 
-  function toggleShowFullText(e) {
-    e.stopPropagation();
-    setShowFullText(!showFullText);
-  }
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  function showNextImage(e) {
-    e.stopPropagation();
-    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-  }
+  const toggleText = () => {
+    setIsExpanded(!isExpanded);
+  };
 
-  function showPreviousImage(e) {
-    e.stopPropagation();
-    setCurrentImageIndex(
-      (prevIndex) => (prevIndex - 1 + images.length) % images.length
-    );
-  }
+  const descriptionLength = 120;
+
 
   function viewProfile(username) {
     navigate(`/u/${username}`);
@@ -125,6 +120,131 @@ const DeletePost = async (e,id) =>{
 
   }
 }
+
+const LikeButton = () => (
+  <Tooltip title={userHasLiked ? "Unlike":"Like"}>
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 gap-1"  onClick={(e)=> handleLike(e,id)}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="38"
+    viewBox="0 0 24 24"
+    fill={userHasLiked ? "red" : "none"}
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="h-5 w-5"
+  >
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+  </svg>
+  {count.likes}
+  </button>
+  </Tooltip>
+)
+
+const CommentButton = () => (
+  <Tooltip title="Comments">
+      <button className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10  px-4 py-2 gap-1`} >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={24}
+          height={24}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-5 w-5"
+        >
+          <path d="M17 6.1H3" />
+          <path d="M21 12.1H3" />
+          <path d="M15.1 18H3" />
+        </svg>
+        {count.comments}
+      </button>
+      </Tooltip>
+)
+
+const ShareButton = () => (
+  <Tooltip title="Share">
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-5 w-5"
+    >
+      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+      <polyline points="16 6 12 2 8 6" />
+      <line x1={12} x2={12} y1={2} y2={15} />
+    </svg>
+  </button>
+  </Tooltip>
+)
+
+const SaveButton = () => (
+  <Tooltip title="Save">
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-5 w-5"
+    >
+      <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+    </svg>
+  </button>
+    </Tooltip>
+)
+
+const ReportButton = () => (
+  <Tooltip title="Report">
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" title='Report'>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-4 w-4"
+    >
+      <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+      <line x1={4} x2={4} y1={22} y2={15} />
+    </svg>
+  </button>
+  </Tooltip>
+)
+
+const MoreOptionButton = () => (
+  <Tooltip title="More Options">
+      <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent  hover:text-accent-foreground h-10 px-4 py-2" title='More Options'>
+      <CustomPopover
+        content={"Options"}
+        buttons={buttons}
+        mainButton={<MoreHorizontalIcon />}
+      />
+      </button>
+      </Tooltip>
+)
   
   const buttons = [
     { label: 'Report', onClick: ()=> console.log("Button 1 Clicked") },
@@ -132,114 +252,78 @@ const DeletePost = async (e,id) =>{
      username == profile.username && { label: 'Delete', onClick: (e)=> DeletePost(e,id) }
   ];
 
-  function viewPost(id){
-    navigate
-  }
+  const onChange = (currentSlide) => {
+    console.log(currentSlide);
+  };
 
   return (
     <div
-  className="bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 rounded-lg flex flex-col min-h-[300px] h-auto min-w-[250px] max-w-[650px] 3xl:max-w-[850px] 3xl:w-[800px]  space-y-6 p-5 py-7 mb-4 shadow-lg"
-  onMouseEnter={() => setIsMouseOver(true)}
-  onMouseLeave={() => setIsMouseOver(false)}
->
-  <div className="flex space-x-4 items-center w-full ">
-    <div className="w-12 h-12">
-      <img
-        onClick={(e) =>{ e.stopPropagation(); viewProfile(username)}}
-        alt="avatar"
-        src={profileImage ? profileImage : defaultProfilePic}
-        className="rounded-full w-full h-full object-cover cursor-pointer"
-      />
-    </div>
-    <div className="space-y-2">
-      <div className="flex space-x-2 items-center w-full">
-        <h2
-          onClick={(e) =>{ e.stopPropagation(); viewProfile(username)}}
-          className="text-base font-bold cursor-pointer"
-        >
-          {fullname}
-        </h2>
-        <CheckCircleOutlined
-          className=" text-green-500"
-          title="This Profile is verified"
-        />
-        <div className="text-xs text-gray-600">posted an update</div>
-        <CustomPopover
-          content={"Options"}
-          buttons={buttons}
-          mainButton={<EllipsisOutlined />}
-        />
-      </div>
-      <p className="text-xs text-gray-600">{timeAgo(timestamp)}</p>
-    </div>
-  </div>
-  <div>
-    <p
-      className="post_text text-sm leading-6 text-text1 dark:text-text2"
-      dangerouslySetInnerHTML={{ __html: truncatedText }}
-    ></p>
-    {postText.length > 3 && (
-      <span
-        className="text-blue-500 cursor-pointer"
-        onClick={(e)=>toggleShowFullText(e)}
-      >
-        {showFullText ? " Show less" : " Show more"}
-      </span>
-    )}
-  </div>
-  <div className="relative cursor-pointer"   onClick={(e)=>{
-    e.stopPropagation();
-  navigate('/post/'+id);}}
+    className="border text-card-foreground max-w-xl mx-auto mt-8 p-5 bg-white shadow-md rounded-md"
+    data-v0-t="card"
   >
-    {images?.length > 1 ? (
-      <div
-        onClick={(e)=>showPreviousImage(e)}
-        title="Show Previous"
-        className="cursor-pointer absolute left-1 top-1/2 transition-opacity duration-300 "
-        style={{ opacity: isMouseOver ? 0.8 : 0 }}
-      >
-        <LeftCircleOutlined style={{ fontSize: "40px" }} />
+    <div className="flex items-center justify-between">
+      <div className="flex items-center">
+        <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full mr-4">
+          <span className="flex h-full w-full items-center justify-center rounded-full bg-muted cursor-pointer">
+            <img
+              alt="Profile picture"
+              className="object-cover w-full h-full"
+              onClick={(e) =>{ e.stopPropagation(); viewProfile(username)}}
+              src={profileImage ? profileImage : defaultProfilePic}
+              style={{ aspectRatio: "1/1", objectFit: "cover" }}
+              />
+          </span>
+        </span>
+        <div>
+          <h4 className=" font-primary_font tracking-wide text-md cursor-pointer" onClick={(e) =>{ e.stopPropagation(); viewProfile(username)}}>{username}</h4>
+          <p className="font-primary_font tracking-wide text-sm text-gray-500" title={dateFormat(timestamp,true)}>{timeAgo(timestamp)}</p>
+          
+        </div>
+        
       </div>
-    ) : null}
-    {images?.length > 1 ? (
-      <div
-        onClick={(e)=>showNextImage(e)}
-        title="Show Next"
-        className="cursor-pointer absolute right-1 top-1/2 transition-opacity duration-300"
-        style={{ opacity: isMouseOver ? 0.8 : 0 }}
-      >
-        <RightCircleOutlined style={{ fontSize: "40px" }} />
+      <div className="flex items-center space-x-2">
+        <MoreOptionButton/>
+       <ReportButton/>
       </div>
-    ) : null}
-    {images?.length > 0 ? (
-      <img
-        onClick={(e) => openImageinNewTab(e)}
-        src={images[currentImageIndex]}
-        alt="post"
-        style={{ pointerEvents: "none" }}
-        title="Click to open in new tab"
-        className="h-auto w-full cursor-alias object-cover rounded-lg"
-      />
-    ) : (
-      <></>
-    )}
-  </div>
-  <div className="flex justify-between pt-1">
-    <div className="flex gap-2">
-      <button onClick={(e)=> handleLike(e,id)} className="flex gap-1 items-center">
-        <ThumbsUpIcon className={userHasLiked ? " fill-secondary_btn text-secondary_btn_hover" : ""}/>
-        <p>{count.likes} Likes</p>
-      </button>
     </div>
-    <button onClick={() => console.log("comment")} className="flex gap-1 items-center">
-      <CommentOutlined style={{ fontSize: "20px" }} />
-      <p>{count.comments} Comments</p>
-    </button>
-    <button onClick={() => console.log("share")} className="flex gap-1 items-center ">
-      <SendOutlined style={{ fontSize: "20px" }} />
-    </button>
+    <Carousel showArrows={true}  onChange={onChange} showThumbs={false} emulateTouch>
+  {images.map((image, index) => (
+    <div key={index}>
+      <img src={image} alt={`Post content ${index}`} style={{width: '500px', height: 'auto'}} />
+    </div>
+  ))}
+</Carousel>
+ <p className="mt-4 text-gray-800">
+      {
+        // Use the slice method to show only a part of the text when it is collapsed
+        isExpanded ? postText : `${postText.slice(0, descriptionLength)}`
+      }
+      {
+        // Use a conditional rendering to show or hide the button based on the length of the text
+        postText.length > descriptionLength && (<>
+          {!isExpanded && <>...</>}
+          <button
+            onClick={toggleText}
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-primary underline-offset-4 hover:underline h-10 px-4 py-2"
+          >
+            {isExpanded ? 'Show less' : 'Show more'}
+          </button>
+        </>
+        )
+      }
+    </p>
+    
+    <div className="flex items-center justify-between mt-4">
+      <div className="flex items-center space-x-2">
+      <LikeButton/>
+        <CommentButton/>
+      <ShareButton/>
+      
+
+      </div>
+      <SaveButton/>
+    </div>
   </div>
-</div>
 
   );
 };

@@ -54,15 +54,9 @@ const SinglePost = () => {
               })
             );
           }
-         setPostData({
-            ...postData,
-            comments:response.data
-           })
-           formik.setValues({
-            ...formik.values,
-            comment:""
-          });
            toast.success("Comment Added sucessfully!")
+          getData()
+
            
         }
         else{
@@ -87,9 +81,13 @@ const SinglePost = () => {
       comments:[]
    })
 
-
+   
    
    useEffect(()=>{
+      getData()
+   },[])
+
+   const getData = async() => {
       if(id){
          APICall(`/api/posts/getPost/${id.id}/`,"GET",{}).then((r)=>{
             setPostData((p)=>({
@@ -110,30 +108,23 @@ const SinglePost = () => {
             setIsLoading(false)
             formik.setValues({
                ...formik.values,
-               post_id: r.post.id
+               post_id: r.post.id,
+               comment:""
              });
          })
       }
       else{
          navigate('/')
       }
-   },[])
+   }
 
    async function deleteComment(id){
       var response = await APICall('/api/posts/deleteComment/','POST',{"comment_id":id,
        "post_id":postData.id
       })
       if(response.status == 200){
-         setPostData({
-            ...postData,
-            comments:response.data
-           })
-           formik.setValues({
-            ...formik.values,
-            comment:""
-          });
            toast.success("Comment Deleted sucessfully!")
-           
+          getData()
         }
         else{
          toast.error("something went wrong!")
@@ -141,10 +132,9 @@ const SinglePost = () => {
          }
 
   return (
-<div className={`block ml-0 w-full overflow-auto scrollbar  bg-cardBg2 dark:bg-darkcardBg2 `}>
+<div className={` overflow-auto scrollbar  bg-cardBg2 dark:bg-darkcardBg2 block w-full m-auto max-sm:m-0 max-sm:p-0 h-fit mb-20 font-primary_font justify-center items-center rounded-lg border p-10`}>
    {
    isLoading ? <PostSkeleton/> : <> <SinglePostComponent postData={postData}/>
-   <div className=" block ml-5 w-4/6 mt-2 h-fit mb-20 font-primary_font justify-center items-center max-xl:w-full m-0 max-sm:w-full  bg-white rounded-lg border p-10">
 
    <div className="m-2 mt-0">
 
@@ -214,7 +204,6 @@ const SinglePost = () => {
    
 
 
-</div>
 
    </>
 }

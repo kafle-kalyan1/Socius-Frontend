@@ -24,6 +24,10 @@ const CreatePost = ({profile}) => {
       content: "",
     },
     onSubmit: async (values) => {
+      if (values.content.trim() == "" && values.content.images == null) {
+        toast.error("Please enter content to post");
+        return;
+      }
       showLoading(true)
       var urls = [];
       if(values.images?.length > 0){

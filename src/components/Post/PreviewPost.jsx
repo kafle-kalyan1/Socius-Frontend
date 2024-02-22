@@ -31,7 +31,6 @@ const PreviewPost = ({
   fullname,
 }) => {
   const [showFullText, setShowFullText] = useState(false);
-  const {profile} = useContext(ProfileContext)
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
