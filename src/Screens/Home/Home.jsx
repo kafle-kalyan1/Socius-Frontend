@@ -32,14 +32,47 @@ const Home = () => {
     const getPosts = async () => {
       try {
         const response = await APICall("/api/posts/getPosts/?sort="+sort, "GET", {});
-        setPosts(response); 
+        setPosts(response);
+        storePostsInIndexedDB(response); // Store posts in IndexedDB
       } catch (error) {
         toast.error("Something went wrong!");
       }
     };
-
+  
     getPosts();
+
   }, [sort]);
+
+  function storePostsInIndexedDB(posts) {
+    const request = indexedDB.open('postsDB', 2); // Increase the version number
+  
+    request.onerror = function(event) {
+      console.error('Database error:', event.target.error);
+    };
+  
+    request.onupgradeneeded = function(event) {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains('posts')) { // Check if 'posts' object store exists
+        const objectStore = db.createObjectStore('posts', { keyPath: 'id', autoIncrement: true });
+        objectStore.createIndex('id', 'id', { unique: false });
+      }
+    };
+  
+    request.onsuccess = function(event) {
+      const db = event.target.result;
+      const transaction = db.transaction(['posts'], 'readwrite');
+      const objectStore = transaction.objectStore('posts');
+  
+      objectStore.clear().onsuccess = function() {
+        posts.forEach(post => {
+          objectStore.add(post);
+        });
+        console.log('Posts stored in IndexedDB');
+      };
+    };
+  }
+  
+  
 
   const filters = [
     { value: "default", label: "Default" },

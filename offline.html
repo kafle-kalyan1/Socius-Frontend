@@ -31,22 +31,16 @@
 </head>
 <body>
   <h1>You're Offline</h1>
-  <svg viewBox="0 0 24 24">
+  <!-- <svg viewBox="0 0 24 24">
     <path fill="#fff" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm1-11h-2v5h2v-5z"/>
     
   </svg>
-  <input type="file" id="imageUploader" accept="image/*">
-<button id="uploadButton">Upload</button>
+  <input type="file" id="imageUploader" accept="image/*"> -->
+  <div id="postsContainer"></div>
+
+
+<!-- <button id="uploadButton">Upload</button> -->
   <script>
-    document.getElementById('uploadButton').addEventListener('click', () => {
-      const imageInput = document.getElementById('imageUploader');
-      const file = imageInput.files[0];
-      if (file) {
-        storeImageInIndexedDB(file);
-      } else {
-        console.log('No file selected');
-      }
-    });
     
     function storeImageInIndexedDB(file) {
       const reader = new FileReader();
@@ -63,6 +57,7 @@
     
         request.onsuccess = function(event) {
           const db = event.target.result;
+          debugger;
           const transaction = db.transaction(['images'], 'readwrite');
           const objectStore = transaction.objectStore('images');
           const imageStoreRequest = objectStore.add({ image: imgData });
@@ -83,7 +78,54 @@
       reader.readAsDataURL(file);
     }
     
+    // Function to get posts from IndexedDB
+    // Function to get posts from IndexedDB
+function getPostsFromIndexedDB() {
+  const request = indexedDB.open('postsDB', 2);
+
+  request.onsuccess = function(event) {
+    const db = event.target.result;
+    const transaction = db.transaction(['posts'], 'readonly');
+    const objectStore = transaction.objectStore('posts');
+    const getAllRequest = objectStore.getAll();
+
+    getAllRequest.onsuccess = function() {
+      // Check if there are any posts in IndexedDB
+      if (getAllRequest.result.length > 0) {
+        displayPosts(getAllRequest.result);
+      } else {
+        console.log('No posts in IndexedDB');
+      }
+    };
+
+    getAllRequest.onerror = function() {
+      console.log('Error getting posts from IndexedDB');
+    };
+  };
+
+  request.onerror = function(event) {
+    console.log('Database error:', event.target.error);
+  };
+}
+
+// Function to display posts
+function displayPosts(posts) {
+  const postsContainer = document.getElementById('postsContainer');
+  postsContainer.innerHTML = ''; // Clear the container
+
+  posts.forEach(post => {
+    const postElement = document.createElement('div');
+    postElement.innerHTML = `
+      <h2>${post.user.username}</h2>
+      <p>${post.text_content}</p>
+      <img src="${post.images[0]}" alt="Post image">
+    `;
+    postsContainer.appendChild(postElement);
+  });
+}
+
+getPostsFromIndexedDB();
+
   </script>
-  <script type="module" src="/src/Offline/Offline.jsx"></script>
 </body>
 </html>
