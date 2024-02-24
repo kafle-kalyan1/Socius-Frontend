@@ -64,7 +64,7 @@ hideBigPopup('createPost')
     showBigPopup({
       id: "preview-post",
       children: (
-        <div className="flex flex-col mt-0 bg-cardBg mx-auto w-full p-4 rounded-md overflow-scroll">
+        <div className="flex flex-col mt-0 bg-cardBg mx-auto w-full p-4 rounded-md ">
           <h1 className="text-2xl mb-2 text-center">Post Preview</h1>
           <PreviewPost
             profileImage={profile.profileImage ? "data:image/png;base64," + profile.profileImage : defaultProfilePic}
@@ -93,7 +93,7 @@ hideBigPopup('createPost')
   };
 
   return (
-    <div className="flex flex-col mt-0 bg-cardBg mx-auto w-full  p-4 rounded-md  overflow-scroll">
+    <div className="flex flex-col mt-0 bg-cardBg mx-auto w-full  p-4 rounded-md  ">
       <h1 className="text-2xl mb-2 text-center">Create Post</h1>
       <TextArea 
         formik={formik}
@@ -110,6 +110,18 @@ hideBigPopup('createPost')
           formik.handleChange("content")(value);
         }}
       /> */}
+      {formik.values.images && formik.values.images.length > 0 && (
+      <div className="flex flex-wrap justify-center mt-4">
+        {formik.values.images.map((image, index) => (
+          <img
+            key={index}
+            src={URL.createObjectURL(image.originFileObj)}
+            alt={`Preview ${index}`}
+            className="w-32 h-32 object-cover m-2"
+          />
+        ))}
+      </div>
+    )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-5 mt-4 justify-evenly">
         <Button
           onClick={() => {
@@ -140,7 +152,7 @@ hideBigPopup('createPost')
       </div>
       {isAddImageModalVisible && (
         <div className="fixed inset-0 flex justify-center items-center z-40 mx-auto bg-opacity-50 bg-gray-800">
-          <div className="mt-6 p-4 w-11/12 min-w-md bg-cardBg rounded-md shadow-md overflow-scroll">
+          <div className="mt-6 p-4 w-11/12 min-w-md bg-cardBg rounded-md shadow-md ">
             <h1 className="text-2xl mb-2 text-center">Add Images</h1>
             <ImageUploader
               formik={formik}

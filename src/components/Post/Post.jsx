@@ -123,7 +123,7 @@ const DeletePost = async (e,id) =>{
 
 const LikeButton = () => (
   <Tooltip title={userHasLiked ? "Unlike":"Like"}>
-  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 gap-1"  onClick={(e)=> handleLike(e,id)}>
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 gap-1"  onClick={(e)=> handleLike(e,id)}>
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -145,7 +145,7 @@ const LikeButton = () => (
 
 const CommentButton = () => (
   <Tooltip title="Comments">
-      <button className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10  px-4 py-2 gap-1`} >
+      <button className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10  px-4 py-2 gap-1`} >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width={24}
@@ -169,7 +169,7 @@ const CommentButton = () => (
 
 const ShareButton = () => (
   <Tooltip title="Share">
-  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={24}
@@ -192,7 +192,7 @@ const ShareButton = () => (
 
 const SaveButton = () => (
   <Tooltip title="Save">
-  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
 
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -214,7 +214,7 @@ const SaveButton = () => (
 
 const ReportButton = () => (
   <Tooltip title="Report">
-  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" title='Report'>
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" title='Report'>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={24}
@@ -236,7 +236,7 @@ const ReportButton = () => (
 
 const MoreOptionButton = () => (
   <Tooltip title="More Options">
-      <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent  hover:text-accent-foreground h-10 px-4 py-2" title='More Options'>
+      <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent  hover:text-accent-foreground h-10 px-4 py-2" title='More Options'>
       <CustomPopover
         content={"Options"}
         buttons={buttons}
@@ -258,7 +258,7 @@ const MoreOptionButton = () => (
 
   return (
     <div
-    className="border text-card-foreground max-w-xl mx-auto mt-8 p-5 bg-white shadow-md rounded-md"
+    className="border text-card-foreground max-w-xl mx-auto mt-8 p-5 bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 shadow-md rounded-md"
     data-v0-t="card"
   >
     <div className="flex items-center justify-between">
@@ -293,7 +293,7 @@ const MoreOptionButton = () => (
     </div>
   ))}
 </Carousel>
- <p className="mt-4 text-gray-800">
+ <p className="mt-4 text-text1 dark:text-text2">
       {
         // Use the slice method to show only a part of the text when it is collapsed
         isExpanded ? postText : `${postText.slice(0, descriptionLength)}`

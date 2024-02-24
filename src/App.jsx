@@ -63,7 +63,14 @@ function App() {
 
 
        
-        }
+        },
+        Tooltip:{
+          colorBgBase:isDarkTheme ? "#F9FAFB" :'#111827',
+          colorTextBase:isDarkTheme ? '#F9FAFB' : '#111827',
+          colorBorder:isDarkTheme ? '#9CA3AF' : '#6B7280',
+          
+
+        },
       }
        }}
       >

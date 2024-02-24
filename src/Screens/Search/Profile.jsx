@@ -29,7 +29,7 @@ const Profile = ({data}) => {
       <h1 className="text-2xl font-bold">People you may know</h1>
       <p className="text-gray-500">Based on your activity</p>
     </div>
-      <div className="grid grid-cols-1 text-text1 dark:text-text2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-4 gap-4"> 
+      <div className="grid grid-cols-1 text-text1 dark:text-text2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 mt-4 gap-4"> 
      {
       profiles && profiles.map((profile) => {
         return (

@@ -93,9 +93,9 @@ const Search = () => {
 
    return (
       <div className={`flex flex-col bg-cardBg2 dark:bg-darkcardBg2 overflow-auto scroll-bar w-full  font-primary_font items-center max-lg:w-full h-max m-auto max-sm:w-full`}>
-      <div className=' m-auto flex flex-col items-center w-5/6 bg-cardBg dark:bg-darkcardBg h-full p-10'>
+      <div className=' m-auto flex flex-col items-center w-5/6 max-md:w-full bg-cardBg dark:bg-darkcardBg h-full p-10 max-md:p-2'>
 
-      <div className="flex mt-10 gap-3 w-5/6 max-md:w-full max-sm:w-full mb-4">
+      <div className="flex mt-10 gap-3 w-5/6 max-md:w-full mb-4">
          <Select
             showSearch
             style={{ width: 150, height: 40}}
@@ -129,7 +129,7 @@ const Search = () => {
 
      {
       formik.values.type == "all" && (<>
-      <div className='w-5/6 mb-4'>
+      <div className='w-5/6 mb-4 max-md:w-full'>
          <CustomSegmentedControl
           options={[
             {icon:<TbUserSearch className='mt-1' /> ,label: "Users", value: "users" },
