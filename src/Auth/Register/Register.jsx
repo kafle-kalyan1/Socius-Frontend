@@ -80,6 +80,7 @@ const Register = () => {
       gender: null,
       dob: "",
       terms: false,
+      profile_picture: "",
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -182,6 +183,10 @@ const Register = () => {
       }
     },
   });
+
+  useEffect(()=>{
+    formik.setFieldValue("profile_picture",`https://ui-avatars.com/api/?background=random&name=${formik.values.fullname}&size=128`)
+  },[formik.values.fullname])
 
   return (
     <>

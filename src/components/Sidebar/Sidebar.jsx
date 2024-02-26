@@ -25,7 +25,6 @@ import CustomPopover from "../PopOver/PopOver";
 import { showModal, hideAlertModal } from "/src/components/Alert/Alert";
 import { defaultProfilePic } from "../../Library/Others/Others";
 import { MessageNotificationContext } from "../../context/NotificationContext/MessageNotificationContext";
-import { MdNotifications } from 'react-icons/md';
 import { NotificationContext } from "../../context/NotificationContext/NotificationContext";
 
 export const SidebarContext = createContext();
