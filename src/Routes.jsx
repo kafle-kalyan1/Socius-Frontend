@@ -116,6 +116,13 @@ function AppRoute() {
             </>
           ));
         } else if (res_data.type == "friend_request") {
+          Notification.requestPermission().then((result) => {
+            if (result === 'granted' && document.hidden) {
+              new Notification('New Friend Request', {
+                body: res_data.message,
+              });
+            }
+          });
           toast((t) => (
             <div className="relative w-auto bg-gray-100 p-4 rounded-md shadow-md">
               <div className="flex">
@@ -189,6 +196,13 @@ function AppRoute() {
           res_data.type == "post_like" &&
           profile.username != res_data.sender
         ) {
+          Notification.requestPermission().then((result) => {
+            if (result === 'granted' && document.hidden) {
+              new Notification('New Like', {
+                body: res_data.message,
+              });
+            }
+          });
           toast((t) => (
             <div className="relative w-auto bg-gray-100 p-4 rounded-md shadow-md">
               <div className="flex">
@@ -224,6 +238,13 @@ function AppRoute() {
           res_data.type == "post_comment" &&
           profile.username != res_data.sender
         ) {
+          Notification.requestPermission().then((result) => {
+            if (result === 'granted' && document.hidden) {
+              new Notification('New Comment', {
+                body: res_data.message,
+              });
+            }
+          });
           toast((t) => (
             <div className="relative w-auto bg-gray-100 p-4 rounded-md shadow-md">
               <div className="flex">
