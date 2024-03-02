@@ -54,12 +54,12 @@ const Button = ({ width, text, type, onClick, shortCutKey, icon, disabled=false 
     if (typeof width === 'number' || (typeof width === 'string' && /^\d+(\.\d+)?(px|%)?$/.test(width))) {
       return `w-${width}`;
     }
-    return 'w-full';
+    return 'w-max';
   };
 
   const widthClass = getWidthClass();
 
-  const buttonClasses = `flex cursor-pointer text-center px-4 py-2 tracking-wide text-textPrimary dark:text-textPrimary transition-colors duration-200 transform ${widthClass} rounded-md`;
+  const buttonClasses = `flex cursor-pointer text-center px-4 py-1 tracking-wide text-textPrimary dark:text-textPrimary transition-colors duration-200 transform ${widthClass} rounded-md`;
 
   const typeClasses = {
     primary: 'bg-primary_btn_dark hover:bg-primary_btn_dark_hover text-white focus:outline-none focus:bg-primary_btn_dark_hover',
