@@ -1,10 +1,16 @@
 import React, { useContext } from 'react';
 import toast from 'react-hot-toast';
 import { NotificationContext } from '../../context/NotificationContext/NotificationContext';
+import { dateFormat, firstLetterCapital } from '../../Library/Others/Others';
+import comment_icon from '/src/assets/Post/comment.jpg' 
+import heart_icon from '/src/assets/Post/heart.jpg'
+import friend_icon from '/src/assets/Post/friend.jpg'
+import { useNavigate } from 'react-router-dom';
+
 
 // Reusable Notification component
 export const Notification = ({ iconSrc, title, time, message, onClick }) => (
-  <div className="mt-2  px-6 py-4 bg-cardBg2 dark:bg-darkcardBg2 text-text1 dark:text-text2 rounded-lg shadow w-full" onClick={onClick}>
+  <div className="mt-2  px-6 py-4 bg-cardBg2 dark:bg-darkcardBg2 text-text1 dark:text-text2 rounded-lg shadow w-full cursor-pointer" onClick={onClick}>
     <div className="inline-flex items-center justify-between w-full">
       <div className="inline-flex items-center">
         <img src={iconSrc} alt="Icon" className="w-6 h-6 mr-3" />
@@ -21,10 +27,28 @@ export const Notification = ({ iconSrc, title, time, message, onClick }) => (
 // Notifications component
 const Notifications = () => {
   const { notificationList,setNotificationList } = useContext(NotificationContext);
+  const navigate = useNavigate();
+
   const clearNotifications = () => {
     setNotificationList([]);
     toast.success("All notifications cleared!");
     }
+    
+  const findIcon = (type) => {
+    switch (type) {
+      case "like":
+        return heart_icon;
+      case "comment":
+        return comment_icon;
+      case "friend_request":
+        return friend_icon;
+      case "post":
+        return "/assets/icons/post.svg";
+      default:
+        return heart_icon;
+    }
+  }
+
   return(
   <div className="h-screen grid place-items-center my-8">
     <div className="lg:w-3/5 sm:w-4/5 w-full bg-gray-100 dark:bg-gray-800 rounded-xl mx-auto border p-10 shadow-sm">
@@ -45,11 +69,11 @@ const Notifications = () => {
         notificationList.map((notification, index) => (
           <Notification
             key={index}
-            iconSrc={notification.iconSrc}
-            title={notification.title}
-            time={notification.time}
-            message={notification.message}
-            onClick={notification.onClick}
+            iconSrc={findIcon(notification?.notification_type)}
+            title={firstLetterCapital(notification?.notification_type)}
+            time={dateFormat(notification?.timestamp, true)}
+            message={notification?.notification_message}
+            onClick={()=>navigate(notification?.action_on_view)}
           />
         ))
         :

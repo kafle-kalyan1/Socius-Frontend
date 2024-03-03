@@ -271,7 +271,7 @@ export default function SIdebar() {
           icon={<BellRing size={20} />}
           text="Notifications"
           path="/notifications"
-          alert={notificationList.length}
+          alert={notificationList?.length}
         />
 
         <hr className="my-3 mt-6" />

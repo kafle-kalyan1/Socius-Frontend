@@ -1,113 +1,27 @@
 import React, { createContext, useEffect, useState } from 'react';
+import APICall from '../../Library/API/APICall';
 
 export const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
    // State to track the theme
    const [numOfNotification, setNumOfNotification] = useState(2);
-   const [notificationList, setNotificationList] = useState([
-    {iconSrc:"https://cdn-icons-png.flaticon.com/128/763/763812.png",
-    title:"Training",
-    time:"2 min ago",
-    message:"Hey! Do you remember about choosing your training regime?",
-    onClick: () => console.log("Training notification clicked!")
-    },
-    {
-      iconSrc:"https://cdn-icons-png.flaticon.com/128/763/763812.png",
-        title:"Training",
-        time:"2 min ago",
-        message:"Hey! Do you remember about choosing your training regime?",
-        onClick:() => console.log("Training notification clicked!")
+   const [notificationList, setNotificationList] = useState([]
+   );
+   useEffect(() => {
+    getNotificationList();
+  },[]);
+
+  useEffect(() => {
+    console.log(notificationList);
+  },[notificationList]);
+
+  const getNotificationList = async () => {
+    var response = await APICall("/api/utils/notifications/", "GET", {});
+    if(response.status == 200){
+      setNotificationList(response.data.notifications);
     }
-    ,
-    {
-      iconSrc:"https://cdn-icons-png.flaticon.com/128/763/763812.png",
-        title:"Training",
-        time:"2 min ago",
-        message:"Hey! Do you remember about choosing your training regime?",
-        onClick:() => console.log("Training notification clicked!")
-    }
-    ,
-    {
-      iconSrc:"https://cdn-icons-png.flaticon.com/128/763/763812.png",
-        title:"Training",
-        time:"2 min ago",
-        message:"Hey! Do you remember about choosing your training regime?",
-        onClick:() => console.log("Training notification clicked!")
-    }
-    ,
-    {
-      iconSrc:"https://cdn-icons-png.flaticon.com/128/763/763812.png",
-        title:"Training",
-        time:"2 min ago",
-        message:"Hey! Do you remember about choosing your training regime?",
-        onClick:() => console.log("Training notification clicked!")
-    }
-    ,
-    {
-      iconSrc:"https://cdn-icons-png.flaticon.com/128/763/763812.png",
-        title:"Training",
-        time:"2 min ago",
-        message:"Hey! Do you remember about choosing your training regime?",
-        onClick:() => console.log("Training notification clicked!")
-    }
-    ,
-    {
-      iconSrc:"https://cdn-icons-png.flaticon.com/128/763/763812.png",
-        title:"Training",
-        time:"2 min ago",
-        message:"Hey! Do you remember about choosing your training regime?",
-        onClick:() => console.log("Training notification clicked!")
-    }
-    ,
-    {
-      iconSrc:"https://cdn-icons-png.flaticon.com/128/763/763812.png",
-        title:"Training",
-        time:"2 min ago",
-        message:"Hey! Do you remember about choosing your training regime?",
-        onClick:() => console.log("Training notification clicked!")
-    }
-    ,
-    {
-      iconSrc:"https://cdn-icons-png.flaticon.com/128/763/763812.png",
-        title:"Training",
-        time:"2 min ago",
-        message:"Hey! Do you remember about choosing your training regime?",
-        onClick:() => console.log("Training notification clicked!")
-    }
-    ,
-    {
-      iconSrc:"https://cdn-icons-png.flaticon.com/128/763/763812.png",
-        title:"Training",
-        time:"2 min ago",
-        message:"Hey! Do you remember about choosing your training regime?",
-        onClick:() => console.log("Training notification clicked!")
-    }
-    ,
-    {
-      iconSrc:"https://cdn-icons-png.flaticon.com/128/763/763812.png",
-        title:"Training",
-        time:"2 min ago",
-        message:"Hey! Do you remember about choosing your training regime?",
-        onClick:() => console.log("Training notification clicked!")
-    }
-    ,
-    {
-      iconSrc:"https://cdn-icons-png.flaticon.com/128/763/763812.png",
-        title:"Training",
-        time:"2 min ago",
-        message:"Hey! Do you remember about choosing your training regime?",
-        onClick:() => console.log("Training notification clicked!")
-    }
-    ,
-    {
-      iconSrc:"https://cdn-icons-png.flaticon.com/128/763/763812.png",
-        title:"Training",
-        time:"2 min ago",
-        message:"Hey! Do you remember about choosing your training regime?",
-        onClick:() => console.log("Training notification clicked!")
-    }
-   ]);
+  }
 
    const contextValue = {
     numOfNotification,

@@ -3,20 +3,15 @@ import { NotificationContext } from '../../../context/NotificationContext/Notifi
 import { Notification } from '../../../Screens/Notification/Notification';
 import toast from 'react-hot-toast';
 import APICall from '../../../Library/API/APICall';
+import { dateFormat, firstLetterCapital } from '../../../Library/Others/Others';
+import comment_icon from '/src/assets/Post/comment.jpg' 
+import heart_icon from '/src/assets/Post/heart.jpg'
+import friend_icon from '/src/assets/Post/friend.jpg'
+import { useNavigate } from 'react-router-dom';
 
 const NotificationPannel = () => {
   const { notificationList,setNotificationList } = useContext(NotificationContext);
-
-  useEffect(() => {
-    getNotificationList();
-  },[]);
-
-  const getNotificationList = async () => {
-    var response = await APICall("/api/utils/notifications/", "GET", {});
-    if(response.status === 200){
-      setNotificationList(response.data);
-    }
-  }
+  const navigate = useNavigate();
 
   const clearNotifications = () => {
     setNotificationList([]);
@@ -24,12 +19,28 @@ const NotificationPannel = () => {
       position: 'top-center'
     });
     }
+
+  const findIcon = (type) => {
+    switch (type) {
+      case "like":
+        return heart_icon;
+      case "comment":
+        return comment_icon;
+      case "friend_request":
+        return friend_icon;
+      case "post":
+        return "/assets/icons/post.svg";
+      default:
+        return heart_icon;
+    }
+  }
   return (
 <>
 
     <div
       className=" w-full pt-5 block r-0 z-30 m-0  overflow-x-hidden transform translate-x-0 transition ease-in-out duration-700 bg-cardBg  scroll-bar overflow-y-hidden dark:bg-darkcardBg h-screen foucs:overflow-y-auto hover:overflow-y-auto p-4 text-text1 dark:text-text2"
       id="notification"
+
     >
         <div className="flex items-center justify-between">
           <div className="inline-flex items-center justify-between w-full">
@@ -45,16 +56,17 @@ const NotificationPannel = () => {
       </div>
         </div>
         <div className="w-full p-1 m-0 mt-8 rounded flex-wrap">
+        
         {
-        notificationList.length > 0 ? 
+        notificationList ?
         notificationList.map((notification, index) => (
           <Notification
             key={index}
-            iconSrc={notification.iconSrc}
-            title={notification.title}
-            time={notification.time}
-            message={notification.message}
-            onClick={notification.onClick}
+            iconSrc={findIcon(notification?.notification_type)}
+            title={firstLetterCapital(notification?.notification_type)}
+            time={dateFormat(notification?.timestamp, true)}
+            message={notification?.notification_message}
+            onClick={()=>navigate(notification?.action_on_view)}
           />
         ))
         :
