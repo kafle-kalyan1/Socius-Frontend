@@ -1,10 +1,22 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { NotificationContext } from '../../../context/NotificationContext/NotificationContext';
 import { Notification } from '../../../Screens/Notification/Notification';
 import toast from 'react-hot-toast';
+import APICall from '../../../Library/API/APICall';
 
 const NotificationPannel = () => {
   const { notificationList,setNotificationList } = useContext(NotificationContext);
+
+  useEffect(() => {
+    getNotificationList();
+  },[]);
+
+  const getNotificationList = async () => {
+    var response = await APICall("/api/utils/notifications/", "GET", {});
+    if(response.status === 200){
+      setNotificationList(response.data);
+    }
+  }
 
   const clearNotifications = () => {
     setNotificationList([]);
