@@ -69,13 +69,16 @@ const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = fals
 
         {
           title: "Unfriend",
-          onClick: async () => {
-            let response = await APICall("/api/user/unfriend/","POST",{"friend": username})
+          onclick: () => {
+            APICall("/api/user/removeFriend/","POST",{"friend": username}).then(response => {
             if(response.status == 200){
             toast.success(`Unfriended ${username}`);
             load_data()
             }
-          },
+          }).catch(error => {
+            console.log(error)
+          })
+        } 
         },
         {
           text: "Cancel",

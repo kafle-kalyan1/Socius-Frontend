@@ -71,6 +71,24 @@ function App() {
           
 
         },
+        Card:{
+          colorBgBase:isDarkTheme ? "#4B5563" :'#D1D5DB',
+          colorBorder:isDarkTheme ? '#9CA3AF' : '#6B7280',
+          colorTextBase:isDarkTheme ? '#F9FAFB' : '#111827',
+        },
+        Switch:{
+          colorBgBase:isDarkTheme ? "#4B5563" :'#9CA3AF',
+          colorTextBase:isDarkTheme ? '#F9FAFB' : '#9CA3AF',
+          colorBorder:isDarkTheme ? '#9CA3AF' : '#9CA3AF',
+          colorBgContainer:isDarkTheme ? "#4B5563" :'#9CA3AF',
+          colorBgThumb:isDarkTheme ? "#F9FAFB" :'#9CA3AF',
+          colorBgThumbChecked:isDarkTheme ? "#F9FAFB" :'#9CA3AF',
+          colorBorderThumb:isDarkTheme ? '#9CA3AF' : '#9CA3AF',
+          colorBorderThumbChecked:isDarkTheme ? '#9CA3AF' : '#9CA3AF',
+          colorTextThumb:isDarkTheme ? '#F9FAFB' : '#9CA3AF',
+          colorTextThumbChecked:isDarkTheme ? '#F9FAFB' : '#9CA3AF',
+          
+        },
       }
        }}
       >

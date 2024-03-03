@@ -14,7 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import CustomPopover from "../PopOver/PopOver";
 import '/src/index.css'
-import { dateFormat, defaultProfilePic, socketLink, timeAgo } from "../../Library/Others/Others";
+import { copy, dateFormat, defaultProfilePic, socketLink, timeAgo } from "../../Library/Others/Others";
 import { FaThumbsUp } from "react-icons/fa";
 import { MoreHorizontalIcon, ThumbsUp, ThumbsUpIcon } from "lucide-react";
 import APICall from "../../Library/API/APICall";
@@ -23,6 +23,8 @@ import { w3cwebsocket } from "websocket";
 import {  Tooltip } from "antd";
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import toast from "react-hot-toast";
+import { showModal } from "../Alert/Alert";
 
 
 const Post = ({
@@ -77,6 +79,39 @@ const Post = ({
     navigate(`/post/${id}`)
   }
 
+  const ReportPost = async () => {
+    showModal({
+      title: "Report",
+      type : "error",
+      message: `Are you sure you want to report this post?`,
+      buttons: [
+        {
+          title: "Report",
+          onclick: () => {
+            APICall("/api/posts/reportPost/","POST",{"post_id": id}).then(response => {
+              if(response.status == 200){
+                toast.success(`Post reported`);
+              }
+              else{
+                toast.error("something went wrong!")
+              }
+            })
+          }
+        },
+        {
+          title: "Cancel",
+          onclick: () => {
+            console.log("Cancel")
+          }
+        }
+      ]
+    })
+  }
+
+  const PrintPost = () => {
+    print()
+  }
+  
   function viewProfile(username) {
     navigate(`/u/${username}`);
   }
@@ -112,6 +147,13 @@ const Post = ({
     
   }
 
+}
+
+
+const Share = () => {
+  const url = `${window.location.origin}/post/${id}`;
+  console.log("Share")
+  copy(url)
 }
 
 const DeletePost = async (e,id) =>{
@@ -172,7 +214,9 @@ const CommentButton = () => (
 
 const ShareButton = () => (
   <Tooltip title="Share">
-  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+  onClick={Share}
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={24}
@@ -217,7 +261,9 @@ const SaveButton = () => (
 
 const ReportButton = () => (
   <Tooltip title="Report">
-  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" title='Report'>
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" title='Report'
+  onClick={ReportPost}
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={24}
@@ -250,8 +296,8 @@ const MoreOptionButton = () => (
 )
   
   const buttons = [
-    { label: 'Report', onClick: ()=> console.log("Button 1 Clicked") },
-    { label: 'Print', onClick: ()=> console.log("Button 2 Clicked") },
+    { label: 'Report', onClick: ReportPost},
+    { label: 'Print', onClick: ()=> PrintPost },
      username == profile.username && { label: 'Delete', onClick: (e)=> DeletePost(e,id) }
   ];
 
@@ -290,7 +336,7 @@ const MoreOptionButton = () => (
       </div>
     </div>
     <Carousel showArrows={true}  onChange={onChange} showThumbs={false} emulateTouch>
-  {images.map((image, index) => (
+  {images && images.map((image, index) => (
     <div key={index}>
       <img src={image} alt={`Post content ${index}`} style={{width: '500px', height: 'auto'}} />
     </div>

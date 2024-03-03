@@ -33,7 +33,12 @@ const Home = () => {
       try {
         const response = await APICall("/api/posts/getPosts/?sort="+sort, "GET", {});
         setPosts(response);
-        storePostsInIndexedDB(response); // Store posts in IndexedDB
+        const setting_response = await APICall("/api/utils/getSettings/", "GET", {});
+        if(setting_response.status === 200){
+          if(setting_response.data.sync_post_for_offline == true){
+            storePostsInIndexedDB(response);
+          }
+        }
       } catch (error) {
         toast.error("Something went wrong!");
       }
@@ -115,7 +120,7 @@ const Home = () => {
         </div>
       </div>
 
-          {posts && posts.map((post) => (
+          {posts.length > 0 && posts.map((post) => (
             <Post
               key={post.id}
               id={post.id}

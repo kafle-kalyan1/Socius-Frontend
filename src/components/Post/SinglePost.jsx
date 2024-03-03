@@ -161,13 +161,13 @@ const SinglePost = () => {
 
 <hr />
 
-<h3 className="font-bold text-center font-primary_font text-xl">Comments</h3>
+<h3 className="font-bold text-center font-primary_font text-xl text-text1 dark:text-text2">Comments</h3>
 
     <div className="flex flex-col">
     {
       postData.comments && 
       postData.comments.map((cur)=>
-      <div className="border rounded-md p-3 ml-3 my-3" key={cur.id}>
+      <div className="border rounded-md p-3 text-text1 dark:text-text2 ml-3 my-3" key={cur.id}>
             <div className="flex gap-3 items-center w-full">
                 <img src={cur.user_profile.profile_picture || defaultProfilePic }
                     className="object-cover w-8 h-8 rounded-full 
@@ -189,7 +189,7 @@ const SinglePost = () => {
           mainButton={<BsThreeDotsVertical />}
         />
             </div>
-            <p className="text-gray-600 mt-2">
+            <p className="text-text1 dark:text-text2 mt-2">
                 {cur.text}
             </p>
 

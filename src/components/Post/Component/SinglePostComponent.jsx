@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useState } from 'react'
-import { defaultProfilePic, socketLink, timeAgo } from '../../../Library/Others/Others'
+import { copy, defaultProfilePic, socketLink, timeAgo } from '../../../Library/Others/Others'
 import { useNavigate } from 'react-router-dom';
 import { dateFormat } from '/src/Library/Others/Others';
 import { CheckCircle, MoreHorizontalIcon } from 'lucide-react';
@@ -13,6 +13,7 @@ import { w3cwebsocket } from 'websocket';
 import toast from 'react-hot-toast';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
+import { showModal } from '../../Alert/Alert';
 const SinglePostComponent = ({postData}) => {
   const {id,
     profile_picture,
@@ -37,9 +38,49 @@ const SinglePostComponent = ({postData}) => {
   function viewProfile(username) {
     navigate(`/u/${username}`);
   }
+
+  const ReportPost = async () => {
+    showModal({
+      title: "Report",
+      type : "error",
+      message: `Are you sure you want to report this post?`,
+      buttons: [
+        {
+          title: "Report",
+          onclick: () => {
+            APICall("/api/posts/reportPost/","POST",{"post_id": id}).then(response => {
+              if(response.status == 200){
+                toast.success(`Post reported`);
+              }
+              else{
+                toast.error("something went wrong!")
+              }
+            })
+          }
+        },
+        {
+          title: "Cancel",
+          onclick: () => {
+            console.log("Cancel")
+          }
+        }
+      ]
+    })
+  }
+
+  const PrintPost = () => {
+    print()
+  }
+
+  const Share = () => {
+    const url = `${window.location.origin}/post/${id}`;
+    console.log("Share")
+    copy(url)
+  }
+
   const buttons = [
-    { label: 'Report', onClick: ()=> console.log("Button 1 Clicked") },
-    { label: 'Print', onClick: ()=> console.log("Button 2 Clicked") },
+    { label: 'Report', onClick: ()=> ReportPost },
+    { label: 'Print', onClick: ()=> PrintPost },
      username == profile?.username && { label: 'Delete', onClick: (e)=> DeletePost(e,id) }
   ];
 
@@ -101,7 +142,7 @@ const SinglePostComponent = ({postData}) => {
 
   const LikeButton = () => (
     <Tooltip title={userHasLiked ? "Unlike":"Like"}>
-    <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 gap-1"  onClick={(e)=> handleLike(e,id)}>
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 gap-1"  onClick={(e)=> handleLike(e,id)}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -123,7 +164,7 @@ const SinglePostComponent = ({postData}) => {
 
   const CommentButton = () => (
     <Tooltip title="Comments">
-        <button className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10  px-4 py-2 gap-1`} >
+      <button className={`inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10  px-4 py-2 gap-1`} >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width={24}
@@ -147,7 +188,9 @@ const SinglePostComponent = ({postData}) => {
 
   const ShareButton = () => (
     <Tooltip title="Share">
-    <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+  onClick={Share}
+  >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width={24}
@@ -170,7 +213,7 @@ const SinglePostComponent = ({postData}) => {
 
   const SaveButton = () => (
     <Tooltip title="Save">
-    <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
 
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -192,7 +235,7 @@ const SinglePostComponent = ({postData}) => {
 
   const ReportButton = () => (
     <Tooltip title="Report">
-    <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" title='Report'>
+  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" title='Report' onClick={ReportPost}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width={24}
@@ -214,7 +257,7 @@ const SinglePostComponent = ({postData}) => {
 
   const MoreOptionButton = () => (
     <Tooltip title="More Options">
-        <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent  hover:text-accent-foreground h-10 px-4 py-2" title='More Options'>
+      <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-cardBg dark:bg-darkcardBg hover:bg-accent  hover:text-accent-foreground h-10 px-4 py-2" title='More Options'>
         <CustomPopover
           content={"Options"}
           buttons={buttons}
@@ -226,7 +269,7 @@ const SinglePostComponent = ({postData}) => {
 
   return (
     <div
-    className="border text-card-foreground max-w-xl mx-auto mt-8 p-5 bg-white shadow-md rounded-md"
+    className="border text-card-foreground max-w-xl mx-auto mt-8 p-5 bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 shadow-md rounded-md"
     data-v0-t="card"
   >
     <div className="flex items-center justify-between">
@@ -255,13 +298,13 @@ const SinglePostComponent = ({postData}) => {
       </div>
     </div>
     <Carousel showArrows={true} onChange={onChange} showThumbs={false} emulateTouch>
-  {images.map((image, index) => (
+  {images && images.map((image, index) => (
     <div key={index}>
       <img src={image} alt={`Post content ${index}`} style={{width: '500px', height: 'auto'}} />
     </div>
   ))}
 </Carousel>
- <p className="mt-4 text-gray-800">
+ <p className="mt-4 text-text1 dark:text-text2">
       {
         // Use the slice method to show only a part of the text when it is collapsed
         isExpanded ? text_content : `${text_content.slice(0, descriptionLength)}`
