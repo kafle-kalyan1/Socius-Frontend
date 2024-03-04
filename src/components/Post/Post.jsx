@@ -25,6 +25,8 @@ import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import toast from "react-hot-toast";
 import { showModal } from "../Alert/Alert";
+import BigPopup, { hideBigPopup, showBigPopup } from "../BigPopup/BigPopup";
+import SharePopup from './Component/SharePopup';
 
 
 const Post = ({
@@ -71,6 +73,18 @@ const Post = ({
 
   const toggleText = () => {
     setIsExpanded(!isExpanded);
+  };
+
+  const Share = () => {
+    const url = `${window.location.origin}/post/${id}`;
+
+    showBigPopup({
+      id: "sharePost",
+      onClose: () => hideBigPopup("sharePost"),
+      children: (
+        <SharePopup id={id} postText={postText} images={images} />
+      )
+    });
   };
 
   const descriptionLength = 120;
@@ -147,13 +161,6 @@ const Post = ({
     
   }
 
-}
-
-
-const Share = () => {
-  const url = `${window.location.origin}/post/${id}`;
-  console.log("Share")
-  copy(url)
 }
 
 const DeletePost = async (e,id) =>{

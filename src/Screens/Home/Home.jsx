@@ -13,11 +13,15 @@ import "/src/index.css";
 import NotificationPannel from "../../components/Notification/NotificationPannel/NotificationPannel";
 import {defaultProfilePic} from './../../Library/Others/Others';
 import { hideBigPopup } from "../../components/BigPopup/BigPopup";
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 
 const Home = () => {
   const { profile } = useContext(ProfileContext);
   const [posts, setPosts] = useState([]);
   const [sort, setSort] = useState("default");
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true); 
 
   const createPost2 = () => {
     showBigPopup({
@@ -31,8 +35,9 @@ const Home = () => {
   useEffect(() => {
     const getPosts = async () => {
       try {
-        const response = await APICall("/api/posts/getPosts/?sort="+sort, "GET", {});
-        setPosts(response);
+        const response = await APICall(`/api/posts/getPosts/?sort=${sort}&page=${page}`, "GET", {});
+        setPosts(prevPosts => [...prevPosts, ...response]); 
+        setHasMore(true);
         const setting_response = await APICall("/api/utils/getSettings/", "GET", {});
         if(setting_response.status === 200){
           if(setting_response.data.sync_post_for_offline == true){
@@ -46,7 +51,7 @@ const Home = () => {
   
     getPosts();
 
-  }, [sort]);
+  }, [sort, page]);
 
   function storePostsInIndexedDB(posts) {
     const request = indexedDB.open('postsDB', 2); // Increase the version number
@@ -119,6 +124,12 @@ const Home = () => {
           />
         </div>
       </div>
+      <InfiniteScroll
+        dataLength={posts.length}
+        next={() => setPage(prevPage => prevPage + 1)}
+        hasMore={hasMore} // Use the hasMore state
+        loader={<h4>Loading...</h4>}
+      >
 
           {posts.length > 0 && posts.map((post) => (
             <Post
@@ -138,6 +149,8 @@ const Home = () => {
               shares={0}
             />
           ))}
+      </InfiniteScroll>
+
           
         
 
