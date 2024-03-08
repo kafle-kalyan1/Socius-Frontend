@@ -11,9 +11,10 @@ import toast from "react-hot-toast";
 import { Select } from "antd";
 import "/src/index.css";
 import NotificationPannel from "../../components/Notification/NotificationPannel/NotificationPannel";
-import {defaultProfilePic} from './../../Library/Others/Others';
+import {defaultProfilePic, urltoBase64} from './../../Library/Others/Others';
 import { hideBigPopup } from "../../components/BigPopup/BigPopup";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import imageToBase64 from "image-to-base64";
 
 
 const Home = () => {
@@ -53,8 +54,22 @@ const Home = () => {
 
   }, [sort, page]);
 
+  const imageUrlToBase64 = async (url) => {
+    const data = await fetch(url);
+    const blob = await data.blob();
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = () => {
+        const base64data = reader.result;
+        resolve(base64data);
+      };
+      reader.onerror = reject;
+    });
+  };
+
   function storePostsInIndexedDB(posts) {
-    const request = indexedDB.open('postsDB', 2); // Increase the version number
+    const request = indexedDB.open('postsDB', 5);
   
     request.onerror = function(event) {
       console.error('Database error:', event.target.error);
@@ -62,25 +77,30 @@ const Home = () => {
   
     request.onupgradeneeded = function(event) {
       const db = event.target.result;
-      if (!db.objectStoreNames.contains('posts')) { // Check if 'posts' object store exists
+      if (!db.objectStoreNames.contains('posts')) { 
         const objectStore = db.createObjectStore('posts', { keyPath: 'id', autoIncrement: true });
         objectStore.createIndex('id', 'id', { unique: false });
       }
     };
   
-    request.onsuccess = function(event) {
+    request.onsuccess = async function(event) {
       const db = event.target.result;
       const transaction = db.transaction(['posts'], 'readwrite');
       const objectStore = transaction.objectStore('posts');
   
-      objectStore.clear().onsuccess = function() {
-        posts.forEach(post => {
+      objectStore.clear();
+  
+      for (const post of posts) {
+        if (post.images && post.images.length > 0) {
+          const base64 = await imageUrlToBase64(post.images[0]);
+          post.image = base64;
           objectStore.add(post);
-        });
-        console.log('Posts stored in IndexedDB');
-      };
-    };
+        }
+      }
+    }
   }
+  
+  
   
   
 
@@ -131,9 +151,9 @@ const Home = () => {
         loader={<h4>Loading...</h4>}
       >
 
-          {posts.length > 0 && posts.map((post) => (
+          {posts.length > 0 && posts.map((post, i) => (
             <Post
-              key={post.id}
+              key={post.id+i}
               id={post.id}
               profileImage={post.user_profile.profile_picture}
               username={post.user.username}

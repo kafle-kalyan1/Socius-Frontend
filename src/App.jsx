@@ -7,11 +7,67 @@ import  Sidebar  from '/src/components/Sidebar/Sidebar';
 import { useContext, useEffect } from "react";
 import MobileNavbar from "./components/Sidebar/MobileNavbar";
 import { ThemeContext } from "./context/ThemeContext/Index";
+import { showLoading } from "./components/Loading/Loading";
+import APICall from "./Library/API/APICall";
+import toast from "react-hot-toast";
+import { uploadCloudinary } from "./Library/Others/Others";
 
 
 function App() {
   const { isMobile } = useContext(MenuContext);
   const {isDarkTheme} = useContext(ThemeContext);
+
+  useEffect(() => {
+    postSavedPosts();
+  }, []);
+
+  
+const postSavedPosts = async () => {
+  let db;
+  let request = indexedDB.open("offlinePosts", 1);
+
+  request.onsuccess = function(event) {
+    db = event.target.result;
+
+    let transaction = db.transaction(["posts"], "readwrite");
+    let objectStore = transaction.objectStore("posts");
+    let getAllRequest = objectStore.getAll();
+
+    getAllRequest.onsuccess = function(event) {
+      let posts = getAllRequest.result;
+      posts.forEach(async (post, index) => {
+        // Your existing code to post data
+        let urls = [];
+        console.log(post);
+        // if(post.image){
+        //   for (const element of post.image) {
+            const imgLinks = await uploadCloudinary(post.image);
+            urls = [...urls, imgLinks.url];
+          // }
+        // }
+        const final_data = {
+          images: urls,
+          text_content: post.text
+        }
+        let response = await APICall('/api/posts/createPost/','POST',final_data).then((res)=>{
+          toast.success(res.message)
+          // Delete the post from IndexedDB
+          let deleteTransaction = db.transaction(["posts"], "readwrite");
+          let deleteObjectStore = deleteTransaction.objectStore("posts");
+          let deleteRequest = deleteObjectStore.delete(index+1);
+          deleteRequest.onsuccess = function(event) {
+            console.log("Post deleted successfully.");
+          };
+        }).catch((err)=>console.log(err)).finally(()=>{
+          showLoading(false)
+        });
+      });
+    };
+  };
+}
+
+window.addEventListener('online', postSavedPosts);
+
 
   return (
     <BrowserRouter>

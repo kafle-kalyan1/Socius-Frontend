@@ -8,7 +8,7 @@ import { SHA256 } from 'crypto-js';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { w3cwebsocket } from 'websocket';
-
+import imageToBase64 from 'image-to-base64/browser';
 
 
 
@@ -224,3 +224,16 @@ export const useThemeDetector = () => {
 }
 
 export const socketLink = "ws://localhost:8000";
+
+export const urltoBase64 = (url) =>
+imageToBase64(url) // Path to the image
+.then(
+    (response) => {
+        return (response);
+    }
+)
+.catch(
+    (error) => {
+        console.log(error);
+    }
+)

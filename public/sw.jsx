@@ -5,6 +5,7 @@ const CACHE_NAME = 'socius v-1';
 const urlsToCache = [
     '/index.html',
     '/offline.html',
+    '/posts.html',
     '/src/Offline/Offline.jsx',
     '/Favicons/browser.png',
     '/src/Offline/offline.js',
