@@ -47,6 +47,8 @@ const ExtraPage = lazy(() => import("./Screens/Extras/Index"));
 
 const Notifications = lazy(() => import("./Screens/Notification/Notification"));
 
+const ReportPost = lazy(() => import("./Screens/Admin/Reports/Posts/ReportPost"));
+
 import { ProfileContext } from "/src/context/ProfileContext/ProfileContext";
 import Sidebar from "/src/components/Sidebar/Sidebar";
 import MobileNavbar from "./components/Sidebar/MobileNavbar";
@@ -536,6 +538,19 @@ function AppRoute() {
             </Suspense>
           }
         />
+
+        {
+          profile && profile.is_staff &&
+          <Route
+          exact
+          path="/admin/posts/reports"
+          element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <ReportPost />
+            </Suspense>
+          }
+        />
+        }
 
         <Route
           exact

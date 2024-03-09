@@ -26,6 +26,7 @@ import { showModal, hideAlertModal } from "/src/components/Alert/Alert";
 import { defaultProfilePic } from "../../Library/Others/Others";
 import { MessageNotificationContext } from "../../context/NotificationContext/MessageNotificationContext";
 import { NotificationContext } from "../../context/NotificationContext/NotificationContext";
+import { MdReport } from "react-icons/md";
 
 export const SidebarContext = createContext();
 
@@ -235,6 +236,7 @@ export default function SIdebar() {
   const { open, setOpen } = useContext(MenuContext);
   const {totalNotification} = useContext(MessageNotificationContext)
   const { numOfNotification, notificationList } = useContext(NotificationContext);
+  const {profile} = useContext(ProfileContext)
 
   return   (
     <main className="App">
@@ -272,8 +274,18 @@ export default function SIdebar() {
           text="Notifications"
           path="/notifications"
           alert={notificationList?.length}
-        />
+          />
 
+        {
+          profile && profile.is_staff && (
+            <SidebarItem
+          icon={<MdReport size={20} />}
+          text="Manage Post Reports"
+          path="/admin/posts/reports"
+          />
+          )
+        }
+       
         <hr className="my-3 mt-6" />
         <SidebarItem
           icon={<UserCircle size={20} />}
