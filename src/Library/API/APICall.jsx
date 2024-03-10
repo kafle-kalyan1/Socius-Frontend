@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import toast from "react-hot-toast";
 import { useNavigation } from "react-router-dom";
 
 
@@ -35,6 +36,7 @@ export default async function APICall(url, method='post', data={}) {
 
    } catch (error) {
       console.error(error);
+      toast.error('An error occurred',error.message);
       throw error; 
     }
       

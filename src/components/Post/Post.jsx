@@ -20,13 +20,15 @@ import { MoreHorizontalIcon, ThumbsUp, ThumbsUpIcon } from "lucide-react";
 import APICall from "../../Library/API/APICall";
 import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
 import { w3cwebsocket } from "websocket";
-import {  Tooltip } from "antd";
+import {  Modal, Tooltip } from "antd";
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import toast from "react-hot-toast";
 import { showModal } from "../Alert/Alert";
 import BigPopup, { hideBigPopup, showBigPopup } from "../BigPopup/BigPopup";
 import SharePopup from './Component/SharePopup';
+import Button  from '/src/components/Button/Button';
+import ReportPopup from "./Component/ReportPopup";
 
 
 const Post = ({
@@ -50,6 +52,7 @@ const Post = ({
 
   const [isMouseOver, setIsMouseOver] = useState(false);
   const [userHasLiked, setUserHasLiked] = useState(user_has_liked);
+
 
   const {profile} = useContext(ProfileContext)
 
@@ -93,34 +96,19 @@ const Post = ({
     navigate(`/post/${id}`)
   }
 
-  const ReportPost = async () => {
-    showModal({
-      title: "Report",
-      type : "error",
-      message: `Are you sure you want to report this post?`,
-      buttons: [
-        {
-          title: "Report",
-          onclick: () => {
-            APICall("/api/posts/reportPost/","POST",{"post_id": id}).then(response => {
-              if(response.status == 200){
-                toast.success(`Post reported`);
-              }
-              else{
-                toast.error("something went wrong!")
-              }
-            })
-          }
-        },
-        {
-          title: "Cancel",
-          onclick: () => {
-            console.log("Cancel")
-          }
-        }
-      ]
-    })
+  const ReportPost = () => {
+
+
+    showBigPopup({
+      id: "reportPost",
+      onClose: () => hideBigPopup("reportPost"),
+      children: (
+        <ReportPopup id={id}/>
+      )
+    });
   }
+
+
 
   const PrintPost = () => {
     print()
@@ -351,11 +339,9 @@ const MoreOptionButton = () => (
 </Carousel>
  <p className="mt-4 text-text1 dark:text-text2">
       {
-        // Use the slice method to show only a part of the text when it is collapsed
         isExpanded ? postText : `${postText.slice(0, descriptionLength)}`
       }
       {
-        // Use a conditional rendering to show or hide the button based on the length of the text
         postText.length > descriptionLength && (<>
           {!isExpanded && <>...</>}
           <button

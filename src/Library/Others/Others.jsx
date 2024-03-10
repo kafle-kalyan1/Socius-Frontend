@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 import { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ProfileContext } from '/src/context/ProfileContext/ProfileContext';
-import { SHA256 } from 'crypto-js';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { w3cwebsocket } from 'websocket';
