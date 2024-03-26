@@ -67,7 +67,7 @@ hideBigPopup('createPost')
         <div className="flex flex-col mt-0 bg-cardBg mx-auto w-full p-4 rounded-md ">
           <h1 className="text-2xl mb-2 text-center">Post Preview</h1>
           <PreviewPost
-            profileImage={profile.profileImage ? "data:image/png;base64," + profile.profileImage : defaultProfilePic}
+            profileImage={profile.profileImage ? profile.profileImage : defaultProfilePic}
             username={profile.username}
             timestamp="0s ago"
             fullname={profile.email}
@@ -93,8 +93,8 @@ hideBigPopup('createPost')
   };
 
   return (
-    <div className="flex flex-col mt-0 bg-cardBg mx-auto w-full  p-4 rounded-md  ">
-      <h1 className="text-2xl mb-2 text-center">Create Post</h1>
+    <div className="flex flex-col mt-0 bg-cardBg dark:bg-darkcardBg mx-auto w-full  p-4 rounded-md  ">
+      <h1 className="text-2xl mb-2 text-center text-text1 dark:text-text2">Create Post</h1>
       <TextArea 
         formik={formik}
         name="content"
@@ -129,12 +129,7 @@ hideBigPopup('createPost')
           }}
           text={`<u>P</u>ost`}
           type="primary"
-        />
-        <Button
-          onClick={handlePreviewClick}
-          text={`P<u>r</u>eview`}
-          type="txtPrimary"
-          disabled={true}
+          shortCutKey="p"
         />
         <Button
           onClick={handleAddImageClick}

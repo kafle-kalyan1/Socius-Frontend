@@ -17,6 +17,7 @@ import SinglePostComponent from "./Component/SinglePostComponent";
 import toast from "react-hot-toast";
 import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
 import { w3cwebsocket } from "websocket";
+import Alert, { showModal } from "../Alert/Alert";
 
 
 
@@ -118,18 +119,38 @@ const SinglePost = () => {
       }
    }
 
-   async function deleteComment(id){
-      var response = await APICall('/api/posts/deleteComment/','POST',{"comment_id":id,
-       "post_id":postData.id
+   function deleteComment(id, text){
+      
+      showModal({
+         type: "warning",
+         title:"Delete Comment",
+         message:`Are you sure you want to delete the comment "${text}"?`,
+         buttons:[
+            {
+               title:"Yes",
+               onclick: async()=>{
+                  var response = await APICall('/api/posts/deleteComment/','POST',{"comment_id":id,
+                  "post_id":postData.id
+                 })
+                 if(response.status == 200){
+                      toast.success("Comment Deleted sucessfully!")
+                     getData()
+                   }
+                   else{
+                    toast.error("something went wrong!")
+                   }
+               }
+            },
+            {
+               title:"No",
+               onclick:()=>{
+                  return
+               }
+            }
+         ]
       })
-      if(response.status == 200){
-           toast.success("Comment Deleted sucessfully!")
-          getData()
-        }
-        else{
-         toast.error("something went wrong!")
-        }
-         }
+   
+   }
 
   return (
 <div className={` overflow-auto scrollbar  bg-cardBg2 dark:bg-darkcardBg2 block w-full m-auto max-sm:m-0 max-sm:p-0 h-fit mb-20 font-primary_font justify-center items-center rounded-lg border p-10`}>
@@ -184,7 +205,7 @@ const SinglePost = () => {
           content={"Options"}
           buttons={[
       { icon: <MdCopyAll className="mr-2" />, label: 'Copy Link', onClick: () => copy(window.location.href.split("?")[0]) },
-      profile.username === postData.username && { icon: <MdDeleteForever className="mr-2" />, label: 'Delete', onClick: () => deleteComment(cur.id) },
+      profile.username === cur.user.username && { icon: <MdDeleteForever className="mr-2" />, label: 'Delete', onClick: () => deleteComment(cur.id, cur.text) },
     ]}
           mainButton={<BsThreeDotsVertical />}
         />

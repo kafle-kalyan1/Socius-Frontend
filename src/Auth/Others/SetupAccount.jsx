@@ -106,12 +106,12 @@ const SetupAccount = ({getOwnPosts,
   return (<>
     {
       loading ? (<FormSkeleton />) : (
-        <div className="flex flex-col mx-auto bg-cardBg dark:bg-darkcardBg rounded-md h-fit p-8 my-0 space-y-4 w-[40vw] max-md:w-full">
+        <div className="flex flex-col mx-auto bg-cardBg dark:bg-darkcardBg rounded-md h-fit p-8 my-0 space-y-4 max-lg:w-[70vw] w-[50vw] max-sm:w-[90vw]">
         <h1 className="w-full m-auto -ml-1 flex -my-14 justify-center">
           <DynamicLogo />
         </h1>
             <h4 className="text-sm font-bold text-center text-primary">
-              Setup Account
+              Edit Profile
             </h4>
             <p className="text-sm text-center text-gray-500">
               Hi  {formik.values.fullname}!

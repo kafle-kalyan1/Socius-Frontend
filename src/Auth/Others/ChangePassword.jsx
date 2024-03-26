@@ -56,7 +56,7 @@ const ChangePassword = ({getOwnPosts, getUserProfile, fetchProfileData }) => {
 
   return (
     <>
-    <div className="flex flex-col mx-auto bg-cardBg2 dark:bg-darkcardBg2 text-text1 dark:text-text2 rounded-md h-fit p-8 my-0 gap-4 w-[30vw] max-md:w-full">
+    <div className="flex flex-col mx-auto bg-cardBg2 dark:bg-darkcardBg2 text-text1 dark:text-text2 rounded-md h-fit p-8 my-0 gap-4 max-lg:w-[70vw] w-[50vw] max-sm:w-[90vw]">
             <h1 className="w-full m-auto -ml-1 flex -my-14 justify-center">
               <DynamicLogo />
             </h1>

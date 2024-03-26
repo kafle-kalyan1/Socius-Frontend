@@ -49,7 +49,7 @@ const FriendList = ({userList, open, setOpen, setCurrentChatUser, setMessages,cu
              <p className="text-text1 dark:text-text2 font-semibold">
                {user.username}
              </p>
-             <p className="text-xs text-text4 dark:text-text3">
+             <p className="text-xs text-text4 max-lg:hidden dark:text-text3">
                {dateFormat(user.timestamp)}
              </p>
            </div>

@@ -11,6 +11,7 @@ import {
   Settings,
   HelpCircle,
   BellRing,
+  Save,
 } from "lucide-react";
 import { useContext, createContext, useState, useEffect, useRef } from "react";
 import { MenuContext } from "/src/context/MenuContext/MenuContext";
@@ -26,7 +27,8 @@ import { showModal, hideAlertModal } from "/src/components/Alert/Alert";
 import { defaultProfilePic } from "../../Library/Others/Others";
 import { MessageNotificationContext } from "../../context/NotificationContext/MessageNotificationContext";
 import { NotificationContext } from "../../context/NotificationContext/NotificationContext";
-import { MdReport } from "react-icons/md";
+import { MdReport, MdReportGmailerrorred } from "react-icons/md";
+import { BsSave2, BsSave2Fill } from "react-icons/bs";
 
 export const SidebarContext = createContext();
 
@@ -270,6 +272,25 @@ export default function SIdebar() {
           path="/friends"
         />
         <SidebarItem
+          icon={ <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={24}
+      height={24}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-5 w-5"
+    >
+      <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+    </svg>}
+          text="Saved Post"
+          path="/saved"
+          />
+
+        <SidebarItem
           icon={<BellRing size={20} />}
           text="Notifications"
           path="/notifications"
@@ -279,7 +300,7 @@ export default function SIdebar() {
         {
           profile && profile.is_staff && (
             <SidebarItem
-          icon={<MdReport size={20} />}
+          icon={<MdReportGmailerrorred size={20} />}
           text="Manage Post Reports"
           path="/admin/posts/reports"
           />

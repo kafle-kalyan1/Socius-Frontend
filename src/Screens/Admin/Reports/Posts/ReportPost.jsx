@@ -5,6 +5,7 @@ import { Delete } from 'lucide-react';
 import Button from '/src/components/Button/Button';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { showLoading } from '/src/components/Loading/Loading';
 
 const ReportPost = () => {
   const [posts, setPosts] = useState([]);
@@ -36,8 +37,16 @@ const ReportPost = () => {
     }
      fetchPosts();  };
 
-  const sendStrongWarning = (postId) => {
-    // Implement send strong warning logic here
+  const sendStrongWarning = async (postId) => {
+    showLoading(true);
+    var response = await APICall(`/api/posts/sendwarning/?post_id=${postId}`, 'GET', {});
+    if (response.status == 200)
+    {
+      toast.success('Warning sent successfully');
+      showLoading(false);
+      removeReports(postId);
+    }
+
   };
 
   const viewPost = (postId) => {

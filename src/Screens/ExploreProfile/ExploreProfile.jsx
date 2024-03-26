@@ -62,7 +62,7 @@ const ExploreProfile = () => {
   return (
     <div className="flex mt-8">
       <div
-        className={`block overflow-auto scroll-bar w-5/6 h-screen font-primary_font text-text1 dark:text-text2 justify-center items-center max-lg:w-full m-auto ml-[5%] max-sm:ml-5 max-sm:w-full`}
+        className={`block w-5/6 h-screen font-primary_font text-text1 dark:text-text2 justify-center items-center max-lg:w-full m-auto ml-[5%] max-sm:ml-5 max-sm:w-full`}
       >
         <span className="w-full flex justify-center text-3xl text-center ">Explore Profiles</span>
       <div className="w-full gap-2 flex align-center justify-center z-10"> 

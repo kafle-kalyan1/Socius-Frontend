@@ -2,41 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { ShortcutKey, sanitizeHtml } from '../../Library/Others/Others';
 import { FaSpinner } from 'react-icons/fa'; // Assuming you're using react-icons for icons
 
-const Button = ({ width, text, type, onClick, shortCutKey, icon, disabled=false }) => {
+const Button = ({ width, text, type, onClick, shortCutKey, icon, disabled=false,className }) => {
   const [isAltPressed, setIsAltPressed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === 'Alt') {
-        event.preventDefault();
-        setIsAltPressed(true);
-      }
-    };
-
-    const handleKeyUp = (event) => {
-      event.preventDefault();
-      if (event.key === 'Alt') {
-        setIsAltPressed(false);
-      }
-    };
-
-    let shortCutKeyPressed;
-    if (shortCutKey) {
-      shortCutKeyPressed = ShortcutKey(shortCutKey, handleClick);
-    }
-
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('keyup', handleKeyUp);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('keyup', handleKeyUp);
-      if (shortCutKeyPressed) {
-        shortCutKeyPressed();
-      }
-    };
-  }, [shortCutKey]);
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -50,16 +19,8 @@ const Button = ({ width, text, type, onClick, shortCutKey, icon, disabled=false 
     }
   };
 
-  const getWidthClass = () => {
-    if (typeof width === 'number' || (typeof width === 'string' && /^\d+(\.\d+)?(px|%)?$/.test(width))) {
-      return `w-${width}`;
-    }
-    return 'w-max';
-  };
 
-  const widthClass = getWidthClass();
-
-  const buttonClasses = `flex cursor-pointer text-center px-4 py-1 tracking-wide text-textPrimary dark:text-textPrimary transition-colors duration-200 transform ${widthClass} rounded-md`;
+  const buttonClasses = `flex cursor-pointer text-center px-4 py-1 tracking-wide text-textPrimary dark:text-textPrimary transition-colors duration-200 transform rounded-md`;
 
   const typeClasses = {
     primary: 'bg-primary_btn_dark hover:bg-primary_btn_dark_hover text-white focus:outline-none focus:bg-primary_btn_dark_hover',
@@ -76,7 +37,7 @@ const Button = ({ width, text, type, onClick, shortCutKey, icon, disabled=false 
     <button
       onClick={(e)=>handleClick(e)}
       type="submit"
-      className={`transition focus:ring-2 focus:border-main_text  disabled:cursor-not-allowed ease-linear duration-100 shadow-md ${buttonClasses} ${typeClass} hover:shadow-lg justify-center`}
+      className={`transition focus:ring-2  focus:border-main_text  disabled:cursor-not-allowed disabled:opacity-50 ease-linear duration-100 shadow-md ${buttonClasses} ${typeClass} hover:shadow-lg justify-center text-text1 dark:text-text2 ${className}`}
       disabled={disabled}
     >
           {icon && <span className="mt-1 mr-3">{icon}</span>}

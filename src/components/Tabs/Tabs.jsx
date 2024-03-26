@@ -4,7 +4,7 @@ export default function CustomSegmentedControl ({ options, value, onChange }) {
        {options.map((option, index) => (
          <button
            key={index}
-           className={`flex gap-3 text-center justify-center flex-grow p-2 ${value == option.value ? 'bg-blue-500 text-text1 dark:text-text2' : 'text-text1 dark:text-text2'}`}
+           className={`flex gap-3 text-center justify-center flex-grow p-2 ${value == option.value ? 'bg-blue-500 text-text1 dark:text-text2' : 'text-text1 dark:text-text2 border-r-2'}`}
            onClick={() => onChange(option.value)}
          >
          {option?.icon}

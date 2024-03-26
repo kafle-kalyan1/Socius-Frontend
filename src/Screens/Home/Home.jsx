@@ -14,7 +14,6 @@ import NotificationPannel from "../../components/Notification/NotificationPannel
 import {defaultProfilePic, urltoBase64} from './../../Library/Others/Others';
 import { hideBigPopup } from "../../components/BigPopup/BigPopup";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import imageToBase64 from "image-to-base64";
 
 
 const Home = () => {
@@ -34,25 +33,26 @@ const Home = () => {
   }
 
   useEffect(() => {
-    const getPosts = async () => {
-      try {
-        const response = await APICall(`/api/posts/getPosts/?sort=${sort}&page=${page}`, "GET", {});
-        setPosts(prevPosts => [...prevPosts, ...response]); 
-        setHasMore(true);
-        const setting_response = await APICall("/api/utils/getSettings/", "GET", {});
-        if(setting_response.status === 200){
-          if(setting_response.data.sync_post_for_offline == true){
-            storePostsInIndexedDB(response);
-          }
-        }
-      } catch (error) {
-        toast.error("Something went wrong!");
-      }
-    };
   
     getPosts();
 
   }, [sort, page]);
+
+  const getPosts = async () => {
+    try {
+      const response = await APICall(`/api/posts/getPosts/?sort=${sort}&page=${page}`, "GET", {});
+      setPosts(prevPosts => [...prevPosts, ...response]); 
+      setHasMore(true);
+      const setting_response = await APICall("/api/utils/getSettings/", "GET", {});
+      if(setting_response.status === 200){
+        if(setting_response.data.sync_post_for_offline == true){
+          storePostsInIndexedDB(response);
+        }
+      }
+    } catch (error) {
+      toast.error("Something went wrong!");
+    }
+  };
 
   const imageUrlToBase64 = async (url) => {
     const data = await fetch(url);
@@ -69,7 +69,7 @@ const Home = () => {
   };
 
   function storePostsInIndexedDB(posts) {
-    const request = indexedDB.open('postsDB', 5);
+    const request = indexedDB.open('postsDB', 6);
   
     request.onerror = function(event) {
       console.error('Database error:', event.target.error);
@@ -94,8 +94,8 @@ const Home = () => {
         if (post.images && post.images.length > 0) {
           const base64 = await imageUrlToBase64(post.images[0]);
           post.image = base64;
-          objectStore.add(post);
         }
+        objectStore.add(post);
       }
     }
   }
@@ -140,16 +140,16 @@ const Home = () => {
           defaultValue={sort}
           optionFilterProp="children"
           options={filters}
-          onChange={(value) => setSort(value)}
+          onChange={(value) => {setSort(value); setPosts([]); setPage(1);}}
           />
         </div>
       </div>
-      <InfiniteScroll
+        <InfiniteScroll
         dataLength={posts.length}
         next={() => setPage(prevPage => prevPage + 1)}
-        hasMore={hasMore} // Use the hasMore state
+        hasMore={hasMore}
         loader={<h4>Loading...</h4>}
-      >
+        >
 
           {posts.length > 0 && posts.map((post, i) => (
             <Post
@@ -167,6 +167,8 @@ const Home = () => {
               is_verified={false} 
               is_suspicious={false} 
               shares={0}
+              afterDelete={()=>getPosts()}
+              is_post_saved={post.is_post_saved}
             />
           ))}
       </InfiniteScroll>

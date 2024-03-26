@@ -10,10 +10,10 @@ const LostPage = () => {
     <div className="relative">
       <div className="absolute">
         <div className="">
-          <h1 className="my-2 text-gray-800 font-bold text-2xl">
+          <h1 className="my-2 text-text1 dark:text-text2 font-bold text-2xl">
             Looks like you've found the doorway to the great nothing
           </h1>
-          <p className="my-2 text-gray-800">
+          <p className="my-2 text-text1 dark:text-text2">
             Sorry about that! Please visit our hompage to get where you need to
             go.
           </p>

@@ -24,7 +24,7 @@ function App() {
   
 const postSavedPosts = async () => {
   let db;
-  let request = indexedDB.open("offlinePosts", 1);
+  let request = indexedDB.open("offlinePosts", 2);
 
   request.onsuccess = function(event) {
     db = event.target.result;
@@ -39,11 +39,11 @@ const postSavedPosts = async () => {
         // Your existing code to post data
         let urls = [];
         console.log(post);
-        // if(post.image){
+        if(post.image){
         //   for (const element of post.image) {
             const imgLinks = await uploadCloudinary(post.image);
             urls = [...urls, imgLinks.url];
-          // }
+          }
         // }
         const final_data = {
           images: urls,

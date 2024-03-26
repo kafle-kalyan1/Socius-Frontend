@@ -17,7 +17,7 @@
 </body>
 <script>
   function getPostsFromIndexedDB() {
-    const request = indexedDB.open('postsDB', 3);
+    const request = indexedDB.open('postsDB', 6);
   
     request.onsuccess = function(event) {
       const db = event.target.result;

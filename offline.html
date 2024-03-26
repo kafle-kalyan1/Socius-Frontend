@@ -633,13 +633,17 @@
 
       document.getElementById('uploadButton').addEventListener('click', () => {
  
+        if(document.querySelector("textarea").value == "" && document.querySelector("input[type=file]").files.length === 0) {
+          alert("Please write something or upload an image");
+          return;
+        }
         savePostOnIndexedDB();
      
       });
       
       function savePostOnIndexedDB() {
         let db;
-        let request = indexedDB.open("offlinePosts", 1);
+        let request = indexedDB.open("offlinePosts", 2);
       
         request.onupgradeneeded = function(event) {
           db = event.target.result;
@@ -664,15 +668,43 @@
             console.log("Post saved successfully.");
             alert("Post saved successfully.");
             document.querySelector("textarea").value = "";
-            //remove image
             document.querySelector("input[type=file]").value = "";
+            //remove the image from the preview
+            previewImage.src = "";
+            //remove the uploaded file name
+            uploadedFileName.innerHTML = "";
+            // remove the uploaded file counter
+            uploadedFileCounter.innerHTML = "";
+            // remove the uploaded file icon text
+            uploadedFileIconText.innerHTML = "";
+            // remove the uploaded file info active class
+            uploadedFileInfo.classList.remove("uploaded-file__info--active");
+            // remove the uploaded file open class
+            uploadedFile.classList.remove("uploaded-file--open");
+            // remove the file details open class
+            fileDetails.classList.remove("file-details--open");
+            // remove the upload area open class
+            uploadArea.classList.remove("upload-area--open");
+            // remove the drop zoon uploaded class
+            dropZoon.classList.remove("drop-zoon--Uploaded");
+            // remove the drop zoon over class
+            dropZoon.classList.remove("drop-zoon--over");
+            // remove the text from the drop zoon
+            dropZoon.querySelector(".drop-zoon__paragraph").innerHTML = "Drop your file here or Click to browse";
+            // remove the preview image
+            previewImage.style.display = "none";
+            // remove the loading text
+            loadingText.style.display = "none";
 
           };
         };
       }
 
       function showALert() {
-        alert("You are online now");
+        var confirm = confirm("You are online now, do you want to switch to online mode?");
+        if(confirm) {
+          window.location.reload();
+        }      
       }
      window.addEventListener('online', showALert);
 

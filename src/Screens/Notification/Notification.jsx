@@ -6,6 +6,7 @@ import comment_icon from '/src/assets/Post/comment.jpg'
 import heart_icon from '/src/assets/Post/heart.jpg'
 import friend_icon from '/src/assets/Post/friend.jpg'
 import { useNavigate } from 'react-router-dom';
+import APICall from '/src/Library/API/APICall';
 
 
 // Reusable Notification component
@@ -29,9 +30,12 @@ const Notifications = () => {
   const { notificationList,setNotificationList } = useContext(NotificationContext);
   const navigate = useNavigate();
 
-  const clearNotifications = () => {
-    setNotificationList([]);
-    toast.success("All notifications cleared!");
+  const clearNotifications = async () => {
+    const response = await APICall('/api/notifications/markallnotificationasread/', 'GET', {});
+    if(response.status == 200){
+      setNotificationList([]);
+      toast.success(response.message);
+    }
     }
     
   const findIcon = (type) => {

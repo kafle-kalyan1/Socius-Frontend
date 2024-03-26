@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -182,4 +183,11 @@
   border-radius: 4px;
   border: 4px groove #537aee;
 }
+
+@media print {
+  .hide-for-print {
+    display: none !important;
+  }
+}
+
 

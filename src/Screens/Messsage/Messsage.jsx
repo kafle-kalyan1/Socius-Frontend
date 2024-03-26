@@ -64,6 +64,7 @@ const Message = () => {
 
         newSocket.onmessage = (event) => {
           let new_message = JSON.parse(event.data);
+          console.log(new_message);
           setMessages((messages) => [
             ...messages,
             {
@@ -111,7 +112,7 @@ const Message = () => {
       setMessages([]);
     }
 
-  }, [currentChatUser, page]);
+  }, [currentChatUser]);
 
   useEffect(() => {
     scrollChatToBottom();
@@ -123,12 +124,13 @@ const Message = () => {
         `/api/chat/getMessages/?username=${currentChatUser}&page=${page}`,
         "GET"
       );
-      if (response.data.length === 0) {
+      if (response.data.length == 0) {
         setHasMore(false);
       } else {
-        const reversedMessages = response.data;
-        setMessages((prevMessages) => [...reversedMessages, ...prevMessages]);
-        setPage((prevPage) => prevPage + 1);
+        if(page == 1)
+          setMessages(response.data.reverse());
+        else
+          setMessages((prevMessages) => [...response.data, ...prevMessages]);
         setCurrentChatUserDetails(response.user);
         setIsFriend(response.is_friend)
       }
@@ -142,6 +144,7 @@ const Message = () => {
       message: "",
     },
     onSubmit: (values) => {
+      if(values.message.trim() === "") return;
       if (socket && socket.readyState === WebSocket.OPEN) {
         socket.send(
           JSON.stringify({
@@ -151,6 +154,12 @@ const Message = () => {
             timestamp: new Date(),
           })
         );
+        console.log({
+          message: EncryptString(values.message),
+            to: currentChatUser,
+            from: user,
+            timestamp: new Date()
+        });
       } else {
         console.error("WebSocket not ready yet.");
       }
@@ -169,18 +178,19 @@ const Message = () => {
 
   const handleLoadMore = () => {
     setPage((prevPage) => prevPage + 1);
+    fetchMessages();
   };
 
   return (
     <div
-      className={`block overflow-auto scroll-bar w-full h-screen font-primary_font justify-center items-center max-lg:w-full m-auto ml-0 max-sm:w-full max-lg:h-[100%]`}
+      className={`block overflow-x-fixed w-full font-primary_font justify-center items-center max-lg:w-full m-auto ml-0 max-sm:w-full `}
     >
       <div className="max-md:w-full max-sm:w-full">
-        <div className={`flex h-screen`}>
-          <div className={`flex h-full w-fit xl:w-[30%] md:w-[40%] ${
+        <div className={`flex h-screen  max-md:h-[92vh]`}>
+          <div className={`flex h-full w-[40%] max-md:w-[100%] ${
               currentChatUser
-                ? "max-sm:hidden"
-                : "max-sm:block"
+                ? "max-md:hidden"
+                : "max-md:block"
             }
              `}>
           <FriendList
@@ -256,19 +266,21 @@ const Message = () => {
                     </span>
                   </div>
                 )}
-              <InfiniteScroll
-                dataLength={messages.length}
-                next={handleLoadMore}
-                hasMore={hasMore}
-                scrollableTarget="chatContainer"
-              >
-                {messages.reverse().map(
+
+              <div className="flex flex-col gap-2 justify-center items-center">
+                  <Button
+                    text="Load More"
+                    type="primary"
+                    onClick={handleLoadMore}
+                    disabled={!hasMore}
+                  />
+                </div>
+                {messages.map(
                   (
-                    msg,
-                    index // Reverse the order of the messages
+                    msg
                   ) => (
                     <div
-                      key={index}
+                      key={msg.timestamp + msg.id}
                       className={`mb-2 flex w-full gap-4 ${
                         msg?.sender?.username == currentChatUser
                           ? "justify-start"
@@ -310,10 +322,9 @@ const Message = () => {
                   )
                 )}
                 
-              </InfiniteScroll>
             </div>
             {currentChatUser && (
-              <div className=" flex justify-between gap-2 py-0 p-4 bg-cardBg dark:bg-darkcardBg border-t border-gray-300 max-md:fixed max-md:bottom-14">
+              <div className=" flex justify-between gap-2 py-0 p-4 bg-cardBg dark:bg-darkcardBg border-t border-gray-300 max-md:fixed max-md:bottom-16">
                 <>
                   <TextArea
                     formik={formik}

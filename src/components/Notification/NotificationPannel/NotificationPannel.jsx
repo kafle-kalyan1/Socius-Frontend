@@ -13,11 +13,13 @@ const NotificationPannel = () => {
   const { notificationList,setNotificationList } = useContext(NotificationContext);
   const navigate = useNavigate();
 
-  const clearNotifications = () => {
-    setNotificationList([]);
-    toast.success("All notifications cleared!",{
-      position: 'top-center'
-    });
+  const clearNotifications = async () => {
+      const response = await APICall('/api/notifications/markallnotificationasread/', 'GET', {});
+      if(response.status == 200){
+        setNotificationList([]);
+        toast.success(response.message);
+      }
+
     }
 
   const findIcon = (type) => {
@@ -45,7 +47,7 @@ const NotificationPannel = () => {
         <div className="flex items-center justify-between">
           <div className="inline-flex items-center justify-between w-full">
         <h3 className="font-bold text-xl sm:text-2xl text-gray-800  dark:text-white">Notifications</h3>
-        <button className="inline-flex text-sm bg-white justify-center px-4 py-2 w-auto text-red-500 items-center rounded font-medium shadow border focus:outline-none transform active:scale-75 transition-transform duration-700 hover:bg-red-500 hover:text-white hover:-translate-y-1 hover:scale-110 dark:hover:bg-white dark:text-gray-800 dark:hover:text-gray-800"
+        <button className="inline-flex text-sm bg-white justify-center px-4 py-2 w-2/5 text-red-500 items-center rounded font-medium shadow border focus:outline-none transform active:scale-75 transition-transform duration-700 hover:bg-red-500 hover:text-white hover:-translate-y-1 hover:scale-110 dark:hover:bg-white dark:text-gray-800 dark:hover:text-gray-800"
         onClick={() => clearNotifications()}
         >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 sm:mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
