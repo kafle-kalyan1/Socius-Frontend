@@ -224,6 +224,8 @@ export const useThemeDetector = () => {
 
 export const socketLink = "ws://localhost:8000";
 
+export const defaultURL = "http://127.0.0.1:8000";
+
 export const urltoBase64 = (url) =>
 imageToBase64(url) // Path to the image
 .then(

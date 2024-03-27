@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import {  AudioRecorder } from 'react-audio-voice-recorder';
 import { LeftCircleOutlined, RightCircleOutlined } from "@ant-design/icons";
 import { useNavigate, useParams } from "react-router-dom";
 import APICall from "../../Library/API/APICall";
-import { copy, defaultProfilePic, socketLink, timeAgo } from "../../Library/Others/Others";
+import { copy, defaultProfilePic, defaultURL, socketLink, timeAgo } from "../../Library/Others/Others";
 import PostSkeleton from "./PostSkeleton";
 import { MenuContext } from '/src/context/MenuContext/MenuContext';
 import CustomPopover from "../PopOver/PopOver";
@@ -18,6 +19,9 @@ import toast from "react-hot-toast";
 import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
 import { w3cwebsocket } from "websocket";
 import Alert, { showModal } from "../Alert/Alert";
+import axios from "axios";
+import Cookies from "js-cookie";
+import AudioPlayer from "./Component/AudioPlayer";
 
 
 
@@ -27,19 +31,39 @@ const SinglePost = () => {
    const { isMobile } = useContext(MenuContext);
    const {profile} = useContext(ProfileContext)
    const [isLoading, setIsLoading] = useState(true)
+
+   const [audioBlob, setAudioBlob] = useState(null);
+   const [isRecording, setIsRecording] = useState(false);
+   const [audioURL, setAudioURL] = useState(null);
    const comment_ref = useRef()
    const formik = useFormik({
       initialValues: {
          comment:"",
-         post_id:null
+         post_id:null,
+         voice_comment:null
       },
       onSubmit: async (values)=>{
-         if(values.comment.trim() == ""){
-            toast.error("Please enter comment")
-            comment_ref.current.focus()
-            return
-         }
-        let response = await APICall(`/api/posts/commentPost/`,"POST",values)
+         if (values.comment.trim() === "" && !audioBlob) {
+            toast.error("Please enter a comment or record a voice message");
+            comment_ref.current.focus();
+            return;
+          }
+        
+          const formData = new FormData();
+          formData.append("post_id", values.post_id);
+          formData.append("comment", values.comment);
+        
+          if (audioBlob) {
+            formData.append("voice_comment", audioBlob, "voice_comment.wav");
+          }       
+          const access_token = Cookies.get("access");
+
+        let response = await axios.post('/api/posts/commentPost/',formData,{
+         headers: {
+               'Content-Type': 'multipart/form-data',
+               'Authorization': `Bearer ${access_token}`,
+            },
+     })
         if(response.status == 201){
             const newSocket = new w3cwebsocket(`${socketLink}/notifications/${profile.username}/`);
           newSocket.onopen = () => {
@@ -83,7 +107,6 @@ const SinglePost = () => {
    })
 
    
-   
    useEffect(()=>{
       getData()
    },[])
@@ -92,6 +115,7 @@ const SinglePost = () => {
       if(id){
          APICall(`/api/posts/getPost/${id.id}/`,"GET",{}).then((r)=>{
             setPostData((p)=>({
+               ...p,
                id:r.post.id,
                username:r.post.user.username,
                email:r.post.user.email,
@@ -170,14 +194,42 @@ const SinglePost = () => {
 </div>
 
 <div className="w-full flex justify-end px-3">
-   <Button
-   text={"<u>C</u>omment"}
-   icon={<MdComment/>}
-   onClick={()=>{formik.submitForm()}}
-   shortCutKey={"c"}
-   width="40"
-/>
+  <AudioRecorder
+    onRecordingComplete={(blob) => setAudioBlob(blob)}
+    recorderType="audio/wav"
+    isRecording={isRecording}
+    onRecordingStart={() => setIsRecording(true)}
+    onRecordingStop={() => {
+      setIsRecording(false);
+      setAudioURL(URL.createObjectURL(audioBlob));
+    }}
+    onNotAllowedOrFound={(error) => toast.error('Permission error:', error)}
+  />
+  <Button
+    text={"<u>C</u>omment"}
+    icon={<MdComment />}
+    onClick={() => {
+      formik.submitForm();
+      // setAudioURL(null);
+      // setAudioBlob(null);
+    }}
+    shortCutKey={"c"}
+    width="40"
+  />
 </div>
+{audioURL && (
+  <div>
+    {/* <AudioReplay audioURL={audioURL} />
+    <Button
+      text="Reset"
+      onClick={() => {
+        setAudioURL(null);
+        setAudioBlob(null);
+      }}
+    /> */}
+  </div>
+)}
+
 </div>
 
 <hr />
@@ -213,6 +265,9 @@ const SinglePost = () => {
             <p className="text-text1 dark:text-text2 mt-2">
                 {cur.text}
             </p>
+            {cur.voice_comment && (
+                <AudioPlayer audioUrl={defaultURL+cur.voice_comment} />
+              )}
 
         </div>
       )
@@ -221,7 +276,7 @@ const SinglePost = () => {
 
     </div>
 
-
+ 
    
 
 
