@@ -43,11 +43,13 @@ import { jwtDecode } from "jwt-decode";
 import ReactFacebookLogin from "react-facebook-login";
 import { FaGenderless } from "react-icons/fa";
 import { BsGenderAmbiguous } from "react-icons/bs";
+import CookieConsent from "./Cookies/Cookies";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(true);
   const [isOTP, setIsOTP] = useState(null);
   const [isTermsShown, setIsTermsShown] = useState(false);
+  const [showCookieConsent, setShowCookieConsent] = useState(true); 
 
   const navigate = useNavigate();
 
@@ -337,6 +339,9 @@ const Register = () => {
           </p>
         </div>
       </div>
+      {showCookieConsent && (
+        <CookieConsent onAcceptAll={() => setShowCookieConsent(false)} onCustomPermissions={() => setShowCookieConsent(false)} />
+      )}
       {/* <Footer /> */}
     </>
   );

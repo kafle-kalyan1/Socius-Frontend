@@ -29,6 +29,7 @@ import { MessageNotificationContext } from "../../context/NotificationContext/Me
 import { NotificationContext } from "../../context/NotificationContext/NotificationContext";
 import { MdReport, MdReportGmailerrorred } from "react-icons/md";
 import { BsSave2, BsSave2Fill } from "react-icons/bs";
+import { Menu, MenuItem } from "@szhsin/react-menu";
 
 export const SidebarContext = createContext();
 
@@ -163,12 +164,29 @@ export function Sidebarr({ children }) {
                   </span>
                 </Tooltip>
               </div>
-              <CustomPopover
-                content="Options"
-                buttons={buttons}
-                mainButton={<MoreVertical cursor="pointer" size={20} />}
-                placement="top"
-              />
+              <Menu
+                menuButton={
+                  <MoreVertical
+                    size={20}
+                    className="text-gray-600 dark:text-white cursor-pointer"
+                  />
+                }
+                transition
+                className={""}
+                placement={"top"}
+                direction="top"
+                position={"auto"}
+                portal="document.body"
+
+              >
+               <div className="" >
+               {buttons.map((button, index) => (
+                  <MenuItem key={index} onClick={button.onClick}>
+                    {button.label}
+                  </MenuItem>
+                ))}
+               </div>
+                </Menu>
             </div>
           )}
         </div>

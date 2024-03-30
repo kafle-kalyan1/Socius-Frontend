@@ -179,7 +179,9 @@ const SinglePost = () => {
   return (
 <div className={` overflow-auto scrollbar  bg-cardBg2 dark:bg-darkcardBg2 block w-full m-auto max-sm:m-0 max-sm:p-0 h-fit mb-20 font-primary_font justify-center items-center rounded-lg border p-10`}>
    {
-   isLoading ? <PostSkeleton/> : <> <SinglePostComponent postData={postData}/>
+   isLoading ? <PostSkeleton/> : <>
+   
+    <SinglePostComponent postData={postData}/>
 
    <div className="m-2 mt-0">
 
@@ -195,16 +197,40 @@ const SinglePost = () => {
 
 <div className="w-full flex justify-end px-3">
   <AudioRecorder
-    onRecordingComplete={(blob) => setAudioBlob(blob)}
+    onRecordingComplete={(blob) => {setAudioBlob(blob)
+    console.log(blob)
+      setAudioURL(URL.createObjectURL(blob));
+
+    }}
     recorderType="audio/wav"
     isRecording={isRecording}
     onRecordingStart={() => setIsRecording(true)}
     onRecordingStop={() => {
       setIsRecording(false);
-      setAudioURL(URL.createObjectURL(audioBlob));
+      alert("Recording Stop")
     }}
     onNotAllowedOrFound={(error) => toast.error('Permission error:', error)}
   />
+  {
+    audioBlob && <Button
+    text="Reset"
+    onClick={() => {
+      setAudioURL(null);
+      setAudioBlob(null);
+    }}
+  />
+  }
+  
+
+  {/* when recording is complete we can play audio we recorder */}
+
+  {
+    audioBlob && (
+      <audio controls src={audioURL} />
+    )
+  }
+
+  
   <Button
     text={"<u>C</u>omment"}
     icon={<MdComment />}
@@ -217,18 +243,7 @@ const SinglePost = () => {
     width="40"
   />
 </div>
-{audioURL && (
-  <div>
-    {/* <AudioReplay audioURL={audioURL} />
-    <Button
-      text="Reset"
-      onClick={() => {
-        setAudioURL(null);
-        setAudioBlob(null);
-      }}
-    /> */}
-  </div>
-)}
+
 
 </div>
 

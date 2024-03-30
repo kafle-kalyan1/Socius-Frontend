@@ -169,6 +169,7 @@ const Home = () => {
               shares={0}
               afterDelete={()=>getPosts()}
               is_post_saved={post.is_post_saved}
+              is_deep_fake={post.is_deep_fake}
             />
           ))}
       </InfiniteScroll>

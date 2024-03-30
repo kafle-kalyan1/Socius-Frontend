@@ -15,8 +15,8 @@ import { useNavigate } from "react-router-dom";
 import CustomPopover from "../PopOver/PopOver";
 import '/src/index.css'
 import { copy, dateFormat, defaultProfilePic, socketLink, timeAgo } from "../../Library/Others/Others";
-import { FaThumbsUp } from "react-icons/fa";
-import { MoreHorizontalIcon, ThumbsUp, ThumbsUpIcon } from "lucide-react";
+import { FaPrint, FaThumbsUp } from "react-icons/fa";
+import { MoreHorizontalIcon, Printer, PrinterIcon, ThumbsUp, ThumbsUpIcon } from "lucide-react";
 import APICall from "../../Library/API/APICall";
 import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
 import { w3cwebsocket } from "websocket";
@@ -32,6 +32,8 @@ import ReportPopup from "./Component/ReportPopup";
 import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
+import ContextMenu from "../ContextMenu/ContextMenu";
+import { MdOutlineDelete, MdOutlineDownload, MdOutlineImage, MdOutlinePrint, MdOutlineQrCode, MdOutlineReport, MdOutlineWarning } from "react-icons/md";
 
 
 
@@ -48,7 +50,8 @@ const Post = ({
   comments,
   shares,
   fullname,
-  afterDelete
+  afterDelete,
+  is_deep_fake
 }) => {
   
   const [showFullText, setShowFullText] = useState(false);
@@ -74,8 +77,10 @@ const Post = ({
     setCount({likes: likes, comments: comments})
   }, [likes, comments])
 
-  function openImageinNewTab(e) {
-    window.open(e.target.src, "_blank");
+  function openImageinNewTab() {
+    //open current image in new tab according to image index
+    const url = images[currentImageIndex];
+    window.open(url, "_blank");
   }
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -393,16 +398,24 @@ const MoreOptionButton = () => (
       /> */}
        <Menu menuButton={<MenuButton> <MoreHorizontalIcon /> </MenuButton>} transition>
       <MenuItem>
-        <button onClick={ReportPost}>Report</button>
+        <button className="flex items-center gap-2 cursor-pointer" onClick={ReportPost}>
+        <MdOutlineReport />
+        Report</button>
       </MenuItem>
       <MenuItem>
-        <button onClick={PrintPost}>Print</button>
+        <button className="flex items-center gap-2 cursor-pointer" onClick={PrintPost}>
+        <MdOutlinePrint />
+        Print</button>
       </MenuItem>
       <MenuItem>
-        <button onClick={showQRModal}>Show QR</button>
+        <button className="flex items-center gap-2 cursor-pointer" onClick={showQRModal}>
+        <MdOutlineQrCode />
+        Show QR</button>
       </MenuItem>
       {username == profile.username && <MenuItem>
-        <button onClick={(e)=> DeletePost(e,id)}>Delete</button>
+        <button className="flex items-center gap-2 cursor-pointer" onClick={(e)=> DeletePost(e,id)}>
+        <MdOutlineDelete />
+        Delete</button>
       </MenuItem>}
     </Menu>
       </button>
@@ -418,10 +431,24 @@ const MoreOptionButton = () => (
     console.log(currentSlide);
   };
 
+  const [showContextMenu, setShowContextMenu] = useState(false);
+  const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
+
+  const handleContextMenu = (event) => {
+    event.preventDefault();
+    setShowContextMenu(true);
+    setAnchorPoint({ x: event.clientX, y: event.clientY });
+  };
+
+  const handleContextMenuClose = () => {
+    setShowContextMenu(false);
+  };
+
   return (
     <div
     className="border text-card-foreground max-w-xl mx-auto mt-8 p-5 bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 shadow-md rounded-md"
     data-v0-t="card"
+    onContextMenu={handleContextMenu}
   >
     <div className="flex items-center justify-between">
       <div className="flex items-center">
@@ -438,7 +465,14 @@ const MoreOptionButton = () => (
         </span>
         <div>
           <h4 className=" font-primary_font tracking-wide text-md cursor-pointer" onClick={(e) =>{ e.stopPropagation(); viewProfile(username)}}>{username}</h4>
-          <p className="font-primary_font tracking-wide text-sm text-gray-500" title={dateFormat(timestamp,true)}>{timeAgo(timestamp)}</p>
+          <p className="font-primary_font tracking-wide text-sm text-gray-500" title={dateFormat(timestamp,true)}>{timeAgo(timestamp)}
+          {
+            is_deep_fake ?
+              <WarningOutlined className="ml-6 text-red-500" title="Possible Deepfake Image" />
+              :
+              null
+          }
+          </p>
           
         </div>
         
@@ -482,6 +516,87 @@ const MoreOptionButton = () => (
       </div>
       <SaveButton/>
     </div>
+    {showContextMenu && (
+        <ContextMenu
+          anchorPoint={anchorPoint}
+          handleClose={handleContextMenuClose}
+        >
+
+          <div className="flex flex-col gap-2">
+
+            <button
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={ReportPost}
+            >
+              <MdOutlineReport />
+              Report
+            </button>
+            <hr />
+            <button
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={PrintPost}
+            >
+              <MdOutlinePrint />
+              Print
+            </button>
+            <hr />
+            <button
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={showQRModal}
+            >
+              <MdOutlineQrCode />
+              Show QR
+            </button>
+            <hr />
+            {username == profile.username && (
+              <>
+              <button
+                className="flex items-center gap-2 cursor-pointer"
+                onClick={(e) => DeletePost(e, id)}
+              >
+                <MdOutlineDelete />
+                Delete
+              </button>
+              <hr />
+              </>
+            )}
+
+
+              {
+                images && images.length > 0 && (
+                  <>
+                  <button
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={openImageinNewTab}
+            >
+              <MdOutlineImage />
+              View Image
+            </button>
+                  <hr />
+            <button
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={() => {
+                images.forEach((image) => {
+
+                  const link = document.createElement("a");
+                  link.href = image;
+                  link.download = "image";
+                  link.click();
+                  link.remove();
+                });
+              }}
+            >
+              <MdOutlineDownload />
+              Download Images
+            </button>
+                  </>
+                )
+              }
+
+          </div>
+
+        </ContextMenu>
+      )}
   </div>
 
   );

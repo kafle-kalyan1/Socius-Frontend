@@ -47,7 +47,18 @@ const ImageUploader = ({ formik, name,title,max, Icon }) => {
       </span>
       <span className="flex w-full justify-center">
 
-    <ImgCrop rotationSlider>
+    {/* <ImgCrop 
+    rotationSlider
+    modalTitle="Crop Image"
+    modalCancel='Cancel'
+    modalOk='Done'
+    modalClassName=' text-textPrimary dark:text-dark_textPrimary border'
+    quality={1}
+    aspectSlider={true}
+    grid={true}
+    showReset={true}
+    resetText='Reset'    
+    > */}
       <Upload
         action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
         listType="picture-card"
@@ -58,7 +69,7 @@ const ImageUploader = ({ formik, name,title,max, Icon }) => {
       >
         {fileList.length < (max?max:1) && '+ Upload'}
       </Upload>
-    </ImgCrop>
+    {/* </ImgCrop> */}
       </span>
       {formik?.touched[name] && formik?.errors[name] && (
         <h3 className="text-xs text-error_red">{formik?.errors[name]}</h3>
