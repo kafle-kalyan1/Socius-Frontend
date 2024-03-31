@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import CustomPopover from "../PopOver/PopOver";
 import '/src/index.css'
 import { copy, dateFormat, defaultProfilePic, socketLink, timeAgo } from "../../Library/Others/Others";
-import { FaPrint, FaThumbsUp } from "react-icons/fa";
+import { FaHackerNews, FaPrint, FaThumbsUp } from "react-icons/fa";
 import { MoreHorizontalIcon, Printer, PrinterIcon, ThumbsUp, ThumbsUpIcon } from "lucide-react";
 import APICall from "../../Library/API/APICall";
 import { ProfileContext } from "../../context/ProfileContext/ProfileContext";
@@ -34,6 +34,7 @@ import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import ContextMenu from "../ContextMenu/ContextMenu";
 import { MdOutlineDelete, MdOutlineDownload, MdOutlineImage, MdOutlinePrint, MdOutlineQrCode, MdOutlineReport, MdOutlineWarning } from "react-icons/md";
+import { BsRobot } from "react-icons/bs";
 
 
 
@@ -417,6 +418,17 @@ const MoreOptionButton = () => (
         <MdOutlineDelete />
         Delete</button>
       </MenuItem>}
+      {
+        profile && profile.is_staff && images && images.length > 0 && (
+          <>
+          <MenuItem>
+          <button className="flex items-center gap-2 cursor-pointer" onClick={(e)=> DeletePost(e,id)}>
+        <BsRobot />
+        Report DeepFake</button>
+          </MenuItem>
+          </>
+        )
+      }
     </Menu>
       </button>
 )

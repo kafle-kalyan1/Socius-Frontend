@@ -27,7 +27,7 @@ import { showModal, hideAlertModal } from "/src/components/Alert/Alert";
 import { defaultProfilePic } from "../../Library/Others/Others";
 import { MessageNotificationContext } from "../../context/NotificationContext/MessageNotificationContext";
 import { NotificationContext } from "../../context/NotificationContext/NotificationContext";
-import { MdReport, MdReportGmailerrorred } from "react-icons/md";
+import { MdAdminPanelSettings, MdOutlineAdminPanelSettings, MdReport, MdReportGmailerrorred } from "react-icons/md";
 import { BsSave2, BsSave2Fill } from "react-icons/bs";
 import { Menu, MenuItem } from "@szhsin/react-menu";
 
@@ -318,9 +318,9 @@ export default function SIdebar() {
         {
           profile && profile.is_staff && (
             <SidebarItem
-          icon={<MdReportGmailerrorred size={20} />}
-          text="Manage Post Reports"
-          path="/admin/posts/reports"
+          icon={<MdOutlineAdminPanelSettings size={20} />}
+          text="Admin"
+          path="/admin/posts/deepfake"
           />
           )
         }
