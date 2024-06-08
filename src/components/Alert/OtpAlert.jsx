@@ -4,6 +4,8 @@ import OtpInput from 'react-otp-input';
 import {toast} from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 import Button from '../Button/Button';
+import APICall from '@/Library/API/APICall';
+import axios from 'axios';
 
 const OtpAlert = ({ title, message, icon, link, submit,data }) => {
   const [otp, setOtp] = useState('');
@@ -27,6 +29,27 @@ const OtpAlert = ({ title, message, icon, link, submit,data }) => {
     
   };
 
+  const resendOtp = () => { 
+    axios.post("api/auth/resendOTP/", {username:data.username}).then((res) => {
+      if (res.status === 200) {
+        toast.success(res.data.message, {
+          duration: 3000,
+        });
+      } else {
+        toast.error(res.data.message, {
+          duration: 3000,
+        });
+      }
+    }
+    ).catch((err) => {
+      toast.error(err.response?.data?.message ? err.response?.data?.message: "Something went wrong", {
+        duration: 3000,
+      });
+    });
+  }
+
+
+
   return (
     <div className="min-w-screen h-screen animated fadeIn faster left-0 top-0 flex justify-center items-center outline-none focus:outline-none bg-no-repeat bg-center bg-cover bg-opacity-60 fixed inset-0 bg-black backdrop-blur-md z-50" id="modal-id" ref={input_ref}>
       <div className="w-full max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg bg-cardBg dark:bg-darkcardBg" ref={input_ref}>
@@ -35,12 +58,12 @@ const OtpAlert = ({ title, message, icon, link, submit,data }) => {
             <div className="flex justify-center">{icon}</div>
             <h2 className="text-xl  text-text1 dark:text-text2  font-bold py-4 text-primary">{title}</h2>
             <p className="text-sm text-text1 dark:text-text2 px-8">{message}</p>
-            <a
-              href="/login"
-              className="font-medium text-main_text hover:underline"
+            <h2
+              onClick={resendOtp}
+              className="font-medium text-main_text hover:underline cursor-pointer text-primary mt-2"
             >
               {link}
-            </a>     
+            </h2>     
                 
                  </div> 
           <div className='text-4xl flex justify-between font-bold w-full h-16 rounded-lg border-gray-300 text-center ' ref={input_ref}>

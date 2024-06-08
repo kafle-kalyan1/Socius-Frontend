@@ -1,20 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useState } from "react";
-import {
-  HeartOutlined,
-  CommentOutlined,
-  LeftCircleOutlined,
-  RightCircleOutlined,
-  CheckCircleOutlined,
-  EllipsisOutlined,
-  WarningOutlined,
-  SendOutlined // for share
-} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import CustomPopover from "../PopOver/PopOver";
 import '/src/index.css'
-import { copy, dateFormat, defaultProfilePic, socketLink, timeAgo } from "../../Library/Others/Others";
+import { copy, dateFormat, defaultProfilePic, defaultURL, socketLink, timeAgo } from "../../Library/Others/Others";
 import { FaHackerNews, FaPrint, FaThumbsUp } from "react-icons/fa";
 import { MoreHorizontalIcon, Printer, PrinterIcon, ThumbsUp, ThumbsUpIcon } from "lucide-react";
 import APICall from "../../Library/API/APICall";
@@ -33,8 +23,12 @@ import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import ContextMenu from "../ContextMenu/ContextMenu";
-import { MdOutlineDelete, MdOutlineDownload, MdOutlineImage, MdOutlinePrint, MdOutlineQrCode, MdOutlineReport, MdOutlineWarning } from "react-icons/md";
-import { BsRobot } from "react-icons/bs";
+import { MdDrafts, MdEdit, MdOutlineDelete, MdOutlineDownload, MdOutlineImage, MdOutlinePrint, MdOutlineQrCode, MdOutlineReport, MdOutlineWarning, MdWarning } from "react-icons/md";
+import { BsRobot, BsThreeDotsVertical } from "react-icons/bs";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/extracomponents/ui/hover-card";
+import AudioPlayer from "./Component/AudioPlayer";
+import { Separator } from "@/extracomponents/ui/separator";
+import EditPost from "../EditPost/EditPost"; // Import the EditPost component
 
 
 
@@ -45,14 +39,16 @@ const Post = ({
   timestamp,
   postText,
   images,
-  likes,
+  likes_count ,
   user_has_liked,
   is_post_saved,
-  comments,
+  comments_count,
   shares,
   fullname,
   afterDelete,
-  is_deep_fake
+  is_deep_fake,
+  single_view = false,
+  comments
 }) => {
   
   const [showFullText, setShowFullText] = useState(false);
@@ -62,6 +58,7 @@ const Post = ({
   const [isMouseOver, setIsMouseOver] = useState(false);
   const [userHasLiked, setUserHasLiked] = useState(user_has_liked);
   const [saved, setSaved] = useState(is_post_saved);
+  const [isEditPostVisible, setIsEditPostVisible] = useState(false); // State for EditPost visibility
 
 
   const {profile} = useContext(ProfileContext)
@@ -75,8 +72,8 @@ const Post = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    setCount({likes: likes, comments: comments})
-  }, [likes, comments])
+    setCount({likes: likes_count, comments: comments_count})
+  }, [likes_count, comments_count])
 
   function openImageinNewTab() {
     //open current image in new tab according to image index
@@ -203,6 +200,12 @@ const Post = ({
 
   const truncatedText = showFullText ? postText : postText.slice(0, 200);
 
+  const report_deepfake = async () => {
+    let res = await APICall('/api/posts/reportDeepFake/','POST',{'post_id':id})
+    if(res.status == 200){
+      toast.success(res.message)
+    }
+  }
 
   const  handleLike = async (e,id) => {
     e.stopPropagation();
@@ -246,7 +249,7 @@ const DeletePost = async (e,id) =>{
           let res =  await APICall('/api/posts/deletePost/','POST',{'post_id':id})
           if(res.status == 200){
             toast.success("Post deleted successfully")
-              afterDelete()
+              afterDelete
               // navigate('/')
         
           }
@@ -413,13 +416,28 @@ const MoreOptionButton = () => (
         <MdOutlineQrCode />
         Show QR</button>
       </MenuItem>
-      {username == profile.username && <MenuItem>
+      {username == profile?.username && 
+      <>
+
+      <MenuItem>
         <button className="flex items-center gap-2 cursor-pointer" onClick={(e)=> DeletePost(e,id)}>
         <MdOutlineDelete />
         Delete</button>
-      </MenuItem>}
+      </MenuItem>
+      {/* <MenuItem>
+        <button className="flex items-center gap-2 cursor-pointer" onClick={(e)=> DeletePost(e,id)}>
+        <MdEdit />
+        Edit</button>
+      </MenuItem>
+      <MenuItem>
+        <button className="flex items-center gap-2 cursor-pointer" onClick={(e)=> DeletePost(e,id)}>
+        <MdDrafts />
+        Draft</button>
+      </MenuItem> */}
+      </>
+      }
       {
-        profile && profile.is_staff && images && images.length > 0 && (
+        profile && profile?.is_staff && images && images.length > 0 && (
           <>
           <MenuItem>
           <button className="flex items-center gap-2 cursor-pointer" onClick={(e)=> DeletePost(e,id)}>
@@ -436,7 +454,7 @@ const MoreOptionButton = () => (
   const buttons = [
     { label: 'Report', onClick: ReportPost},
     { label: 'Print', onClick: ()=> PrintPost },
-     username == profile.username && { label: 'Delete', onClick: (e)=> DeletePost(e,id) }
+     username == profile?.username && { label: 'Delete', onClick: (e)=> DeletePost(e,id) }
   ];
 
   const onChange = (currentSlide) => {
@@ -458,8 +476,9 @@ const MoreOptionButton = () => (
 
   return (
     <div
-    className="border text-card-foreground max-w-xl mx-auto mt-8 p-5 bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 shadow-md rounded-md"
+    className={`border text-card-foreground max-w-xl mx-auto mt-8 p-5 bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2 shadow-md rounded-md ${is_deep_fake ? 'border-red-500' : ''}`}
     data-v0-t="card"
+    title={is_deep_fake ? "This post is detected as deep fake" : ""}
     onContextMenu={handleContextMenu}
   >
     <div className="flex items-center justify-between">
@@ -478,12 +497,6 @@ const MoreOptionButton = () => (
         <div>
           <h4 className=" font-primary_font tracking-wide text-md cursor-pointer" onClick={(e) =>{ e.stopPropagation(); viewProfile(username)}}>{username}</h4>
           <p className="font-primary_font tracking-wide text-sm text-gray-500" title={dateFormat(timestamp,true)}>{timeAgo(timestamp)}
-          {
-            is_deep_fake ?
-              <WarningOutlined className="ml-6 text-red-500" title="Possible Deepfake Image" />
-              :
-              null
-          }
           </p>
           
         </div>
@@ -502,10 +515,10 @@ const MoreOptionButton = () => (
 </Carousel>
  <p className="mt-4 text-text1 dark:text-text2">
       {
-        isExpanded ? postText : `${postText.slice(0, descriptionLength)}`
+        isExpanded || single_view ? postText : `${postText.slice(0, descriptionLength)}`
       }
       {
-        postText.length > descriptionLength && (<>
+        postText.length > descriptionLength && !single_view && (<>
           {!isExpanded && <>...</>}
           <button
             onClick={toggleText}
@@ -521,7 +534,38 @@ const MoreOptionButton = () => (
     <div className="flex items-center justify-between mt-4">
       <div className="flex items-center space-x-2">
       <LikeButton/>
-        <CommentButton/>
+      <HoverCard>
+  <HoverCardTrigger>        <CommentButton/>
+</HoverCardTrigger>
+  <HoverCardContent className="bg-cardBg2 dark:bg-darkcardBg2 font-primary_font text-text1 dark:text-text2">
+    <div>
+      <h3 className="font-bold text-lg">Comments</h3>
+      <Separator/>
+      <div className="flex flex-col">
+        {
+          comments && comments.length > 0 ? comments.map((comment, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <img
+                src={comment.user_profile.profile_picture || defaultProfilePic}
+                alt="Profile Picture"
+                className="w-8 h-8 rounded-full object-cover"
+              />
+              <div>
+                <h4 className="font-bold">{comment.user.username}</h4>
+                <p>{comment.text}</p>
+                {/* if audio in comment show icon */}
+                {comment.voice_comment && <AudioPlayer audioUrl={ comment.voice_comment} />}
+              </div>
+              <hr className="h-1 w-1"/>
+            <Separator/>
+            </div>
+          )) : <p>No comments</p>
+        }
+    
+        </div>
+    </div>
+  </HoverCardContent>
+</HoverCard>
       <ShareButton/>
       
 
@@ -560,7 +604,7 @@ const MoreOptionButton = () => (
               Show QR
             </button>
             <hr />
-            {username == profile.username && (
+            {username == profile?.username && (
               <>
               <button
                 className="flex items-center gap-2 cursor-pointer"

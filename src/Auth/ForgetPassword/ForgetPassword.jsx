@@ -66,7 +66,9 @@ const ForgetPassword = () => {
                 hideBigPopup('resetPassword');
               },
               children:(
-                  <ResetPassword data={data}/>
+                  <div className="w-[50vw]">
+                    <ResetPassword data={data}/>
+                  </div>
                   ),
               id: 'resetPassword'
               },
@@ -86,6 +88,8 @@ const ForgetPassword = () => {
       })     
     },
   });
+
+  
 
   return (
     <>

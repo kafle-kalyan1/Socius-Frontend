@@ -160,7 +160,7 @@ const Login = () => {
           <div className="mt-6 w-full justify-center flex">
             <Button type="primary" text="Login" className='w-full' icon={<FaLockOpen/>} onClick={()=>formik.handleSubmit(formik.values)} />
           </div>
-        <div className="relative flex items-center justify-center w-full mt-6 border border-t">
+        {/* <div className="relative flex items-center justify-center w-full mt-6 border border-t">
           <div className="absolute px-2 bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2">Or Login With</div>
         </div>
         <span></span>
@@ -192,7 +192,7 @@ const Login = () => {
             <span className="text-xl">Github</span>
             <GithubIcon />
           </button>
-        </div>
+        </div> */}
 
         <p className="mt-8 text-2xs font-light text-center text-text1 dark:text-text2">
           {" "}

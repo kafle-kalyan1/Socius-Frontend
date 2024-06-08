@@ -38,6 +38,11 @@ const Profile = ({data}) => {
             username={profile.username}
             fullname={profile.fullname}
             profile_pic={profile.profile_picture}
+            date_of_birth = {profile.date_of_birth}
+            bio= {profile.bio}
+            gender= {profile.gender}
+            location= {profile.location}
+            number_of_friends= {profile.number_of_friends}
             load_data={getProfiles}
           />
         )

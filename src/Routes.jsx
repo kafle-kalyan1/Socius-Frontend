@@ -52,6 +52,7 @@ const ReportPost = lazy(() => import("./Screens/Admin/Reports/Posts/ReportPost")
 const SavedPost = lazy(() => import("./Screens/Saved/Saved"));
 
 const DeepFakeReport = lazy(() => import("./Screens/Admin/Reports/Deepfake/Deepfake"));
+const Admin = lazy(() => import("./Screens/Admin/main"));
 
 import { ProfileContext } from "/src/context/ProfileContext/ProfileContext";
 import Sidebar from "/src/components/Sidebar/Sidebar";
@@ -559,10 +560,10 @@ function AppRoute() {
 
         <Route
           exact
-          path="/admin/posts/deepfake"
+          path="/admin/posts"
           element={
             <Suspense fallback={<div>Loading...</div>}>
-              <DeepFakeReport />
+              <Admin />
             </Suspense>
           }
         />

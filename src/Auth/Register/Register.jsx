@@ -282,12 +282,13 @@ const Register = () => {
               </button> */}
               <Button
                 type="primary"
+                className='w-full'
                 text="Register"
                 onClick={formik.handleSubmit}
               />
             </div>
           </form>
-          <div className="relative flex items-center justify-center w-full mt-6 border border-t">
+          {/* <div className="relative flex items-center justify-center w-full mt-6 border border-t">
             <div className="absolute px-2 bg-cardBg dark:bg-darkcardBg text-text1 dark:text-text2">
               Or Register With
             </div>
@@ -315,7 +316,7 @@ const Register = () => {
               onClick={() => signUpWithFacebook()}
             />
               </div>
-{/* 
+
             <button
               onClick={() => {}}
               title="Register with Github"
@@ -324,8 +325,8 @@ const Register = () => {
             >
               <GithubIcon />
               <span>Github</span>
-            </button> */}
-          </div>
+            </button> 
+          </div> */}
 
           <p className="mt-8 text-2xs font-light text-center text-text1 dark:text-text2">
             {" "}
@@ -340,7 +341,7 @@ const Register = () => {
         </div>
       </div>
       {showCookieConsent && (
-        <CookieConsent onAcceptAll={() => setShowCookieConsent(false)} onCustomPermissions={() => setShowCookieConsent(false)} />
+        <CookieConsent setIsTermsShown={setIsTermsShown} onAcceptAll={() => setShowCookieConsent(false)} onCustomPermissions={() => setShowCookieConsent(false)} />
       )}
       {/* <Footer /> */}
     </>

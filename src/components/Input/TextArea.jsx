@@ -1,6 +1,6 @@
 
 const TextArea = (props) => {
-   const { formik, Icon, title, name, ref_, rows, cols,showTitle=true,                     disabled=false  } = props;
+   const { formik, Icon, title, name, ref_, rows, cols,showTitle=true,placeholder=title,                     disabled=false  } = props;
  
    return (
      <div className="mb-2">
@@ -24,8 +24,8 @@ const TextArea = (props) => {
            disabled={disabled}
            placeholder={
              formik.touched[name] && formik.errors[name]
-               ? `${title} is required`
-               : `${title}`
+               ? `${placeholder ? placeholder : title} is required`
+               : `${placeholder? placeholder : title}`
            }
            rows={rows}
            cols={cols}

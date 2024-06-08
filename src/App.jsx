@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import AppRoute from "./Routes";
 import { ConfigProvider } from "antd";
-import { ProfileProvider  } from "./context/ProfileContext/ProfileContext";
+import { ProfileContext, ProfileProvider  } from "./context/ProfileContext/ProfileContext";
 import { MenuContext, MenuContextProvider } from "./context/MenuContext/MenuContext";
 import  Sidebar  from '/src/components/Sidebar/Sidebar';
 import { useContext, useEffect } from "react";
@@ -16,62 +16,66 @@ import { uploadCloudinary } from "./Library/Others/Others";
 function App() {
   const { isMobile } = useContext(MenuContext);
   const {isDarkTheme} = useContext(ThemeContext);
-
-  useEffect(() => {
-    postSavedPosts();
-  }, []);
+  const { profile } = useContext(ProfileContext);
+// 
+  // useEffect(() => {
+    // postSavedPosts();
+  // }, [profile]);
 
   
-const postSavedPosts = async () => {
-  let db;
-  let request = indexedDB.open("offlinePosts", 2);
-
-  request.onsuccess = function(event) {
-    db = event.target.result;
-
-    let transaction = db.transaction(["posts"], "readwrite");
-    let objectStore = transaction.objectStore("posts");
-    let getAllRequest = objectStore.getAll();
-
-    getAllRequest.onsuccess = function(event) {
-      let posts = getAllRequest.result;
-      posts.forEach(async (post, index) => {
-        // Your existing code to post data
-        let urls = [];
-        console.log(post);
-        if(post.image){
-        //   for (const element of post.image) {
-            const imgLinks = await uploadCloudinary(post.image);
-            urls = [...urls, imgLinks.url];
-          }
-        // }
-        const final_data = {
-          images: urls,
-          text_content: post.text
-        }
-        let response = await APICall('/api/posts/createPost/','POST',final_data).then((res)=>{
-          toast.success(res.message)
-          // Delete the post from IndexedDB
-          let deleteTransaction = db.transaction(["posts"], "readwrite");
-          let deleteObjectStore = deleteTransaction.objectStore("posts");
-          let deleteRequest = deleteObjectStore.delete(index+1);
-          deleteRequest.onsuccess = function(event) {
-            console.log("Post deleted successfully.");
-          };
-        }).catch((err)=>console.log(err)).finally(()=>{
-          showLoading(false)
-        });
-      });
-    };
+  const postSavedPosts = async () => {
+    if (profile) { // Check if profile is not null
+      let db;
+      let request = indexedDB.open("offlinePosts", 3);
+  
+      request.onsuccess = function (event) {
+        db = event.target.result;
+  
+        let transaction = db.transaction(["posts"], "readwrite");
+        let objectStore = transaction.objectStore("posts");
+        let getAllRequest = objectStore.getAll();
+  
+        getAllRequest.onsuccess = function (event) {
+          let posts = getAllRequest.result;
+          posts.forEach(async (post, index) => {
+            // Your existing code to post data
+            let urls = [];
+            console.log(post);
+            if (post.image) {
+              const imgLinks = await uploadCloudinary(post.image);
+              urls = [...urls, imgLinks.url];
+            }
+            const final_data = {
+              images: urls,
+              text_content: post.text
+            };
+            let response = await APICall('/api/posts/createPost/', 'POST', final_data)
+              .then((res) => {
+                toast.success(res.message);
+                // Delete the post from IndexedDB
+                let deleteTransaction = db.transaction(["posts"], "readwrite");
+                let deleteObjectStore = deleteTransaction.objectStore("posts");
+                let deleteRequest = deleteObjectStore.delete(post.id);
+                deleteRequest.onsuccess = function (event) {
+                  console.log("Post deleted successfully.");
+                };
+              })
+              .catch((err) => console.log(err))
+              .finally(() => {
+                showLoading(false);
+              });
+          });
+        };
+      };
+    }
   };
-}
+  
+  window.addEventListener('online', postSavedPosts);
 
-window.addEventListener('online', postSavedPosts);
 
 
   return (
     <BrowserRouter>
-    <ProfileProvider>
       <ConfigProvider
        theme={{
       token: {
@@ -179,7 +183,6 @@ window.addEventListener('online', postSavedPosts);
     </div>
 
     </ConfigProvider>
-    </ProfileProvider>
     </BrowserRouter>
   );
 }

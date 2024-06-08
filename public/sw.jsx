@@ -10,6 +10,7 @@ const urlsToCache = [
     '/Favicons/browser.png',
     '/src/Offline/offline.js',
     '/src/Offline/offline.css',
+    '/public/svg/user.png'
 ];
 
 // Install the service worker and cache the assets
@@ -33,12 +34,15 @@ self.addEventListener('fetch', event => {
 self.addEventListener('online', event => {
     // Log "Online" when the internet connection is restored
     console.log('Online');
+    //show popup that 
+    
 });
 
 // Listen for the 'offline' event
 self.addEventListener('offline', event => {
     // Log "Offline" when the internet connection is lost
     console.log('Offline');
+    //show popup that internet is lostsd
 });
 
 // Activate the service worker

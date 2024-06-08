@@ -29,7 +29,7 @@ import { MessageNotificationContext } from "../../context/NotificationContext/Me
 import { NotificationContext } from "../../context/NotificationContext/NotificationContext";
 import { MdAdminPanelSettings, MdOutlineAdminPanelSettings, MdReport, MdReportGmailerrorred } from "react-icons/md";
 import { BsSave2, BsSave2Fill } from "react-icons/bs";
-import { Menu, MenuItem } from "@szhsin/react-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/extracomponents/ui/popover";
 
 export const SidebarContext = createContext();
 
@@ -88,12 +88,6 @@ export function Sidebarr({ children }) {
               <h2 className="text-2xl text-text1 dark:text-text2">Socius</h2>
             </span>
           )}
-          {/* <button
-            onClick={() => setOpen((curr) => !curr)}
-            className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"
-          >
-            {open ? <ChevronFirst /> : <ChevronLast />}
-          </button> */}
         </div>
 
         {open && (
@@ -164,29 +158,33 @@ export function Sidebarr({ children }) {
                   </span>
                 </Tooltip>
               </div>
-              <Menu
-                menuButton={
-                  <MoreVertical
-                    size={20}
-                    className="text-gray-600 dark:text-white cursor-pointer"
-                  />
-                }
-                transition
-                className={""}
-                placement={"top"}
-                direction="top"
-                position={"auto"}
-                portal="document.body"
-
+              <Popover 
               >
-               <div className="" >
-               {buttons.map((button, index) => (
-                  <MenuItem key={index} onClick={button.onClick}>
-                    {button.label}
-                  </MenuItem>
-                ))}
-               </div>
-                </Menu>
+        <PopoverTrigger>
+          <button>
+            <MoreVertical
+              size={20}
+              className="text-gray-600 dark:text-white cursor-pointer"
+            />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent>
+        <div className="grid gap-1">
+            {buttons.map((button, index) => (
+              <div
+                key={index}
+                onClick={button.onClick}
+                className="flex items-center gap-2 p-2 cursor-pointer bg-white border-0 hover:bg-gray-100 dark:hover:bg-darkcardBg2"
+              >
+                {button.icon}
+                <span className="font-semibold text-gray-600 bg-white dark:text-white">
+                  {button.label}
+                </span>
+              </div>
+            ))}
+            </div>
+        </PopoverContent>
+      </Popover>
             </div>
           )}
         </div>
@@ -320,7 +318,7 @@ export default function SIdebar() {
             <SidebarItem
           icon={<MdOutlineAdminPanelSettings size={20} />}
           text="Admin"
-          path="/admin/posts/deepfake"
+          path="/admin/posts"
           />
           )
         }

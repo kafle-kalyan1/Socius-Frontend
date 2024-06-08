@@ -20,7 +20,7 @@ const TermsModal = (props) => {
             className=" bg-primary_btn_dark text-white p-2 rounded-md"
             onClick={() => {
               setIsShown(false);
-              change("terms", !terms);
+              // change("terms", !terms);
             }}
           >
             Agree

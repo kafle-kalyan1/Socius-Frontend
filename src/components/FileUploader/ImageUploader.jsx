@@ -66,6 +66,8 @@ const ImageUploader = ({ formik, name,title,max, Icon }) => {
         fileList={fileList}
         onChange={onChange}
         onPreview={onPreview}
+        //only type of images can be uploaded
+        accept="image/*"
       >
         {fileList.length < (max?max:1) && '+ Upload'}
       </Upload>

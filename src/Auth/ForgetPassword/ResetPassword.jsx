@@ -77,7 +77,9 @@ const ResetPassword = ({data}) => {
               name="confirm_password"
               placeholder="Confirm Password"
             />
-            <Button type="primary" text="Reset Password" />
+            <Button type="primary" text="Reset Password"
+            onClick={formik.handleSubmit}
+             />
           </form>
         
 

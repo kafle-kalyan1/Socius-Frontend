@@ -19,7 +19,7 @@ import { SlCalender } from "react-icons/sl";
 const UNFRIEND_MESSAGE = "Are you sure you want to unfriend";
 const CANCEL_REQUEST_MESSAGE = "Are you sure you want to cancel the request to";
 
-const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = false, isrequested = false, isrequestedByMe = false,load_data, verified=true,bio="dasdasdsadasdasdas", joined_date, location, friends,gender="male" }) => {
+const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = false, isrequested = false, isrequestedByMe = false,load_data, verified=true,bio, joined_date, location, friends,gender,number_of_friends }) => {
   const [isRequested, setIsRequested] = useState(isrequested);
   const [isFriend, setIsFriend] = useState(isfriend);
   const [isRequestedByMe, setIsRequestedByMe] = useState(isrequestedByMe);
@@ -206,19 +206,19 @@ const FriendRecommendation = ({ profile_pic, fullname, username, isfriend = fals
           <div className="flex items-center space-x-2">
             <LiaUserFriendsSolid className="text-gray-500 dark:text-gray-400" />
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              1.2K Friends
+              {number_of_friends} Friends
             </span>
           </div>
           <div className="flex items-center space-x-2">
             <GoLocation className="text-gray-500 dark:text-gray-400" />
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              San Francisco, CA
+              {location}
             </span>
           </div>
           <div className="flex items-center space-x-2">
             <SlCalender className="text-gray-500 dark:text-gray-400" />
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Joined: June 2023
+              Joined: {joined_date}
             </span>
           </div>
         </div>

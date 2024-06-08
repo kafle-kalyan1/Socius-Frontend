@@ -19,6 +19,8 @@ import { showLoading } from "./components/Loading/Loading.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
   <React.StrictMode>
+  <ProfileProvider>
+
   <MenuContextProvider>
 <NotificationProvider>
 
@@ -38,6 +40,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 </NotificationProvider>
 
     </MenuContextProvider>
+    </ProfileProvider>
   </React.StrictMode>
+  
   </GoogleOAuthProvider>
 );

@@ -268,12 +268,16 @@ const Message = () => {
                 )}
 
               <div className="flex flex-col gap-2 justify-center items-center">
-                  <Button
+                  {
+                    messages.length > 0 && currentChatUser && (
+                      <Button
                     text="Load More"
                     type="primary"
                     onClick={handleLoadMore}
                     disabled={!hasMore}
                   />
+                    )
+                  }
                 </div>
                 {messages.map(
                   (

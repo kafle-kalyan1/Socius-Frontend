@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { showBigPopup,hideBigPopup } from '/src/components/BigPopup/BigPopup';
 import React, { useState } from 'react';
 
-const CookieConsent = () => {
+const CookieConsent = ({setIsTermsShown}) => {
   const [showPopup, setShowPopup] = useState(true);
 
   const handleAcceptAll = () => {
@@ -42,13 +42,12 @@ const CookieConsent = () => {
                 </p>
                 <div className="flex text-center text-[9px] mt-2 gap-2">
                   <span className="ltr:mr-4 ltr:last:mr-0 rtl:ml-4 rtl:last:ml-0">
-                    <Link
-                      to={'/cookie-policy'}
-                      target='_blank'
+                    <h1
+                      onClick={() => setIsTermsShown((p) => !p)}
                       className="no-underline cursor-pointer shrink-0 text-indigo-600 border-b border-indigo-600"
                     >
                       Privacy policy
-                    </Link>
+                    </h1>
                   </span>
                 </div>
               </div>
@@ -56,13 +55,17 @@ const CookieConsent = () => {
                 <div className="flex-1 gap-2 items-center flex my-0">
                   <button
                     onClick={handleCustomPermissions}
-                    className="flex-1 lg:flex-none ltr:mr-2 rtl:ml-2 flex justify-center items-center text-center cursor-pointer px-2 md:px-4 py-2 border border-transparent text-xs leading-4 font-black bg-indigo-100 text-indigo-600 rounded-md"
+                    disabled
+                    className="flex-1 lg:flex-none ltr:mr-2 rtl:ml-2 flex justify-center items-center text-center cursor-pointer px-2 md:px-4 py-2 border border-transparent text-xs leading-4 font-black bg-indigo-100 text-indigo-600 rounded-md
+                    disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Custom permissions
                   </button>
                   <button
                     onClick={handleAcceptAll}
-                    className="flex-1 lg:flex-none flex justify-center items-center text-center cursor-pointer px-2 md:px-4 py-2 border border-transparent text-xs leading-4 font-black bg-indigo-600 text-white rounded-md"
+                    className="flex-1 lg:flex-none flex justify-center items-center text-center cursor-pointer px-2 md:px-4 py-2 border border-transparent text-xs leading-4 font-black bg-indigo-600 text-white rounded-md
+                    disabled:opacity-50 disabled:cursor-not-allowed
+                    "
                   >
                     Accept all
                   </button>

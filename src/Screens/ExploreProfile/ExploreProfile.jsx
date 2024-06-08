@@ -87,6 +87,11 @@ const ExploreProfile = () => {
     profile_pic={user.profile_pic ? user.profile_pic : defaultProfilePic}
     fullname={user.fullname}
     username={user.username}
+    date_of_birth = {user.date_of_birth}
+            bio= {user.bio}
+            gender= {user.gender}
+            location= {user.location}
+            number_of_friends= {user.number_of_friends}
     isfriend={user.is_friend}
     isrequested={user.is_requested}
     isrequestedByMe={user.is_requested_by_me}

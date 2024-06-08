@@ -5,65 +5,148 @@
   <link rel="icon" type="image/svg+xml" href="/Favicons/browser.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Offline</title>
-  <link rel="stylesheet" href="/src/Offline/offline.css" />
-
+  <style>
+    * {
+      text-align: center;
+    }
+    .container {
+      padding: 1.5rem 1rem;
+    }
+    .post {
+      max-width: 36rem;
+      margin: 0 auto;
+      padding: 1.5rem;
+      background-color: #fff;
+      border-radius: 0.5rem;
+      box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+      margin-bottom: 10px;
+    }
+    .post-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .post-header img {
+      width: 3rem; /* Adjusted size */
+      height: 3rem; /* Adjusted size */
+      border-radius: 9999px;
+      margin-right: 1rem;
+    }
+    .post-header .username {
+      font-weight: 600;
+    }
+    .post-header .date {
+      color: #6b7280;
+      font-size: 0.875rem;
+    }
+    .post img {
+      width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+    }
+    .post figcaption {
+      color: #6b7280;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+    .buttons {
+      margin-bottom: 1.5rem;
+    }
+    .buttons button {
+      margin: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .buttons button:focus {
+      outline: none;
+    }
+  </style>
 </head>
 <body>
   <h1>You're Offline</h1>
-  <h3>Here You can view some offline posts</h3>
+  <h3>Here you can view some offline posts</h3>
+  <div class="buttons">
+    <button onclick="checkInternet()">Check if Internet is Restored</button>
+    <button onclick="addNewPost()">Add New Post</button>
+  </div>
+  <div class="container" id="postsContainer"></div>
 
-  <div id="postsContainer"></div>
+  <script>
+    function checkInternet() {
+      if (navigator.onLine) {
+        alert('Internet connection restored! Redirecting to home page...');
+        window.location.href = '/';
+      } else {
+        alert('Still offline. Please check your internet connection.');
+      }
+    }
 
+    function addNewPost() {
+      window.location.href = '/offline';
+    }
+
+    function getPostsFromIndexedDB() {
+      const request = indexedDB.open('postsDB', 8);
+
+      request.onsuccess = function(event) {
+        const db = event.target.result;
+        const transaction = db.transaction(['posts'], 'readonly');
+        const objectStore = transaction.objectStore('posts');
+        const getAllRequest = objectStore.getAll();
+
+        getAllRequest.onsuccess = function() {
+          if (getAllRequest.result.length > 0) {
+            displayPosts(getAllRequest.result);
+          } else {
+            console.log('No posts in IndexedDB');
+          }
+        };
+
+        getAllRequest.onerror = function() {
+          console.log('Error getting posts from IndexedDB');
+        };
+      };
+
+      request.onerror = function(event) {
+        console.log('Database error:', event.target.error);
+      };
+    }
+
+    function displayPosts(posts) {
+      const postsContainer = document.getElementById('postsContainer');
+      postsContainer.innerHTML = '';
+
+      posts.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.classList.add('post');
+
+        const imageBase64 = post.image.replace('data:text/html;base64,', 'data:image/png;base64');
+
+        postElement.innerHTML = `
+          <div class="post-header">
+            <img src="/public/svg/user.png" style="width: 3rem; height: 3rem; border-radius: 9999px; margin-right: 1rem;" alt="User avatar">
+            <div>
+              <div class="username">${post.user.username}</div>
+              <div class="date">Published on ${new Date(post.timestamp).toLocaleDateString()}</div>
+            </div>
+          </div>
+          <p>${post.text_content}</p>
+          <figure>
+            <img src="${imageBase64}" alt="Post image">
+            <!-- <figcaption>A caption for the blog post image</figcaption> -->
+          </figure>
+        `;
+
+        postsContainer.appendChild(postElement);
+      });
+    }
+
+    getPostsFromIndexedDB();
+  </script>
 </body>
-<script>
-  function getPostsFromIndexedDB() {
-    const request = indexedDB.open('postsDB', 6);
-  
-    request.onsuccess = function(event) {
-      const db = event.target.result;
-      const transaction = db.transaction(['posts'], 'readonly');
-      const objectStore = transaction.objectStore('posts');
-      const getAllRequest = objectStore.getAll();
-  
-      getAllRequest.onsuccess = function() {
-        // Check if there are any posts in IndexedDB
-        if (getAllRequest.result.length > 0) {
-          displayPosts(getAllRequest.result);
-        } else {
-          console.log('No posts in IndexedDB');
-        }
-      };
-  
-      getAllRequest.onerror = function() {
-        console.log('Error getting posts from IndexedDB');
-      };
-    };
-  
-    request.onerror = function(event) {
-      console.log('Database error:', event.target.error);
-    };
-  }
-  
-  // Function to display posts
-  function displayPosts(posts) {
-    const postsContainer = document.getElementById('postsContainer');
-    postsContainer.innerHTML = ''; // Clear the container
-  
-    posts.forEach(post => {
-      const postElement = document.createElement('div');
-      const imageBase64 = post.image.replace('data:text/html;base64,', 'data:image/png;base64');
-      console.log(imageBase64);
-      postElement.innerHTML = `
-        <h2>${post.user.username}</h2>
-        <p>${post.text_content}</p>
-        
-        <img src="${imageBase64}" alt="Post image">
-      `;
-
-      postsContainer.appendChild(postElement);
-    });
-  }
-  
-  getPostsFromIndexedDB();
-</script>
 </html>

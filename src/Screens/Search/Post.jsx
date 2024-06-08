@@ -10,10 +10,11 @@ const RecPost = ({data}) => {
     getPosts();
   }, [data]);
   const getPosts = async () => {
+    debugger
     console.log(data);
     if(data == null || data == undefined){
       try {
-        const response = await APICall("/api/utils/trendingPosts/", "GET", {});
+        const response = await APICall("/api/utils/trendingPosts/", "GET");
         // console.log(response);
         setPosts(response.data);
       } catch (error) {
@@ -28,8 +29,7 @@ const RecPost = ({data}) => {
   return (
     <div className='flex-1 w-full h-full mt-5 justify-center text-text1 dark:text-text2'>
     <div className='flex flex-col justify-center text-center'>
-      <h1 className="text-2xl font-bold">People you may know</h1>
-      <p className="text-gray-500">Based on your activity</p>
+      <h1 className="text-2xl font-bold">Recomanded Post</h1>
     </div>
       <div className="grid grid-cols-2 max-lg:grid-cols-1 text-text1 dark:text-text2 mt-4 gap-4"> 
      {
