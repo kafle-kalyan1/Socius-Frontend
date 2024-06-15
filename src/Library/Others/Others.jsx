@@ -222,9 +222,9 @@ export const useThemeDetector = () => {
   return isDarkTheme;
 }
 
-export const socketLink = "ws://localhost:8000";
+export const socketLink = "ws://socius.onrender.com/";
 
-export const defaultURL = "http://127.0.0.1:8000";
+export const defaultURL = "https://socius.onrender.com/";
 
 export const urltoBase64 = (url) =>
 imageToBase64(url) // Path to the image

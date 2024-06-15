@@ -104,7 +104,7 @@ const EditProfile = () => {
       formData.append("profile_picture", values.profile_picture);
       formData.append("profile_picture_preview", values.profile_picture_preview);
       axios
-        .put("http://localhost:8000/auth/update/", formData, {
+        .put("https://socius.onrender.com/auth/update/", formData, {
           headers: {
             Authorization: "Bearer " + access,
           },
