@@ -1,55 +1,52 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Sidebar from "/src/components/Sidebar/Sidebar";
 import Post from "/src/components/Post/Post";
-import { MenuContext } from "/src/context/MenuContext/MenuContext";
-import Button from "/src/components/Button/Button.jsx";
-import { showBigPopup } from "/src/components/BigPopup/BigPopup";
-import CreatePost from "/src/components/CreatePost/CreatePost";
 import { ProfileContext } from "/src/context/ProfileContext/ProfileContext";
+import { showBigPopup, hideBigPopup } from "/src/components/BigPopup/BigPopup";
+import CreatePost from "/src/components/CreatePost/CreatePost";
 import APICall from "../../Library/API/APICall";
 import toast from "react-hot-toast";
 import { Select } from "antd";
-import "/src/index.css";
-import NotificationPannel from "../../components/Notification/NotificationPannel/NotificationPannel";
-import {copy, defaultProfilePic, urltoBase64} from './../../Library/Others/Others';
-import { hideBigPopup } from "../../components/BigPopup/BigPopup";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import NotificationPannel from "../../components/Notification/NotificationPannel/NotificationPannel";
+import { defaultProfilePic } from './../../Library/Others/Others';
 
 const Home = () => {
   const { profile } = useContext(ProfileContext);
   const [posts, setPosts] = useState([]);
-  const [sort, setSort] = useState("default");
+  const [sort, setSort] = useState("new");
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true); 
-  const [loading, setLoading] = useState(false); // Added to handle loading state
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const createPost2 = () => {
     showBigPopup({
       id: "createPost",
-      children: <CreatePost profile={profile} />,
-      onClose: ()=>hideBigPopup('createPost',false)
+      children: <CreatePost profile={profile} getNewPost={()=>getPosts(true)} />,
+      onClose: () => hideBigPopup('createPost', false),
     });
-  }
+  };
 
-  const getPosts = async () => {
-    if (loading) return; // Prevent multiple calls
+  const getPosts = async (getNew) => {
+    if (loading) return;
     setLoading(true);
+    if (getNew) {
+      setPage(1);
+      setPosts([]);
+    }
 
     try {
       const response = await APICall(`/api/posts/getPosts/?sort=${sort}&page=${page}`, "GET", {});
       if (page === 1) {
-        setPosts(response); // If page is 1, replace existing posts with new posts
+        setPosts(response);
+      } else {
+        setPosts((prevPosts) => [...response]);
       }
-      else {
-        setPosts(prevPosts => [...prevPosts, ...response]); // If page is not 1, append new posts to existing posts
-      }
+      setHasMore(response.length > 0);
 
-      setHasMore(response.length > 0); // Update hasMore based on response
       const setting_response = await APICall("/api/utils/getSettings/", "GET", {});
-      if(setting_response.status === 200){
-        if(setting_response.data.sync_post_for_offline == true){
-          storePostsInIndexedDB(response);
-        }
+      if (setting_response.status === 200 && setting_response.data.sync_post_for_offline) {
+        storePostsInIndexedDB(response);
       }
     } catch (error) {
       toast.error("Something went wrong!");
@@ -60,67 +57,46 @@ const Home = () => {
 
   useEffect(() => {
     getPosts();
-  }, [sort]);
+  }, [sort, page]);
 
-  function storePostsInIndexedDB(posts) {
+  const storePostsInIndexedDB = (posts) => {
     const request = indexedDB.open('postsDB', 8);
-  
-    request.onerror = function(event) {
+
+    request.onerror = (event) => {
       console.error('Database error:', event.target.error);
     };
-  
-    request.onupgradeneeded = function(event) {
+
+    request.onupgradeneeded = (event) => {
       const db = event.target.result;
       if (!db.objectStoreNames.contains('posts')) {
         const objectStore = db.createObjectStore('posts', { keyPath: 'id', autoIncrement: true });
         objectStore.createIndex('id', 'id', { unique: true });
       }
     };
-  
-    request.onsuccess = async function(event) {
+
+    request.onsuccess = async (event) => {
       const db = event.target.result;
-  
-      // Ensure all asynchronous operations complete before the transaction
-      for (const post of posts) {
-        if (post.images && post.images.length > 0) {
-          const base64 = await imageUrlToBase64(post.images[0]);
-          post.image = base64;
-        }
-      }
-  
       const transaction = db.transaction(['posts'], 'readwrite');
       const objectStore = transaction.objectStore('posts');
-  
-      objectStore.clear().onsuccess = function() {
-        for (const post of posts) {
-          objectStore.add(post).onerror = function(event) {
+
+      objectStore.clear().onsuccess = () => {
+        posts.forEach((post) => {
+          objectStore.add(post).onerror = (event) => {
             console.error('Error adding post to IndexedDB', event.target.error);
           };
-        }
+        });
       };
-  
-      transaction.oncomplete = function() {
+
+      transaction.oncomplete = () => {
         console.log('All posts have been stored in IndexedDB.');
       };
-  
-      transaction.onerror = function(event) {
+
+      transaction.onerror = (event) => {
         console.error('Transaction error:', event.target.error);
       };
     };
-  }
-  
-  const imageUrlToBase64 = async (url) => {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = () => resolve(reader.result);
-      reader.onerror = reject;
-    });
   };
-  
-  
+
   const filters = [
     { value: "default", label: "Default" },
     { value: "new", label: "New" },
@@ -128,73 +104,79 @@ const Home = () => {
   ];
 
   return (
-    <div className={`flex ml-0 w-full overflow-auto scrollbar  bg-cardBg2 dark:bg-darkcardBg2 `}>
-      <div className={`block p-10 max-sm:p-1 w-[60%]  h-screen font-primary_font justify-center items-center max-lg:w-full m-auto max-sm:m-0 max-sm:w-full `}>
-        <div className=" max-md:w-full  max-sm:w-full">
-          <div className="w-full p-4 ">
-            <div className="w-[100%] md:w-[95%] h-6 flex items-center justify-center gap-x-3">
-              <div className="w-[10%]">
-                <img
-                  src={profile?.profile_picture ? profile.profile_picture : defaultProfilePic}
-                  alt="other-profile-pic"
-                  className="w-[2rem] h-[2rem] rounded-full"
-                />
-              </div>
+    <div className="flex bg-cardBg2 dark:bg-darkcardBg2 min-h-screen">
+      {/* Sidebar */}
+      <div className="fixed top-0 left-0 h-full w-1/5 bg-gray-100 dark:bg-gray-900 overflow-y-auto hidden md:block">
+        <Sidebar />
+      </div>
+
+      <div className="flex-1 flex flex-col items-center w-2/4 p-4  md:p-10 ml-0 ">
+        <div className="w-full max-w-4xl mb-4">
+          <div className="flex items-center justify-center">
+            <div className="flex items-center gap-3 w-2/4">
+              <img
+                src={profile?.profile_picture || defaultProfilePic}
+                alt="Profile"
+                className="w-10 h-10 rounded-full"
+              />
               <div
-                className="w-[100%] flex items-center justify-start px-4 border-solid border-2 border-gray-200 bg-gray-50 rounded-3xl py-2 cursor-pointer"
+                className="w-full flex items-center border border-gray-300 bg-gray-100 dark:bg-darkgray rounded-2xl py-2 px-4 cursor-pointer"
                 onClick={createPost2}
               >
-                <span className="font-poppins text-xs select-none">
-                  What&apos;s on your mind? <span className=" max-[400px]:hidden">
-                  {profile?.username}
-                  </span>
+                <span className="text-sm text-gray-500 dark:text-gray-300">
+                  What&apos;s on your mind? <span className="hidden sm:inline">{profile?.username}</span>
                 </span>
               </div>
-              <Select
-                showSearch
-                placeholder="Search"
-                className="block max-sm:hidden"
-                defaultValue={sort}
-                optionFilterProp="children"
-                options={filters}
-                onChange={(value) => {setSort(value); setPosts([]); setPage(1);}}
-              />
             </div>
+            <Select
+              defaultValue={sort}
+              onChange={(value) => {
+                setSort(value);
+                setPosts([]);
+                setPage(1);
+              }}
+              options={filters}
+              className="sort-dropdown w-1/4 md:w-1/6"
+            />
           </div>
+        </div>
+
+        <div className="w-full max-w-4xl flex-1 overflow-auto">
           <InfiniteScroll
             dataLength={posts.length}
-            next={() => {setPage(prevPage => prevPage + 1);getPosts()}}
+            next={() => setPage((prevPage) => prevPage + 1)}
             hasMore={hasMore}
             loader={<h4>Loading...</h4>}
           >
-            {posts.length > 0 && posts.map((post, i) => (
-              <div key={post.id+i}>
-                <Post
-                  id={post.id}
-                  profileImage={post.user_profile.profile_picture}
-                  username={post.user.username}
-                  timestamp={post.timestamp}
-                  fullname={post.user_profile.fullname}
-                  postText={post.text_content}
-                  images={post.images}
-                  likes_count={post.likes_count}
-                  user_has_liked={post.user_has_liked}
-                  comments_count={post.comments_count}
-                  is_verified={false} 
-                  is_suspicious={false} 
-                  shares={0}
-                  afterDelete={getPosts}
-                  is_post_saved={post.is_post_saved}
-                  is_deep_fake={post.is_deep_fake}
-                  comments={post.comments}
-                />
-              </div>
+            {posts.map((post, i) => (
+              <Post
+                key={post.id + i}
+                id={post.id}
+                profileImage={post.user_profile.profile_picture}
+                username={post.user.username}
+                timestamp={post.timestamp}
+                fullname={post.user_profile.fullname}
+                postText={post.text_content}
+                images={post.images}
+                likes_count={post.likes_count}
+                user_has_liked={post.user_has_liked}
+                comments_count={post.comments_count}
+                is_verified={false}
+                is_suspicious={false}
+                shares={0}
+                afterDelete={getPosts}
+                is_post_saved={post.is_post_saved}
+                is_deep_fake={post.is_deep_fake}
+                comments={post.comments}
+              />
             ))}
           </InfiniteScroll>
         </div>
       </div>
-      <div className={`block w-[33%] max-xl:hidden h-full overflow-auto sticky right-2 scrollbar  top-0`}>
-        <NotificationPannel/>
+
+      {/* Notification Panel */}
+      <div className="fixed top-0 right-0 h-full w-1/4 bg-gray-100 dark:bg-gray-900 overflow-y-auto hidden md:block">
+        <NotificationPannel />
       </div>
     </div>
   );

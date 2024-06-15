@@ -10,7 +10,8 @@ const urlsToCache = [
     '/Favicons/browser.png',
     '/src/Offline/offline.js',
     '/src/Offline/offline.css',
-    '/public/svg/user.png'
+    '/public/svg/user.png',
+
 ];
 
 // Install the service worker and cache the assets

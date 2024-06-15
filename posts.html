@@ -125,8 +125,6 @@
         const postElement = document.createElement('div');
         postElement.classList.add('post');
 
-        const imageBase64 = post.image.replace('data:text/html;base64,', 'data:image/png;base64');
-
         postElement.innerHTML = `
           <div class="post-header">
             <img src="/public/svg/user.png" style="width: 3rem; height: 3rem; border-radius: 9999px; margin-right: 1rem;" alt="User avatar">

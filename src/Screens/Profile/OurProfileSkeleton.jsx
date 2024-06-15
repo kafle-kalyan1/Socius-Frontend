@@ -4,12 +4,12 @@ import React from "react";
 
 const OurProfileSkeleton = () => {
    return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 w-full">
     <div className="container mx-auto my-5 p-5">
       <Skeleton active paragraph={{ rows: 4 }} />
 
       <div className="md:flex no-wrap md:-mx-2">
-        <div className="w-full md:w-3/12 md:mx-2">
+        <div className="w-full md:w-6/12 md:mx-2">
           <Card>
             <Skeleton avatar active />
 

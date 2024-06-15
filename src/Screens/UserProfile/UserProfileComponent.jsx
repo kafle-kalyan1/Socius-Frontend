@@ -7,6 +7,7 @@ import { defaultProfilePic, socketLink } from "../../Library/Others/Others";
 import APICall from "../../Library/API/APICall";
 import toast from "react-hot-toast";
 import { w3cwebsocket } from "websocket";
+import Cookies from "js-cookie";
 
 
 const OtherUserProfile = (props) => {
@@ -210,26 +211,40 @@ const acceptRequest = async () => {
                   </div>
                 </div>
               </div>
-                 <div className="flex justify-evenly gap-10 mt-5">
-                  <Button text="Message" onClick={()=>navigate(`/message/${profile.data.username}`,{state:{"currentChatUser":profile.data.username}})} type="primary"  />
-
-                  {
-                    profile.is_friend ?
-                    <Button text="Unfriend" onClick={handleUnfriend} type="danger"  />
-                    :
-                    profile.is_requested ?
-                     profile.is_requested_by_me ?
-                    <Button text="Cancel Request" onClick={cancelRequest} type="danger"   />
-                    :
-                    <Button text="Accept Request" onClick={acceptRequest} type="primary"   />
-                    :
-                    <Button text="Add Friend" onClick={sendRequestTo} type="primary"  />
-
-
-                  }
-                 
-                  <Button text="Report" onClick={handleUnfriend} type="danger"  disabled={true}  />
-                 </div>
+                {
+                  //if current user and profile user are same hide the friend request button
+                  profile?.data?.username != Cookies.get('username') ? (
+                    <div className="flex items-center justify-end mt-4">
+                      {profile.data.is_friend ? (
+                        <Button
+                          text="Unfriend"
+                          onClick={handleUnfriend}
+                          type="danger"
+                        />
+                      ) : profile.data.is_request_sent ? (
+                        <Button
+                          text="Cancel Request"
+                          onClick={cancelRequest}
+                          type="danger"
+                        />
+                      ) : profile.data.is_request_received ? (
+                        <Button
+                          text="Accept Request"
+                          onClick={acceptRequest}
+                          type="primary"
+                        />
+                      ) : (
+                        <Button
+                          text="Send Request"
+                          onClick={sendRequestTo}
+                          type="primary"
+                        />
+                      )}
+                    </div>
+                  ) : (
+                    ""
+                  )
+                }
             </div>
           </div>
         </div>

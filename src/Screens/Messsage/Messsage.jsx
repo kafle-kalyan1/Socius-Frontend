@@ -80,13 +80,21 @@ const Message = () => {
           ]);
 
           setUserList((userList) => {
-            var index = userList.findIndex(
-              (user) => user.username === currentChatUser
+            const updatedUserList = [...userList];
+            const index = updatedUserList.findIndex(
+              (user) => user.username == currentChatUser
             );
-            userList[index].last_message = (new_message.message);
-            userList[index].timestamp = new_message.timestamp;
-            return [...userList];
+            const updatedUser = {
+              ...updatedUserList[index],
+              last_message: new_message.message,
+              timestamp: new_message.timestamp,
+              hasUnreadMessages: new_message.username_from == currentChatUser ? true : false,
+            };
+            updatedUserList.splice(index, 1);
+            updatedUserList.unshift(updatedUser);
+            return updatedUserList;
           });
+
         };
       }
 

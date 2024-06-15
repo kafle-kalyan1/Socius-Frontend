@@ -17,7 +17,7 @@ import { Separator } from "@/extracomponents/ui/separator";
 import 'tailwindcss/tailwind.css';
 import EmojiPicker from "emoji-picker-react";
 
-const CreatePost = ({ profile }) => {
+const CreatePost = ({ profile, getNewPost }) => {
   const [isAddImageModalVisible, setAddImageModalVisible] = useState(false);
 
   const formik = useFormik({
@@ -52,6 +52,7 @@ const CreatePost = ({ profile }) => {
         .catch((err) => toast.error("Something went wrong!"))
         .finally(() => {
           showLoading(false);
+          getNewPost()
         });
     },
   });

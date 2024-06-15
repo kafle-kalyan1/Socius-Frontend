@@ -46,9 +46,14 @@ const FriendList = ({userList, open, setOpen, setCurrentChatUser, setMessages,cu
          </div>
          <div className="ml-4 flex-1 py-4">
            <div className="flex items-bottom justify-between">
-             <p className="text-text1 dark:text-text2 font-semibold">
-               {user.username}
-             </p>
+           <p className="text-text1 dark:text-text2 font-semibold">
+          {user.username}
+          {user.hasUnreadMessages && (
+            <span className="ml-2 bg-red-500 text-white px-2 py-1 rounded-full">
+              New
+            </span>
+          )}
+          </p>
              <p className="text-xs text-text4 max-lg:hidden dark:text-text3">
                {dateFormat(user.timestamp)}
              </p>
