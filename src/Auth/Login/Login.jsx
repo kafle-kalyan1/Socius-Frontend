@@ -48,7 +48,7 @@ const Login = () => {
     onSubmit: (values) => {
       showLoading(true)
       // var enc_password = EncryptString(values.password)
-      axios.post("https://socius.onrender.com/auth/login", {
+      axios.post("https://socius.onrender.com/auth/login/", {
         username: values.username,
         password: values.password,
       }).then((res) => {
