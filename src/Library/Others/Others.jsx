@@ -222,7 +222,7 @@ export const useThemeDetector = () => {
   return isDarkTheme;
 }
 
-export const socketLink = "ws://socius.onrender.com/";
+export const socketLink = "wss://socius.onrender.com/";
 
 export const defaultURL = "https://socius.onrender.com/";
 
