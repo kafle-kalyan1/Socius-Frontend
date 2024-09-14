@@ -13,11 +13,13 @@ import { NotificationProvider  } from './context/NotificationContext/Notificatio
 import { uploadCloudinary } from "./Library/Others/Others.jsx";
 import APICall from "./Library/API/APICall.jsx";
 import { showLoading } from "./components/Loading/Loading.jsx";
+import { Analytics } from "@vercel/analytics/react"
 
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+  <Analytics/>
   <React.StrictMode>
   <ProfileProvider>
 
