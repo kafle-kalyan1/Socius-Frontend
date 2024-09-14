@@ -38,6 +38,7 @@ export default async function APICall(url, method='post', data={}) {
             "Access-Control-Allow-Origin": "*",
             'Authorization': `Bearer ${access_token}`,
          },
+         withCredentials: true
       });
 
       if (response.status >= 200 && response.status < 300) {
