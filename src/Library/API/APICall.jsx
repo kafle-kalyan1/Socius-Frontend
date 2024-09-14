@@ -35,9 +35,7 @@ export default async function APICall(url, method='post', data={}) {
          data: data,
          headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
             'Authorization': `Bearer ${access_token}`,
-            "Accept": 'application/json, text/plain, */*'
          },
          withCredentials: true
       });
