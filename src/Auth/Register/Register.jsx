@@ -112,7 +112,7 @@ const Register = () => {
       } else {
         showLoading(true);
         axios
-          .post("api/auth/register/", values)
+          .post("https://socius.onrender.com/auth/register/", values)
           .then((res) => {
             if (res.status === 201) {
               showLoading(false);
@@ -130,7 +130,7 @@ const Register = () => {
                   title: "Verify",
                   action: ({ data, hide }) => {
                     axios
-                      .post("api/auth/verify/", data)
+                      .post("https://socius.onrender.com/auth/verify/", data)
                       .then((res) => {
                         if (res.status === 202) {
                           toast.success(res.data.message, {

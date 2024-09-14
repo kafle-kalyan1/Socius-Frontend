@@ -45,7 +45,7 @@ const ProfileProvider = ({ children }) => {
       return;
     }
     try {
-        const response = await axios.get("/api/auth/user/", {
+        const response = await axios.get("https://socius.onrender.com/auth/user/", {
           headers: {
             Authorization: `Bearer ${access}`,
           },
@@ -76,7 +76,7 @@ const ProfileProvider = ({ children }) => {
     try {
       const refreshToken = Cookies.get("refresh");
         const response = await axios.post(
-          "api/auth/refresh/",
+          "https://socius.onrender.com/auth/refresh/",
           {
             refresh: refreshToken,
           }

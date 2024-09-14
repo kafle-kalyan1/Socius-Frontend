@@ -58,7 +58,7 @@ const SinglePost = () => {
           }       
           const access_token = Cookies.get("access");
 
-        let response = await axios.post('/api/posts/commentPost/',formData,{
+        let response = await axios.post('https://socius.onrender.com/posts/commentPost/',formData,{
          headers: {
                'Content-Type': 'multipart/form-data',
                'Authorization': `Bearer ${access_token}`,

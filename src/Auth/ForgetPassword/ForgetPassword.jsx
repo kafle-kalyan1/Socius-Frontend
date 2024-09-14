@@ -50,7 +50,7 @@ const ForgetPassword = () => {
     }),
     onSubmit: (values) => {
       showLoading(true)
-      axios.post("api/auth/forgetPassword/", {
+      axios.post("https://socius.onrender.com/auth/forgetPassword/", {
         username: values.username,
         email: values.email,
       }).then((res) => {

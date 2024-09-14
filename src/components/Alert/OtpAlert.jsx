@@ -30,7 +30,7 @@ const OtpAlert = ({ title, message, icon, link, submit,data }) => {
   };
 
   const resendOtp = () => { 
-    axios.post("api/auth/resendOTP/", {username:data.username}).then((res) => {
+    axios.post("https://socius.onrender.com/auth/resendOTP/", {username:data.username}).then((res) => {
       if (res.status === 200) {
         toast.success(res.data.message, {
           duration: 3000,

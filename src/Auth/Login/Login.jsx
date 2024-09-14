@@ -76,7 +76,7 @@ const Login = () => {
           });
           const email = err.response.headers.email;
           showOtpModal({title:"Verify OTP", message:"Enter the OTP sent to your email", icon:"", link:"Didn't get otp",data:{email:email, username:values.username, password:values.password}, submit:{title:"Verify", action:({data,hide})=>{
-            axios.post("api/auth/verify/", data).then((res) => {
+            axios.post("https://socius.onrender.com/auth/verify/", data).then((res) => {
               if (res.status === 202) {
                 toast.success(res.data.message, {
                   duration: 3000,

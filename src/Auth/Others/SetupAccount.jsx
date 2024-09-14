@@ -76,7 +76,7 @@ const SetupAccount = ({getOwnPosts,
 
   useEffect(() => {
     let accessToken = Cookies.get("access");
-    axios.get("api/auth/user/", {
+    axios.get("https://socius.onrender.com/auth/user/", {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }

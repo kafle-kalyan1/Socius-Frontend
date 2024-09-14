@@ -7,6 +7,11 @@ export default async function APICall(url, method='post', data={}) {
       return;
    }
    
+   if (url.startsWith('/api/')) {
+      url = url.replace('/api/', 'https://socius.onrender.com/');
+   }
+
+   
    const path = window.location.pathname;
    if (
       path === "/login" ||

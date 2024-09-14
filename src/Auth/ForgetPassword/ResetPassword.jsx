@@ -36,7 +36,7 @@ const ResetPassword = ({data}) => {
       username: Yup.string().required("Username is required")
       }),
     onSubmit: (values) => {
-      axios.post("api/auth/resetPassword/", values).then((res) => {
+      axios.post("https://socius.onrender.com/auth/resetPassword/", values).then((res) => {
         toast.success("Password updated successfully");
         hideBigPopup('resetPassword');
       }).catch((err) => {
