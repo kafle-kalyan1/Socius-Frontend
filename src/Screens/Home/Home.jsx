@@ -37,10 +37,12 @@ const Home = () => {
 
     try {
       const response = await APICall(`/api/posts/getPosts/?sort=${sort}&page=${page}`, "GET", {});
+      if(response.status === 200){
+
       if (page === 1) {
-        setPosts(response);
+        setPosts(response || []);
       } else {
-        setPosts((prevPosts) => [...response]);
+        setPosts(() => [...response]);
       }
       setHasMore(response.length > 0);
 
@@ -48,6 +50,7 @@ const Home = () => {
       if (setting_response.status === 200 && setting_response.data.sync_post_for_offline) {
         storePostsInIndexedDB(response);
       }
+    }
     } catch (error) {
       toast.error("Something went wrong!");
     } finally {
@@ -147,8 +150,9 @@ const Home = () => {
             next={() => setPage((prevPage) => prevPage + 1)}
             hasMore={hasMore}
             loader={<h4>Loading...</h4>}
+            endMessage={<h4>No more posts</h4>}
           >
-            {posts.map((post, i) => (
+            {posts && posts.length > 0 && posts.map((post, i) => (
               <Post
                 key={post.id + i}
                 id={post.id}
